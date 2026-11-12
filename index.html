@@ -355,12 +355,13 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
   .zen__text{order:-1}
   .zen__side{align-items:flex-end}
   /* свободная прокрутка с инерцией (без щелчков по одной картинке) */
-  .zen__strip{display:flex;align-items:center;gap:calc(14 * var(--m));overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;
-    padding:calc(20 * var(--m)) 0;height:calc(380 * var(--m))}
+  .zen__strip{overflow:hidden;touch-action:pan-y;height:calc(380 * var(--m));display:flex;align-items:center;cursor:grab}
+  .zen__track{display:flex;align-items:center;gap:calc(14 * var(--m));will-change:transform}
   .zen__strip::-webkit-scrollbar{display:none}
   /* лист целиком, без обрезки: вертикальные – по высоте 300, горизонтальные – по ширине 320 */
   .zst{flex:none;width:min(calc(300 * var(--m) * var(--arn)), calc(320 * var(--m)));height:auto;aspect-ratio:var(--ar);padding:0;border:0;background:none;
-    transform:scale(calc(1 - var(--d, 1) * .22));opacity:calc(1 - var(--d, 1) * .5);transition:transform .25s ease-out,opacity .25s ease-out}
+    transform:scale(calc(1 - var(--d, 1) * .22));opacity:calc(1 - var(--d, 1) * .5);transition:transform .15s linear,opacity .15s linear;user-select:none;-webkit-user-drag:none}
+  .zst img{pointer-events:none}
   .zst img{width:100%;height:100%;object-fit:cover}
   /* подвал: столбец сверху вниз – имя, время, логотип, связь крупно, наверх */
   .foot__cloud{width:240vw;margin:calc(-120vw * 752 / 2378) 0 0 -120vw}
@@ -1158,28 +1159,45 @@ const zenSheets = ZEN_DATA.map(([w, h], i) => {
 });
 /* телефон: те же рисунки лентой – листаются вбок, ближайший к центру крупнее и ярче */
 const zenStrip = document.getElementById('zenStrip');
-/* лента зациклена: три копии подряд, держимся в средней – у края незаметно перескакиваем на такую же позицию в соседней копии */
+/* лента зациклена без нативной прокрутки: на iPhone перескок scrollLeft во время инерции давал пустые экраны.
+   Свой «бесконечный» трек: позиция берётся по модулю ширины одного набора, на экране всегда средняя из трёх копий.
+   Палец/трекпад двигают позицию, после отпускания – инерция с затуханием */
 const stripCard = ([w, h], i) => { const n = String(i + 1).padStart(2, '0');
-  return `<button class="zst" type="button" style="--ar:${w}/${h};--arn:${(w / h).toFixed(4)}" data-i="${i}" aria-label="${ZEN_TITLES[i]}, open"><img src="assets/zen/zen-${n}-s.webp" alt="${ZEN_TITLES[i]}, ink drawing" width="${w}" height="${h}" loading="lazy" decoding="async"></button>`; };
+  return `<button class="zst" type="button" style="--ar:${w}/${h};--arn:${(w / h).toFixed(4)}" data-i="${i}" aria-label="${ZEN_TITLES[i]}, open"><img src="assets/zen/zen-${n}-s.webp" alt="${ZEN_TITLES[i]}, ink drawing" width="${w}" height="${h}" decoding="async"></button>`; };
 const stripSet = ZEN_DATA.map(stripCard).join('');
-zenStrip.innerHTML = stripSet + stripSet + stripSet;
-const zenCards = [...zenStrip.children];
-zenCards.forEach(b => b.addEventListener('click', () => zenShow(zenSheets[+b.dataset.i], b)));
-let setW = 0;
-function stripLoop(){
-  if (!setW) setW = zenCards[ZEN_DATA.length].offsetLeft - zenCards[0].offsetLeft;
-  if (!setW) return;
-  if (zenStrip.scrollLeft < setW * .5) zenStrip.scrollLeft += setW;
-  else if (zenStrip.scrollLeft > setW * 1.5) zenStrip.scrollLeft -= setW;
-}
-const stripStart = () => { setW = 0; stripLoop(); if (setW) zenStrip.scrollLeft = setW + (zenCards[0].offsetLeft - zenStrip.clientWidth / 2 + zenCards[0].offsetWidth / 2); stripTick(); };
+zenStrip.innerHTML = `<div class="zen__track" id="zenTrack">${stripSet + stripSet + stripSet}</div>`;
+const zenTrack = document.getElementById('zenTrack');
+const zenCards = [...zenTrack.children];
+let setW = 0, sPos = 0, sVel = 0, sDrag = null, sMoved = 0;
+const measureStrip = () => { setW = zenCards[ZEN_DATA.length].offsetLeft - zenCards[0].offsetLeft; };
 function stripTick(){
+  if (!isMobile()) return;
+  if (!setW) measureStrip(); if (!setW) return;
+  if (!sDrag) { sPos += sVel; sVel *= .95; if (Math.abs(sVel) < .05) sVel = 0; }
+  const x = ((sPos % setW) + setW) % setW;          /* 0…setW */
+  zenTrack.style.transform = `translate3d(${(-setW - x + innerWidth / 2 - zenCards[0].offsetWidth / 2).toFixed(1)}px,0,0)`;
   const c = innerWidth / 2;
-  zenCards.forEach(b => { const r = b.getBoundingClientRect(), d = Math.min(1, Math.abs(r.left + r.width / 2 - c) / (innerWidth * .6));
-    b.style.setProperty('--d', d.toFixed(3)); });
+  zenCards.forEach(b => { const r = b.getBoundingClientRect();
+    if (r.right < -200 || r.left > innerWidth + 200) return;
+    b.style.setProperty('--d', Math.min(1, Math.abs(r.left + r.width / 2 - c) / (innerWidth * .6)).toFixed(3)); });
 }
-zenStrip.addEventListener('scroll', () => requestAnimationFrame(() => { stripLoop(); stripTick(); }), { passive: true });
-addEventListener('resize', stripStart); addEventListener('load', stripStart); stripStart();
+zenStrip.addEventListener('pointerdown', e => { sDrag = { x: e.clientX, y: e.clientY, p: sPos, t: performance.now(), lx: e.clientX, axis: 0 }; sMoved = 0; sVel = 0; });
+addEventListener('pointermove', e => {
+  if (!sDrag) return;
+  const dx = e.clientX - sDrag.x, dy = e.clientY - sDrag.y;
+  if (!sDrag.axis && Math.hypot(dx, dy) > 6) sDrag.axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+  if (sDrag.axis !== 'x') return;
+  sMoved = Math.abs(dx);
+  const now = performance.now(); sVel = (sDrag.lx - e.clientX) / Math.max(1, now - sDrag.t) * 16; sDrag.t = now; sDrag.lx = e.clientX;
+  sPos = sDrag.p - dx;
+}, { passive: true });
+addEventListener('pointerup', () => { sDrag = null; });
+addEventListener('pointercancel', () => { sDrag = null; });
+zenStrip.addEventListener('wheel', e => { if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) { e.preventDefault(); sPos += e.deltaX; sVel = 0; } }, { passive: false });
+zenCards.forEach(b => b.addEventListener('click', e => { if (sMoved > 8) { e.preventDefault(); return; } zenShow(zenSheets[+b.dataset.i], b); }));
+const stripStart = () => { setW = 0; measureStrip(); stripTick(); };
+addEventListener('resize', stripStart); addEventListener('load', stripStart);
+typeof gsap !== 'undefined' ? gsap.ticker.add(stripTick) : (function f(){ stripTick(); requestAnimationFrame(f); })();
 /* фразы стоят по центру, каждая между листами, примерно через шесть */
 const zenPhrases = ZEN_PHRASES.map((t, k) => {
   const el = document.createElement('div'); el.className = 'zp'; el.innerHTML = `<p>${t}</p>`; document.getElementById('zenWords').append(el);
