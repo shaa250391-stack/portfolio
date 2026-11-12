@@ -264,6 +264,9 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
   /* --m не растёт бесконечно: на планшете и низких экранах всё остаётся в пропорциях телефона */
   :root{--m:min(calc(100vw / 390), calc(100svh / 760), 1.35px);--u:calc(100vw / 520);--pad:max(16px, env(safe-area-inset-left, 0px))}
   .t-12{font-size:calc(11 * var(--m))}
+  /* меню и выход из кейса – крупнее, под палец */
+  .menu,.case__back{font-size:calc(15 * var(--m))}
+  .menu .roll{height:1.1em}
   .t-14{font-size:calc(13 * var(--m))}
   .t-30{font-size:calc(30 * var(--m));line-height:calc(25 * var(--m))}
   /* первый экран: колонка сверху вниз, заголовок – плакат в три строки внизу */
@@ -351,11 +354,13 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
   .zen__text,.zen__side{position:static;padding:0 var(--pad)}
   .zen__text{order:-1}
   .zen__side{align-items:flex-end}
-  .zen__strip{display:flex;align-items:center;gap:calc(14 * var(--m));overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;
-    padding:calc(20 * var(--m)) calc(50vw - 110 * var(--m));height:calc(380 * var(--m))}
+  /* свободная прокрутка с инерцией (без щелчков по одной картинке) */
+  .zen__strip{display:flex;align-items:center;gap:calc(14 * var(--m));overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;
+    padding:calc(20 * var(--m)) 0;height:calc(380 * var(--m))}
   .zen__strip::-webkit-scrollbar{display:none}
-  .zst{flex:none;height:calc(300 * var(--m));aspect-ratio:var(--ar);max-width:calc(260 * var(--m));padding:0;border:0;background:none;scroll-snap-align:center;
-    transform:scale(calc(1 - var(--d, 1) * .38));opacity:calc(1 - var(--d, 1) * .55);transition:transform .25s ease-out,opacity .25s ease-out}
+  /* лист целиком, без обрезки: вертикальные – по высоте 300, горизонтальные – по ширине 320 */
+  .zst{flex:none;width:min(calc(300 * var(--m) * var(--arn)), calc(320 * var(--m)));height:auto;aspect-ratio:var(--ar);padding:0;border:0;background:none;
+    transform:scale(calc(1 - var(--d, 1) * .22));opacity:calc(1 - var(--d, 1) * .5);transition:transform .25s ease-out,opacity .25s ease-out}
   .zst img{width:100%;height:100%;object-fit:cover}
   /* подвал: столбец сверху вниз – имя, время, логотип, связь крупно, наверх */
   .foot__cloud{width:240vw;margin:calc(-120vw * 752 / 2378) 0 0 -120vw}
@@ -1153,17 +1158,28 @@ const zenSheets = ZEN_DATA.map(([w, h], i) => {
 });
 /* телефон: те же рисунки лентой – листаются вбок, ближайший к центру крупнее и ярче */
 const zenStrip = document.getElementById('zenStrip');
-zenStrip.innerHTML = ZEN_DATA.map(([w, h], i) => { const n = String(i + 1).padStart(2, '0');
-  return `<button class="zst" type="button" style="--ar:${w}/${h}" aria-label="${ZEN_TITLES[i]}, open"><img src="assets/zen/zen-${n}-s.webp" alt="${ZEN_TITLES[i]}, ink drawing" width="${w}" height="${h}" loading="lazy" decoding="async"></button>`; }).join('');
+/* лента зациклена: три копии подряд, держимся в средней – у края незаметно перескакиваем на такую же позицию в соседней копии */
+const stripCard = ([w, h], i) => { const n = String(i + 1).padStart(2, '0');
+  return `<button class="zst" type="button" style="--ar:${w}/${h};--arn:${(w / h).toFixed(4)}" data-i="${i}" aria-label="${ZEN_TITLES[i]}, open"><img src="assets/zen/zen-${n}-s.webp" alt="${ZEN_TITLES[i]}, ink drawing" width="${w}" height="${h}" loading="lazy" decoding="async"></button>`; };
+const stripSet = ZEN_DATA.map(stripCard).join('');
+zenStrip.innerHTML = stripSet + stripSet + stripSet;
 const zenCards = [...zenStrip.children];
-zenCards.forEach((b, i) => b.addEventListener('click', () => zenShow(zenSheets[i])));
+zenCards.forEach(b => b.addEventListener('click', () => zenShow(zenSheets[+b.dataset.i], b)));
+let setW = 0;
+function stripLoop(){
+  if (!setW) setW = zenCards[ZEN_DATA.length].offsetLeft - zenCards[0].offsetLeft;
+  if (!setW) return;
+  if (zenStrip.scrollLeft < setW * .5) zenStrip.scrollLeft += setW;
+  else if (zenStrip.scrollLeft > setW * 1.5) zenStrip.scrollLeft -= setW;
+}
+const stripStart = () => { setW = 0; stripLoop(); if (setW) zenStrip.scrollLeft = setW + (zenCards[0].offsetLeft - zenStrip.clientWidth / 2 + zenCards[0].offsetWidth / 2); stripTick(); };
 function stripTick(){
   const c = innerWidth / 2;
   zenCards.forEach(b => { const r = b.getBoundingClientRect(), d = Math.min(1, Math.abs(r.left + r.width / 2 - c) / (innerWidth * .6));
     b.style.setProperty('--d', d.toFixed(3)); });
 }
-zenStrip.addEventListener('scroll', () => requestAnimationFrame(stripTick), { passive: true });
-addEventListener('resize', stripTick); stripTick();
+zenStrip.addEventListener('scroll', () => requestAnimationFrame(() => { stripLoop(); stripTick(); }), { passive: true });
+addEventListener('resize', stripStart); addEventListener('load', stripStart); stripStart();
 /* фразы стоят по центру, каждая между листами, примерно через шесть */
 const zenPhrases = ZEN_PHRASES.map((t, k) => {
   const el = document.createElement('div'); el.className = 'zp'; el.innerHTML = `<p>${t}</p>`; document.getElementById('zenWords').append(el);
@@ -1212,8 +1228,8 @@ function zenTick(){
     f.el.style.opacity = (o * .85).toFixed(3);
   });
 }
-function zenShow(s){
-  const from = (isMobile() ? zenCards[s.i] : s.btn).getBoundingClientRect();
+function zenShow(s, card){
+  const from = (card || s.btn).getBoundingClientRect();
   zenImg.src = `assets/zen/zen-${s.n}-s.webp`;
   const big = new Image(); big.src = `assets/zen/zen-${s.n}-l.webp`; big.onload = () => { if (!zenView.hidden) zenImg.src = big.src; };
   zenCap.innerHTML = `<span>${ZEN_TITLES[s.i]}</span><span>Ink on paper</span><span>(${s.n})</span>`;
@@ -1266,7 +1282,8 @@ document.fonts.ready.then(centerSlot);
 const menuBtn = document.getElementById('menuBtn');
 const setMenu = open => { menu.classList.toggle('is-list', open); menuBtn.setAttribute('aria-expanded', open); if (lenis) open ? lenis.stop() : lenis.start(); };
 menuBtn.addEventListener('click', () => setMenu(!menu.classList.contains('is-list')));
-document.getElementById('menuList').addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); });
+/* закрываем список ДО перехода (фаза захвата): пока список открыт, прокрутка остановлена и переход к блоку игнорировался */
+document.getElementById('menuList').addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); }, true);
 
 /* ---------- местное время в Дананге ---------- */
 const clockEl = document.getElementById('clock');
