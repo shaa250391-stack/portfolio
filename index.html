@@ -511,7 +511,11 @@ const trailEl = document.getElementById('trail');
 const layers = [...document.querySelectorAll('.layer')].map(el => ({ el, d: +el.dataset.depth, x: 0, y: 0 }));
 const mouse = { x: innerWidth / 2, y: innerHeight / 2, nx: 0, ny: 0 };
 addEventListener('pointermove', e => { mouse.x = e.clientX; mouse.y = e.clientY; mouse.nx = e.clientX / innerWidth - .5; mouse.ny = e.clientY / innerHeight - .5; });
+/* сенсорный экран (телефон, планшет): эффекты от курсора выключены – касание пальцем там читалось как движение мыши,
+   и превью, слои, плашка и подвал дёргались. Остаются только эффекты от прокрутки */
+const isTouch = () => matchMedia('(hover: none), (pointer: coarse)').matches || isMobile();
 function parallax(){
+  if (isTouch()) return;
   const amp = 30 * U();
   layers.forEach(l => {
     l.x += (mouse.nx * amp * l.d - l.x) * .05; l.y += (mouse.ny * amp * .6 * l.d - l.y) * .05;
@@ -527,6 +531,7 @@ const hist = Array.from({ length: N_BLOB * 2 }, () => ({ x: innerWidth / 2, y: i
 const head = { x: innerWidth / 2, y: innerHeight / 2 };
 let speed = 0;
 function cursor(){
+  if (isTouch()) return;
   const dx = mouse.x - head.x, dy = mouse.y - head.y;
   head.x += dx * .25; head.y += dy * .25;
   const v = Math.hypot(dx, dy);
@@ -645,7 +650,7 @@ function scroll(){
   const K = vh * .4;
   let sink = smooth(0, 1, (s - end) / (vh * .7));
   let off = over - K * Math.tanh(over / K) + sink * vh * .45;
-  pt.x += (mouse.nx - pt.x) * .06; pt.y += (mouse.ny - pt.y) * .06;
+  if (isTouch()) { pt.x = 0; pt.y = 0; } else { pt.x += (mouse.nx - pt.x) * .06; pt.y += (mouse.ny - pt.y) * .06; }
   let e = smooth(.98, 1.4, p);
   if (isMobile()) {
     /* телефон: фото короче экрана, поэтому плашка не стоит на месте, а лежит на фото над головой (как на макете)
@@ -712,6 +717,7 @@ function menuTone(){
 /* превью работ наклоняются и сдвигаются за курсором, как плашка */
 const pics = wks.map(li => li.querySelector('.wk__pic'));
 function tiltPics(){
+  if (isTouch()) { pics.forEach(el => el.style.transform = ''); return; }
   const u = U(), per = (900 * u).toFixed(0);
   const t = `perspective(${per}px) translate3d(${(pt.x * 14 * u).toFixed(2)}px,${(pt.y * 10 * u).toFixed(2)}px,0) rotateX(${(-pt.y * 7).toFixed(2)}deg) rotateY(${(pt.x * 9).toFixed(2)}deg)`;
   pics.forEach(el => { const r = el.getBoundingClientRect(); if (r.bottom > 0 && r.top < innerHeight) el.style.transform = t; });
@@ -1129,7 +1135,7 @@ function caseTick(){
     const t = clamp01((vh - top) / (vh * .55)), e = 1 - Math.pow(1 - t, 3);
     box.style.clipPath = `inset(0 0 ${((1 - e) * 100).toFixed(2)}% 0)`;
     m.style.transform = `scale(${(1.14 - .14 * e).toFixed(4)})`;
-    f.style.transform = `translate3d(0,${s.y.toFixed(1)}px,0) skewY(${(caseV * 1.6).toFixed(3)}deg)`;
+    f.style.transform = `translate3d(0,${s.y.toFixed(1)}px,0) skewY(${(isTouch() ? 0 : caseV * 1.6).toFixed(3)}deg)`;
   });
   /* мелкий текст не лезет на большой заголовок: гаснет, подъезжая к его низу (картинки при этом перекрывают заголовок) */
   caseTexts.forEach(el => { const r = el.getBoundingClientRect(); el.style.opacity = clamp01((r.top - 60 * w) / (260 * w)).toFixed(3); });
@@ -1304,6 +1310,7 @@ document.getElementById('zenNext').addEventListener('click', e => { e.preventDef
 const footFloat = document.getElementById('footFloat'), footCloud = footEl.querySelector('.foot__cloud');
 const fm = { x: 0, y: 0, cx: 0, cy: 0 }; let footT = 0;
 function footMove(){
+  if (isTouch()) { footFloat.style.transform = ''; footCloud.style.transform = ''; return; }
   const r = footEl.getBoundingClientRect();
   if (r.top > innerHeight || r.bottom < 0) return;
   const w = innerWidth / 1400; footT += 1 / 60;
