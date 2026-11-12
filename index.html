@@ -227,6 +227,7 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
 .zen__fig img{max-height:84svh;max-width:62vw;width:auto;height:auto;box-shadow:0 calc(40 * var(--w)) calc(120 * var(--w)) rgba(0,0,0,.6)}
 .zen__cap{width:calc(240 * var(--w));display:flex;flex-direction:column;gap:calc(6 * var(--w))}
 .zen__cap span:not(:first-child){opacity:.5}
+.zen__strip{display:none}
 .is-static .zen{height:auto}
 .is-static .zen__stage{position:relative}
 
@@ -339,6 +340,23 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
   .zen__fig{flex-direction:column;align-items:flex-start;gap:calc(14 * var(--m))}
   .zen__fig img{max-width:calc(100vw - 2 * var(--pad));max-height:72svh}
   .zen__cap{width:auto}
+
+  /* зерно: минимальное и неподвижное (на телефоне дрожание читалось как рябь) */
+  .js .grain{animation:none}
+  .grain::before{opacity:.06}.grain::after{opacity:.025}
+  /* рисунки: обычный блок – текст, лента вбок, «дальше» */
+  .zen{height:auto}
+  .zen__stage{position:relative;height:auto;overflow:visible;display:flex;flex-direction:column;gap:calc(28 * var(--m));padding:calc(72 * var(--m)) 0 calc(40 * var(--m))}
+  .zen__space,.zen__words,.zen__bar,.zen__hint{display:none}
+  .zen__text,.zen__side{position:static;padding:0 var(--pad)}
+  .zen__text{order:-1}
+  .zen__side{align-items:flex-end}
+  .zen__strip{display:flex;align-items:center;gap:calc(14 * var(--m));overflow-x:auto;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;scrollbar-width:none;
+    padding:calc(20 * var(--m)) calc(50vw - 110 * var(--m));height:calc(380 * var(--m))}
+  .zen__strip::-webkit-scrollbar{display:none}
+  .zst{flex:none;height:calc(300 * var(--m));aspect-ratio:var(--ar);max-width:calc(260 * var(--m));padding:0;border:0;background:none;scroll-snap-align:center;
+    transform:scale(calc(1 - var(--d, 1) * .38));opacity:calc(1 - var(--d, 1) * .55);transition:transform .25s ease-out,opacity .25s ease-out}
+  .zst img{width:100%;height:100%;object-fit:cover}
   /* подвал: столбец сверху вниз – имя, время, логотип, связь крупно, наверх */
   .foot__cloud{width:240vw;margin:calc(-120vw * 752 / 2378) 0 0 -120vw}
   .foot__float{width:calc(100vw - 2 * var(--pad));height:auto;min-height:78svh;display:flex;flex-direction:column;justify-content:space-between;gap:calc(28 * var(--m))}
@@ -396,6 +414,7 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
   <section class="zen" id="zen" aria-label="Zen drawings">
     <div class="zen__stage" id="zenStage">
       <div class="zen__space"><div class="zen__cam" id="zenCam"></div></div>
+      <div class="zen__strip" id="zenStrip" aria-label="Drawings, swipe sideways"></div>
       <div class="zen__words" id="zenWords" aria-hidden="true"></div>
       <div class="zen__text t-14">
         <h2 class="zen__title t-56">Zen<br>drawings</h2>
@@ -999,7 +1018,7 @@ function openCase(id, fly){
      заголовок кейса садится поверх видимого заголовка списка и их на экране два */
   lt.style.visibility = 'hidden';
   const tl = gsap.timeline({ onComplete: () => { caseBusy = false; gsap.set(caseContent, { clearProps: 'transform' }); gsap.set(caseTitle, { clearProps: 'letterSpacing,lineHeight' }); } });
-  if (fly && inView(a)) {
+  if (fly && inView(a) && !isMobile()) {
     /* заголовок вырастает из строки списка, меняет цвет и встаёт наверх; светлый лист темнеет */
     const L = listLook(lt), b = rectWith(L.ls, L.lh);
     tl.fromTo(caseTitle, { x: a.left - b.left, y: a.top - b.top, scale: L.k, color: L.color, letterSpacing: L.ls, lineHeight: L.lh, '--k': 0 },
@@ -1032,7 +1051,7 @@ function closeCase(){
   const tl = gsap.timeline({ onComplete: done });
   tl.to(caseContent, { y: innerHeight * .5, autoAlpha: 0, duration: .7, ease: 'power3.in' }, 0)
     .to(caseBack, { autoAlpha: 0, duration: .3 }, 0);
-  if (inView(a)) {
+  if (inView(a) && !isMobile()) {
     /* обратный путь: заголовок уменьшается и садится на своё место в списке, тёмный фон тает */
     tl.fromTo(caseTitle, { letterSpacing: CASE_LS, lineHeight: CASE_LH, '--k': 1 },
         { x: a.left - b.left, y: a.top - b.top, scale: L.k, color: L.color, letterSpacing: L.ls, lineHeight: L.lh, '--k': 0, duration: 1.2, ease: 'expo.inOut' }, .35)
@@ -1132,6 +1151,19 @@ const zenSheets = ZEN_DATA.map(([w, h], i) => {
   s.btn.addEventListener('mouseleave', () => zenSec.classList.remove('has-hover'));
   return s;
 });
+/* телефон: те же рисунки лентой – листаются вбок, ближайший к центру крупнее и ярче */
+const zenStrip = document.getElementById('zenStrip');
+zenStrip.innerHTML = ZEN_DATA.map(([w, h], i) => { const n = String(i + 1).padStart(2, '0');
+  return `<button class="zst" type="button" style="--ar:${w}/${h}" aria-label="${ZEN_TITLES[i]}, open"><img src="assets/zen/zen-${n}-s.webp" alt="${ZEN_TITLES[i]}, ink drawing" width="${w}" height="${h}" loading="lazy" decoding="async"></button>`; }).join('');
+const zenCards = [...zenStrip.children];
+zenCards.forEach((b, i) => b.addEventListener('click', () => zenShow(zenSheets[i])));
+function stripTick(){
+  const c = innerWidth / 2;
+  zenCards.forEach(b => { const r = b.getBoundingClientRect(), d = Math.min(1, Math.abs(r.left + r.width / 2 - c) / (innerWidth * .6));
+    b.style.setProperty('--d', d.toFixed(3)); });
+}
+zenStrip.addEventListener('scroll', () => requestAnimationFrame(stripTick), { passive: true });
+addEventListener('resize', stripTick); stripTick();
 /* фразы стоят по центру, каждая между листами, примерно через шесть */
 const zenPhrases = ZEN_PHRASES.map((t, k) => {
   const el = document.createElement('div'); el.className = 'zp'; el.innerHTML = `<p>${t}</p>`; document.getElementById('zenWords').append(el);
@@ -1142,6 +1174,7 @@ const zenPhrases = ZEN_PHRASES.map((t, k) => {
 let zenT = 0, zenTravel = 0, zenOn = true;
 const zcam = { x: 0, y: 0 };
 function zenTick(){
+  if (isMobile()) return; /* на телефоне вместо полёта – лента */
   const r = zenSec.getBoundingClientRect(), vh = innerHeight, vw = innerWidth, w = vw / zenFrame();
   /* вне экрана 3D-сцена целиком выключена: 38 слоёв не нагружают видеокарту, пока смотришь другие блоки */
   const on = r.bottom > 0 && r.top < vh;
@@ -1180,7 +1213,7 @@ function zenTick(){
   });
 }
 function zenShow(s){
-  const from = s.btn.getBoundingClientRect();
+  const from = (isMobile() ? zenCards[s.i] : s.btn).getBoundingClientRect();
   zenImg.src = `assets/zen/zen-${s.n}-s.webp`;
   const big = new Image(); big.src = `assets/zen/zen-${s.n}-l.webp`; big.onload = () => { if (!zenView.hidden) zenImg.src = big.src; };
   zenCap.innerHTML = `<span>${ZEN_TITLES[s.i]}</span><span>Ink on paper</span><span>(${s.n})</span>`;
@@ -1296,7 +1329,7 @@ document.fonts.ready.then(() => {
   lenis = new Lenis({ lerp: .07, wheelMultiplier: .9 });
   drawPhoto = mountPhoto();
   cutCv = document.getElementById('meCutGl');
-  if (drawPhoto) drawCut = mountPhoto(cutCv, document.getElementById('meCut'), true);
+  if (drawPhoto && !isMobile()) drawCut = mountPhoto(cutCv, document.getElementById('meCut'), true);
   gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0);
   /* пункты меню ведут к своим блокам; длительность зависит от расстояния, чтобы дальние переходы не были рывком */
   [...menu.querySelectorAll('a[href^="#"]:not([href="#"])'), document.querySelector('.desc__cta')].forEach(a => a.addEventListener('click', e => {
