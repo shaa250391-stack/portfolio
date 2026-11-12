@@ -6,22 +6,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Anton Shatkovski – Web and graphic designer</title>
 <meta name="description" content="Anton Shatkovski, independent designer in Da Nang, Vietnam. Websites, graphics and visual identities. Minimal, type-driven, with a careful sense of space.">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400;500;600&display=swap">
+<link rel="preload" href="assets/fonts/golos-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>
+/* Golos Text – свой файл (вариативный, 400–600), не с Google Fonts: стабильно везде, в том числе в России и в Safari с защитой от слежения */
+@font-face{font-family:'Golos Text';font-style:normal;font-weight:400 600;font-display:swap;src:url(assets/fonts/golos-400-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2197,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Golos Text';font-style:normal;font-weight:400 600;font-display:swap;src:url(assets/fonts/golos-400-cyrillic.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
 /* Концепт D – по макету Антона (мои концепты макеты/1.png, Figma 1200). Только десктоп.
    1u = 1px макета шириной 1200; экран масштабируется по ширине и по высоте первого экрана (706). */
 :root{
   --night:#0A0A0A; --light:#ECECEC; --title:#DFDFDF; --sheet:#DFDFDF; --blue:#40A2FF; --ink:#111111;
-  --u:min(calc(100vw / 1200), calc(100svh / 706), 1.6px);
+  --u:min(calc(100vw / 1200), calc(100vh / 706), 1.6px);
+  --u:min(calc(100vw / 1200), calc(100vh / 706), 1.6px);
   --pad:calc(20 * var(--u));
   /* с 12.11 Антон работает в кадре Figma 1400: --p = 1px этого кадра (u · 1200/1400); новые размеры шрифтов – в нём */
   --p:calc(var(--u) * 12 / 14);
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{-webkit-text-size-adjust:100%}
-body{background:var(--night);color:var(--light);font-family:'Golos Text',sans-serif;font-weight:400;text-transform:uppercase;-webkit-font-smoothing:antialiased;overflow-x:clip}
+body{background:var(--night);color:var(--light);font-family:'Golos Text',sans-serif;font-weight:400;text-transform:uppercase;-webkit-font-smoothing:antialiased;overflow-x:hidden;overflow-x:clip}
 img{display:block;max-width:100%}
 [hidden]{display:none!important} /* иначе img{display:block} перебивает hidden (так вырезка #meCut вставала под подвалом) */
 a{color:inherit;text-decoration:none}
@@ -35,8 +37,8 @@ a{color:inherit;text-decoration:none}
 .w5{font-weight:500}.w6{font-weight:600}
 
 /* ===== intro: первый экран стоит, пока фото вырастает из маленького кадра ===== */
-.intro{position:relative;z-index:1;height:200svh}
-.stage{position:sticky;top:0;height:100svh;overflow:clip;display:grid;grid-template-areas:'s';justify-items:center;text-align:center;padding-top:calc(18 * var(--u))}
+.intro{position:relative;z-index:1;height:200vh;height:200svh}
+.stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;overflow:clip;display:grid;grid-template-areas:'s';justify-items:center;text-align:center;padding-top:calc(18 * var(--u))}
 .stage>*{grid-area:s}
 .top{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;align-self:start}
 .top>*{flex:none}
@@ -59,7 +61,7 @@ html:not(.no-cta) .desc--old,html.no-cta .desc--cta{display:none}
 .js .slot img{visibility:hidden}
 .title{align-self:end;padding-bottom:calc(14 * var(--u));color:var(--title);white-space:nowrap;position:relative;z-index:1}
 .title{display:flex;flex-direction:column;align-items:center}
-.mask{display:block;overflow:clip;padding:.14em .04em .1em;margin:-.14em -.04em -.1em}
+.mask{display:block;overflow:hidden;overflow:clip;padding:.14em .04em .1em;margin:-.14em -.04em -.1em}
 .mask>span{display:block;width:max-content;margin-inline:auto}
 .is-open .mask{overflow:visible}
 
@@ -79,7 +81,7 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
 .t-br{display:inline}
 
 /* ===== me: фото на всю ширину ===== */
-.me{position:relative;z-index:2;width:100%;aspect-ratio:2/3;margin-top:-100svh}
+.me{position:relative;z-index:2;width:100%;aspect-ratio:2/3;margin-top:-100vh;margin-top:-100svh}
 .me__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform-origin:0 0;will-change:transform}
 /* плашка: в середине стоит, на входе и выходе скорость меняется плавно */
 /* в верхней половине экрана: верх плашки 71px кадра 1400 (скрин Figma 12.11) */
@@ -89,7 +91,7 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
 
 /* дальше начнётся блок работ */
 /* сверху тот же шаг, что между работами (28u): лист начинается сразу с первой работы */
-.works{position:relative;z-index:2;overflow-x:clip;background:var(--sheet);color:var(--ink);padding:calc(28 * var(--u)) 0 calc(66 * var(--u));
+.works{position:relative;z-index:2;overflow-x:hidden;overflow-x:clip;background:var(--sheet);color:var(--ink);padding:calc(28 * var(--u)) 0 calc(66 * var(--u));
   box-shadow:0 calc(-30 * var(--u)) calc(90 * var(--u)) rgba(0,0,0,.45)}
 /* затемнение, когда сверху наезжает подвал */
 .works::after{content:"";position:absolute;inset:0;background:#000;opacity:var(--dim,0);pointer-events:none}
@@ -121,9 +123,9 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
 /* ===== foot: голубой подвал с рисунком-облаком ===== */
 /* ===== foot: последний экран на всю высоту. Четыре угла текста образуют квадрат, в центре – логотип.
    Квадрат с логотипом двигается за мышью как одно целое, облако позади – слабее и с другой скоростью (между ними расстояние) ===== */
-.foot{position:relative;z-index:4;box-shadow:0 calc(-30 * var(--u)) calc(90 * var(--u)) rgba(0,0,0,.3);background:var(--blue);color:var(--ink);height:100svh;overflow:hidden;display:grid;place-items:center}
+.foot{position:relative;z-index:4;box-shadow:0 calc(-30 * var(--u)) calc(90 * var(--u)) rgba(0,0,0,.3);background:var(--blue);color:var(--ink);height:100vh;height:100svh;overflow:hidden;display:grid;place-items:center}
 .foot__cloud{position:absolute;left:50%;top:50%;width:104vw;height:auto;aspect-ratio:2378/752;max-width:none;margin:calc(-52vw * 752 / 2378 - 3.2vw) 0 0 calc(-52vw + 1.2vw); /* сдвиг по макету Антона: облако чуть выше центра квадрата, верхняя петля на уровне верхних строк */mix-blend-mode:lighten;opacity:.7;pointer-events:none;will-change:transform}
-.foot__float{position:relative;width:49.6vw;height:52.6svh;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;will-change:transform}
+.foot__float{position:relative;width:49.6vw;height:52.6vh;height:52.6svh;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;will-change:transform}
 .foot__col{display:flex;flex-direction:column}
 .foot__col>*{line-height:1.1}
 .foot__col--tr,.foot__col--br{text-align:right;align-items:flex-end}
@@ -185,7 +187,7 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
 .case__right{margin-top:var(--g);display:flex;justify-content:flex-end}
 .case__right .case__shots{width:calc(660 * var(--w))}
 /* финал: «Back to works» по центру тёмного поля под заголовком */
-.case__end{min-height:100svh;padding-top:calc(320 * var(--w));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(18 * var(--w))}
+.case__end{min-height:100vh;min-height:100svh;padding-top:calc(320 * var(--w));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(18 * var(--w))}
 .case__home{color:var(--title);transition:color .5s}
 /* подпись у курсора внутри кейса: клик в любом месте возвращает к работам */
 .case__cursor{position:absolute;left:0;top:0;z-index:4;pointer-events:none;display:flex;align-items:center;gap:calc(8 * var(--w));padding:calc(7 * var(--w)) calc(10 * var(--w));background:var(--light);color:var(--ink);opacity:0;transition:opacity .3s;will-change:transform}
@@ -196,8 +198,8 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
 .case__end p{opacity:.5}
 
 /* ===== Zen drawings: отдельный блок между работами и подвалом. Прокрутка ведёт камеру сквозь листы туши ===== */
-.zen{position:relative;z-index:3;height:600svh;background:var(--night);color:var(--light);--w:calc(100vw / 1400);box-shadow:0 calc(-30 * var(--u)) calc(90 * var(--u)) rgba(0,0,0,.45)}
-.zen__stage{position:sticky;top:0;height:100svh;overflow:hidden}
+.zen{position:relative;z-index:3;height:600vh;height:600svh;background:var(--night);color:var(--light);--w:calc(100vw / 1400);box-shadow:0 calc(-30 * var(--u)) calc(90 * var(--u)) rgba(0,0,0,.45)}
+.zen__stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
 .zen__stage::after{content:"";position:absolute;inset:0;z-index:5;background:#000;opacity:var(--dim,0);pointer-events:none}
 .zen__space{position:absolute;inset:0;z-index:1;perspective:calc(900 * var(--w));perspective-origin:50% 50%}
 .zen__cam{position:absolute;left:50%;top:50%;transform-style:preserve-3d;will-change:transform}
@@ -224,7 +226,7 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
 /* просмотр одного листа */
 .zen__view{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:rgba(10,10,10,.8);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);cursor:zoom-out;color:var(--light);--w:calc(100vw / 1400)}
 .zen__fig{display:flex;align-items:flex-end;gap:calc(32 * var(--w))}
-.zen__fig img{max-height:84svh;max-width:62vw;width:auto;height:auto;box-shadow:0 calc(40 * var(--w)) calc(120 * var(--w)) rgba(0,0,0,.6)}
+.zen__fig img{max-height:84vh;max-height:84svh;max-width:62vw;width:auto;height:auto;box-shadow:0 calc(40 * var(--w)) calc(120 * var(--w)) rgba(0,0,0,.6)}
 .zen__cap{width:calc(240 * var(--w));display:flex;flex-direction:column;gap:calc(6 * var(--w))}
 .zen__cap span:not(:first-child){opacity:.5}
 .zen__strip{display:none}
@@ -260,9 +262,12 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
 /* ================= ТЕЛЕФОН (≤ 768, проектируется на 390) =================
    Тот же язык: тёмный фон, зерно, воздух, слои. 1m = 1px кадра 390. --u подобрана так,
    чтобы десктопные пропорции первого экрана читались на узком экране; мелкий текст – в m */
+/* где svh понимают – единицы от «малой» высоты экрана (без прыжков из-за панели Safari) */
+@supports (height:100svh){:root{--u:min(calc(100vw / 1200), calc(100svh / 706), 1.6px)}}
 @media (max-width: 768px){
   /* --m не растёт бесконечно: на планшете и низких экранах всё остаётся в пропорциях телефона */
-  :root{--m:min(calc(100vw / 390), calc(100svh / 760), 1.35px);--u:calc(100vw / 520);--pad:max(16px, env(safe-area-inset-left, 0px))}
+  :root{--m:min(calc(100vw / 390), calc(100vh / 760), 1.35px);--u:calc(100vw / 520);--pad:max(16px, env(safe-area-inset-left, 0px))}
+  @supports (height:100svh){:root{--m:min(calc(100vw / 390), calc(100svh / 760), 1.35px)}}
   .t-12{font-size:calc(11 * var(--m))}
   /* меню и выход из кейса – крупнее, под палец */
   .menu,.case__back{font-size:calc(15 * var(--m))}
@@ -334,7 +339,7 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
   .case__pair>.case__note,.case__note{justify-self:start;width:auto;gap:calc(8 * var(--m))}
   .case__right{display:block}
   .case__right .case__shots{width:auto}
-  .case__end{min-height:70svh;padding-top:0}
+  .case__end{min-height:70vh;min-height:70svh;padding-top:0}
   .case__end p{display:none}
   /* рисунки: листы и текст в кадре 600; текст – наверху, у большого пальца – только «дальше» */
   .zen{--w:calc(100vw / 600)}
@@ -347,7 +352,7 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
   .zen__bar{display:none}
   .zp p{font-size:calc(12 * var(--m))}
   .zen__fig{flex-direction:column;align-items:flex-start;gap:calc(14 * var(--m))}
-  .zen__fig img{max-width:calc(100vw - 2 * var(--pad));max-height:72svh}
+  .zen__fig img{max-width:calc(100vw - 2 * var(--pad));max-height:72vh;max-height:72svh}
   .zen__cap{width:auto}
 
   /* зерно: минимальное и неподвижное (на телефоне дрожание читалось как рябь) */
@@ -371,7 +376,7 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
   .zst img{width:100%;height:100%;object-fit:cover}
   /* подвал: столбец сверху вниз – имя, время, логотип, связь крупно, наверх */
   .foot__cloud{width:240vw;margin:calc(-120vw * 752 / 2378) 0 0 -120vw}
-  .foot__float{width:calc(100vw - 2 * var(--pad));height:auto;min-height:78svh;display:flex;flex-direction:column;justify-content:space-between;gap:calc(28 * var(--m))}
+  .foot__float{width:calc(100vw - 2 * var(--pad));height:auto;min-height:78vh;min-height:78svh;display:flex;flex-direction:column;justify-content:space-between;gap:calc(28 * var(--m))}
   .foot__col--tr,.foot__col--br{text-align:left;align-items:flex-start}
   .foot__col{align-self:stretch}
   .foot__logo{position:static;margin:0;width:calc(32 * var(--m));height:calc(36 * var(--m));order:-1;align-self:flex-start}
@@ -471,8 +476,8 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
 <div class="loader" id="loader" aria-hidden="true"><span class="ld-logo" id="ldLogo"></span></div>
 <div class="grain" aria-hidden="true"></div>
 
-<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
+<script src="assets/lib/gsap.min.js"></script>
+<script src="assets/lib/lenis.min.js"></script>
 <script>
 const params = new URLSearchParams(location.search);
 const isStatic = params.has('static');
@@ -480,7 +485,7 @@ const isStatic = params.has('static');
 const CTA = params.get('cta') !== '0';
 if (!CTA) document.documentElement.classList.add('no-cta');
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
-const motionOn = !isStatic && !reduce && typeof gsap !== 'undefined';
+const motionOn = !isStatic && !reduce && typeof gsap !== 'undefined' && typeof Lenis !== 'undefined';
 document.documentElement.classList.add(motionOn ? 'js' : 'is-static');
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
 /* 1u – из CSS (на телефоне своя формула): меряем пробник шириной 1000u */
@@ -496,7 +501,7 @@ const ease = t => .5 - Math.cos(Math.PI * clamp01(t)) / 2; /* синусоида
 
 /* фраза: две строки, слова по отдельности */
 const phrase = document.getElementById('phrase');
-phrase.innerHTML = phrase.textContent.trim().split(/(?<=\.)\s+/).map(l => l.split(' ').map(w => `<span class="w">${w}</span>`).join(' ')).join('<br>');
+phrase.innerHTML = phrase.textContent.trim().replace(/\.\s+/g, '.\n').split('\n').map(l => l.split(' ').map(w => `<span class="w">${w}</span>`).join(' ')).join('<br>');
 const words = [...phrase.querySelectorAll('.w')].map((el, i) => ({ el, x: Math.sin(i * 2.1 + 1) * 150, y: Math.cos(i * 1.7) * 130, r: Math.sin(i * 3.3) * 14 }));
 
 
@@ -1365,7 +1370,13 @@ function intro(){
     .add(() => document.body.classList.add('is-open'));
 }
 
-document.fonts.ready.then(() => {
+/* старт: ждём шрифт, но не дольше 2.5 с (в некоторых Safari fonts.ready не приходит).
+   Если при запуске что-то упало – не оставляем пустой экран, а перезагружаем страницу в спокойном режиме без анимаций */
+const bootFail = err => { console.error(err); if (!isStatic) location.replace(location.pathname + '?static' + location.hash); };
+addEventListener('error', e => { if (!booted) bootFail(e.error || e.message); });
+let booted = false;
+Promise.race([document.fonts ? document.fonts.ready : Promise.resolve(), new Promise(r => setTimeout(r, 2500))]).then(() => { try { boot(); booted = true; } catch (e) { bootFail(e); } });
+function boot(){
   fitWorks(); addEventListener('resize', fitWorks);
   /* меню: копия текста для прокрутки при наведении */
   menu.querySelectorAll('a').forEach(a => { const t = a.textContent; a.innerHTML = `<span class="roll"><span data-t="${t}">${t}</span></span>`; });
@@ -1395,7 +1406,7 @@ document.fonts.ready.then(() => {
   lenis.stop();
   /* прямой заход по ссылке на кейс: главная встаёт на блок работ, кейс открывается без перелёта */
   loader(() => { lenis.start(); if (location.hash === '#zen') lenis.scrollTo('#zen', { immediate: true }); else if (hashCase()) { lenis.scrollTo(wks[CASES[hashCase()].work], { immediate: true, offset: -60 }); openCase(hashCase(), false); } });
-});
+}
 </script>
 </body>
 </html>
