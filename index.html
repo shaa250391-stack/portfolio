@@ -229,6 +229,7 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
 .zen__fig img{max-height:84vh;max-height:84svh;max-width:62vw;width:auto;height:auto;box-shadow:0 calc(40 * var(--w)) calc(120 * var(--w)) rgba(0,0,0,.6)}
 .zen__cap{width:calc(240 * var(--w));display:flex;flex-direction:column;gap:calc(6 * var(--w))}
 .zen__cap span:not(:first-child){opacity:.5}
+.zen__close{position:absolute;top:max(12px, env(safe-area-inset-top, 0px));right:12px;width:48px;height:48px;border:0;background:none;color:var(--light);font:300 34px/1 'Golos Text',sans-serif;cursor:pointer}
 .zen__strip{display:none}
 .is-static .zen{height:auto}
 .is-static .zen__stage{position:relative}
@@ -305,7 +306,7 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
   .menu__right .roll{height:1em}
   /* фото: на узком экране раскрывается на высоту, а не на ширину – картинка обрезается по бокам */
   /* фото на телефоне – те же пропорции 2:3 во всю ширину, что и кадр: растёт без искажения, как на макете Антона */
-  .me{aspect-ratio:2/3;height:auto}
+  .me{aspect-ratio:2/3;height:auto;margin-top:calc(-100vh + (100vh - 150vw) / 2);margin-top:calc(-100svh + (100svh - 150vw) / 2)}
   /* плашка как на макете: шире, чем выше, лежит на фото над головой */
   .plaque{width:calc(280 * var(--m));height:calc(176 * var(--m));margin-left:calc(-140 * var(--m));top:0}
   /* работы: заголовок, превью почти во всю ширину, подписи – под превью в две колонки */
@@ -317,9 +318,9 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
   .wk__row{width:100%;max-width:calc(420 * var(--m));margin-inline:auto;grid-template-columns:1fr 1fr;row-gap:calc(10 * var(--m));column-gap:calc(16 * var(--m))}
   .wk__pic{grid-column:1 / -1;grid-row:1;width:100%}
   .wk__side{padding-top:0;gap:calc(4 * var(--m))}
-  /* подсказка «можно открыть»: у активной работы (в центре экрана) в углу превью проявляется метка «Open ↗» */
+  /* подсказка «можно открыть»: у активной работы (в центре экрана) в углу превью проявляется метка «Open ↗︎» */
   .wk__pic{position:relative}
-  .wk__pic::after{content:"Open \2197";position:absolute;right:calc(10 * var(--m));bottom:calc(10 * var(--m));padding:calc(7 * var(--m)) calc(11 * var(--m));
+  .wk__pic::after{content:"Open \2197\FE0E";position:absolute;right:calc(10 * var(--m));bottom:calc(10 * var(--m));padding:calc(7 * var(--m)) calc(11 * var(--m));
     background:var(--ink);color:var(--light);font-size:calc(12 * var(--m));font-weight:500;line-height:1;letter-spacing:0;
     opacity:0;transform:translateY(calc(6 * var(--m)));transition:opacity .5s,transform .6s cubic-bezier(.16,1,.3,1)}
   .wk.is-active .wk__pic::after{opacity:1;transform:none}
@@ -328,7 +329,7 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
   /* кейс: одна колонка, всё по порядку; описание не липнет */
   .case{--w:calc(100vw / 390 * .5);--g:calc(14 * var(--m))}
   .case__title{top:calc(56 * var(--m))}
-  /* «← All works» – полоса во всю ширину, чтобы картинки не проезжали под текстом ссылки */
+  /* «←︎ All works» – полоса во всю ширину, чтобы картинки не проезжали под текстом ссылки */
   .case__back{top:0;left:0;right:0;background:rgba(10,10,10,.88);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);height:calc(52 * var(--m) + env(safe-area-inset-top, 0px));display:flex;align-items:center;padding:env(safe-area-inset-top, 0px) var(--pad) 0;gap:calc(8 * var(--m))}
   .case__back span:last-child{display:none}
   .case__content{padding:var(--ct) var(--pad) 0}
@@ -401,15 +402,15 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
   <!-- 1. intro -->
   <section class="intro" id="intro">
     <div class="stage" id="stage">
-      <div class="orb layer" data-depth="-1"><div class="orb__in"><img src="assets/d/circle-blur.webp" alt="" width="1188" height="1188"></div></div>
+      <div class="orb layer" data-depth="-1"><div class="orb__in"><img src="assets/d/circle-blur.webp" alt="" width="1188" height="1188" loading="lazy"></div></div>
       <div class="top">
       <a class="logo layer" data-depth=".15" href="#" aria-label="Anton Shatkovski, home"></a>
       <h1 class="name t-30 layer" data-depth=".35"><span class="mask"><span>Anton</span></span><span class="mask"><span>Shatkovski</span></span></h1>
-      <!-- описание: два варианта. Вариант «cta» (по умолчанию) – польза для клиента + ссылка «Start a project ↓» четвёртой строкой
+      <!-- описание: два варианта. Вариант «cta» (по умолчанию) – польза для клиента + ссылка «Start a project ↓︎» четвёртой строкой
            (высота та же – кадр с фото не сдвигается). Откат к прежнему тексту: CTA = false в начале скрипта или ?cta=0 в адресе -->
-      <p class="desc desc--cta t-14 layer" data-depth=".35">I design and build websites<br>and identities for brands, studios<br>and events. Minimal, type-driven.<br><a class="desc__cta" href="#foot"><span class="roll"><span data-t="Start a project ↓">Start a project ↓</span></span></a></p>
+      <p class="desc desc--cta t-14 layer" data-depth=".35">I design and build websites<br>and identities for brands, studios<br>and events. Minimal, type-driven.<br><a class="desc__cta" href="#foot"><span class="roll"><span data-t="Start a project ↓︎">Start a project ↓︎</span></span></a></p>
       <p class="desc desc--old t-14 layer" data-depth=".35">I'm an independent designer<br>working on websites, graphics<br>and visual identities. Minimal, type-driven,<br>with a careful sense of space.</p>
-      <figure class="slot layer" data-depth=".7" id="slot"><img src="assets/d/photo.webp" alt="" width="1800" height="2700"></figure>
+      <figure class="slot layer" data-depth=".7" id="slot"><img src="assets/d/photo.webp" srcset="assets/d/photo-m.webp 1200w, assets/d/photo.webp 1800w" sizes="(max-width: 768px) 400px, 100vw" alt="" width="1800" height="2700"></figure>
       </div>
       <p class="title t-title layer" data-depth="-.4" id="title" aria-hidden="true"><span class="mask"><span>Web &amp;<span class="t-br"> </span>Graphic</span></span><span class="mask"><span>Designer</span></span></p>
     </div>
@@ -418,7 +419,7 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
   <!-- 2. me: фото раскрывается на всю ширину -->
   <section class="me" id="me" aria-label="Anton Shatkovski, photo">
     <canvas class="me__gl" id="meGl" aria-hidden="true"></canvas>
-    <img class="me__img" id="meImg" src="assets/d/photo.webp" alt="Anton Shatkovski with raised hands on a forest path" width="1800" height="2700">
+    <img class="me__img" id="meImg" src="assets/d/photo.webp" srcset="assets/d/photo-m.webp 1200w, assets/d/photo.webp 1800w" sizes="(max-width: 768px) 400px, 100vw" alt="Anton Shatkovski with raised hands on a forest path" width="1800" height="2700">
   </section>
 
   <!-- 3. works: превью работ, одна всегда активная -->
@@ -441,7 +442,7 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
       <div class="zen__bar" aria-hidden="true"><i id="zenBar"></i></div>
       <div class="zen__side t-12 w5">
         <p class="zen__hint"><span>Scroll to drift</span><span>Click a drawing to look closer</span></p>
-        <a class="zen__next" id="zenNext" href="#foot">Next: contacts ↓</a>
+        <a class="zen__next" id="zenNext" href="#foot">Next: contacts ↓︎</a>
       </div>
     </div>
   </section>
@@ -452,7 +453,7 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
       <div class="foot__col foot__col--tl"><span>Anton Shatkovski</span><span>Independent designer</span><span>Open for new projects</span></div>
       <div class="foot__col foot__col--tr"><span>Now in Da Nang, Vietnam</span><span>Local time <span id="clock">--:--</span></span><span>Working worldwide</span></div>
       <nav class="foot__col foot__col--bl foot__links" aria-label="Contacts"><a href="https://t.me/anton_shanti" target="_blank" rel="noopener">Telegram</a><a href="https://www.instagram.com/anton.shantiom/" target="_blank" rel="noopener">Instagram</a><a href="https://wa.me/79155349959" target="_blank" rel="noopener">WhatsApp</a><a href="mailto:shaa250391@gmail.com">shaa250391@gmail.com</a></nav>
-      <div class="foot__col foot__col--br"><a href="#" id="toTop">Back to top ↑</a><span>© 2026</span></div>
+      <div class="foot__col foot__col--br"><a href="#" id="toTop">Back to top ↑︎</a><span>© 2026</span></div>
       <a class="foot__logo" href="#" aria-label="Back to top"></a>
     </div>
   </footer>
@@ -463,14 +464,14 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
   <div class="case__bg"></div>
   <h2 class="case__title t-title" id="caseTitle"></h2>
   <span class="case__cursor t-12 w5" id="caseCursor" aria-hidden="true"><b>×</b><span>Click to go back</span></span>
-  <a class="case__back t-12 w5" id="caseBack" href="#work"><span>← All works</span><span>Esc</span></a>
+  <a class="case__back t-12 w5" id="caseBack" href="#work"><span>←︎ All works</span><span>Esc</span></a>
   <div class="case__scroll" id="caseScroll"><div class="case__content" id="caseContent"></div></div>
 </section>
 
 <!-- вырезка фото: лежит над плашкой, плашка «заезжает» за Антона -->
 <canvas class="me__cutgl" id="meCutGl" aria-hidden="true"></canvas>
-<img id="meCut" src="assets/d/photo-cut.webp" alt="" width="1800" height="2700" hidden>
-<div class="zen__view" id="zenView" hidden><figure class="zen__fig"><img id="zenImg" alt=""><figcaption class="zen__cap t-14" id="zenCap"></figcaption></figure></div>
+<img id="meCut" data-src="assets/d/photo-cut.webp" alt="" width="1800" height="2700" hidden>
+<div class="zen__view" id="zenView" hidden><button class="zen__close" type="button" aria-label="Close drawing">×</button><figure class="zen__fig"><img id="zenImg" alt=""><figcaption class="zen__cap t-14" id="zenCap"></figcaption></figure></div>
 <div class="plaque" id="plaque"><p class="phrase t-14" id="phrase">I don't decorate. I put things in their place.</p></div>
 <div class="trail" id="trail" aria-hidden="true"></div>
 <div class="loader" id="loader" aria-hidden="true"><span class="ld-logo" id="ldLogo"></span></div>
@@ -602,7 +603,10 @@ function scroll(){
   /* 1. рост: первый экран стоит, фото из маленького кадра встаёт на всю ширину за один экран прокрутки */
   const k = ease(p);
   const W = me.getBoundingClientRect(), S = slot.getBoundingClientRect();
-  const x = S.left + (W.left - S.left) * k, y = S.top + (W.top - S.top) * k, sc = (S.width + (W.width - S.width) * k) / W.width;
+  /* телефон: фото растёт на месте – цель роста неподвижна (фото по центру экрана), а не едет снизу вместе с блоком.
+     Блок .me поставлен так, что к концу роста его верх как раз в этой точке – дальше фото просто уезжает со страницей */
+  const Wt = isMobile() ? Math.min(W.top, (vh - W.height) / 2) : W.top;
+  const x = S.left + (W.left - S.left) * k, y = S.top + (Wt - S.top) * k, sc = (S.width + (W.width - S.width) * k) / W.width;
   meImg.style.transform = `translate3d(${(x - W.left).toFixed(2)}px,${(y - W.top).toFixed(2)}px,0) scale(${sc.toFixed(5)})`;
   if (drawPhoto) {
     /* после роста фото продолжает медленно наезжать, пока проезжает экран */
@@ -768,7 +772,7 @@ const media = m => m.v
   ? `<video muted loop playsinline preload="none" poster="${A}${mob(m.v + '.webp', 'webp')}" data-src="${A}${mob(m.v + '.mp4', 'mp4')}" width="${m.w || 1440}" height="${m.h || 780}" aria-label="${m.alt}"></video>`
   : `<img src="${A}${mob(m.src, 'webp')}" alt="${m.alt}" width="${m.w}" height="${m.h}" ${shotN++ < 2 ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async"${m.crop ? ` style="object-position:${m.crop}"` : ''}>`;
 const shot = (n, cap, m, cls = '') => `<figure class="cs ${cls}${m.crop ? ' cs--crop' : ''}"${m.speed ? ` data-speed="${m.speed}"` : ''}><div class="cs__img">${media(m)}</div><figcaption class="t-14"><span>(${String(n).padStart(2, '0')})</span><span>${cap}</span></figcaption></figure>`;
-const info = c => `<aside class="case__info t-14"><dl class="case__facts">${c.facts.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>${c.text.map(t => `<p>${t}</p>`).join('')}${c.link ? `<a class="case__link" href="${c.link}" target="_blank" rel="noopener">Open site ↗</a>` : ''}</aside>`;
+const info = c => `<aside class="case__info t-14"><dl class="case__facts">${c.facts.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>${c.text.map(t => `<p>${t}</p>`).join('')}${c.link ? `<a class="case__link" href="${c.link}" target="_blank" rel="noopener">Open site ↗︎</a>` : ''}</aside>`;
 const note = t => `<div class="case__note t-14"><p>Note</p><p>${t}</p></div>`;
 const END = `<div class="case__end"><a class="case__home t-56" href="#work">Back to works</a><p class="t-14">or press Esc</p></div>`;
 /* индекс строки в списке берётся из WORKS: порядок работ можно менять свободно */
@@ -1100,7 +1104,7 @@ addEventListener('keydown', e => {
   if (caseOpen) requestClose();
 });
 /* клик в любом месте кейса (кроме ссылок) – назад к работам */
-/* на сенсорном экране тап по картинке – это прокрутка и разглядывание, не выход: закрывают «← All works» и «Back to works» */
+/* на сенсорном экране тап по картинке – это прокрутка и разглядывание, не выход: закрывают «←︎ All works» и «Back to works» */
 caseScroll.addEventListener('click', e => { if (matchMedia('(hover: none)').matches) return; if (!e.target.closest('a')) requestClose(); });
 const caseCursor = document.getElementById('caseCursor'), cc = { x: -100, y: -100 };
 caseEl.addEventListener('pointermove', e => caseCursor.classList.toggle('is-on', !e.target.closest('a') && !caseBusy));
@@ -1179,7 +1183,7 @@ const zenStrip = document.getElementById('zenStrip');
    Свой «бесконечный» трек: позиция берётся по модулю ширины одного набора, на экране всегда средняя из трёх копий.
    Палец/трекпад двигают позицию, после отпускания – инерция с затуханием */
 const stripCard = ([w, h], i) => { const n = String(i + 1).padStart(2, '0');
-  return `<button class="zst" type="button" style="--ar:${w}/${h};--arn:${(w / h).toFixed(4)}" data-i="${i}" aria-label="${ZEN_TITLES[i]}, open"><img src="assets/zen/zen-${n}-s.webp" alt="${ZEN_TITLES[i]}, ink drawing" width="${w}" height="${h}" decoding="async"></button>`; };
+  return `<button class="zst" type="button" style="--ar:${w}/${h};--arn:${(w / h).toFixed(4)}" data-i="${i}" aria-label="${ZEN_TITLES[i]}, open"><img data-src="assets/zen/zen-${n}-xs.webp" alt="${ZEN_TITLES[i]}, ink drawing" width="${w}" height="${h}" decoding="async"></button>`; };
 const stripSet = ZEN_DATA.map(stripCard).join('');
 zenStrip.innerHTML = `<div class="zen__track" id="zenTrack">${stripSet + stripSet + stripSet}</div>`;
 const zenTrack = document.getElementById('zenTrack');
@@ -1193,7 +1197,10 @@ function stripTick(){
   const x = ((sPos % setW) + setW) % setW;          /* 0…setW */
   zenTrack.style.transform = `translate3d(${(-setW - x + innerWidth / 2 - zenCards[0].offsetWidth / 2).toFixed(1)}px,0,0)`;
   const c = innerWidth / 2;
+  /* картинки ленты грузятся, только когда блок рисунков близко и карточка рядом с экраном */
+  const zr = zenSec.getBoundingClientRect(), near = zr.top < innerHeight * 2 && zr.bottom > -innerHeight;
   zenCards.forEach(b => { const r = b.getBoundingClientRect();
+    if (near && r.right > -innerWidth && r.left < innerWidth * 2) { const im = b.firstElementChild; if (im.dataset.src) { im.src = im.dataset.src; im.removeAttribute('data-src'); } }
     if (r.right < -200 || r.left > innerWidth + 200) return;
     b.style.setProperty('--d', Math.min(1, Math.abs(r.left + r.width / 2 - c) / (innerWidth * .6)).toFixed(3)); });
 }
@@ -1264,8 +1271,9 @@ function zenTick(){
 }
 function zenShow(s, card){
   const from = (card || s.btn).getBoundingClientRect();
-  zenImg.src = `assets/zen/zen-${s.n}-s.webp`;
-  const big = new Image(); big.src = `assets/zen/zen-${s.n}-l.webp`; big.onload = () => { if (!zenView.hidden) zenImg.src = big.src; };
+  /* на телефоне: сначала маленькая (уже загружена в ленте), затем 720 px – 2000 px экрану телефона не нужны */
+  zenImg.src = `assets/zen/zen-${s.n}-${isMobile() ? 'xs' : 's'}.webp`;
+  const big = new Image(); big.src = `assets/zen/zen-${s.n}-${isMobile() ? 's' : 'l'}.webp`; big.onload = () => { if (!zenView.hidden) zenImg.src = big.src; };
   zenCap.innerHTML = `<span>${ZEN_TITLES[s.i]}</span><span>Ink on paper</span><span>(${s.n})</span>`;
   zenView.hidden = false;
   if (lenis) lenis.stop();
@@ -1283,6 +1291,12 @@ function zenHide(){
   gsap.to(zenView, { autoAlpha: 0, duration: .45, ease: 'power2.in', onComplete: fin });
 }
 zenView.addEventListener('click', zenHide);
+/* смахнуть рисунок вверх или вниз – закрыть; во время жеста он едет за пальцем */
+let zsw = null;
+zenView.addEventListener('touchstart', e => { zsw = { y: e.touches[0].clientY, x: e.touches[0].clientX }; }, { passive: true });
+zenView.addEventListener('touchmove', e => { if (!zsw) return; const dy = e.touches[0].clientY - zsw.y; zenImg.style.transform = `translate3d(0,${dy}px,0)`; zenView.style.opacity = (1 - Math.min(1, Math.abs(dy) / 400)).toFixed(3); e.preventDefault(); }, { passive: false });
+zenView.addEventListener('touchend', e => { if (!zsw) return; const dy = e.changedTouches[0].clientY - zsw.y; zsw = null;
+  if (Math.abs(dy) > 70) zenHide(); else { zenImg.style.transform = ''; zenView.style.opacity = ''; } });
 document.getElementById('zenNext').addEventListener('click', e => { e.preventDefault(); if (lenis) lenis.scrollTo('#foot', { duration: 2 }); else footEl.scrollIntoView(); });
 /* пункт меню «Zen drawings» ведёт к блоку – обработчик общий для меню (внизу) */
 
@@ -1330,12 +1344,14 @@ function loader(done){
   const ld = document.getElementById('loader'), logo = document.getElementById('ldLogo'), realLogo = document.querySelector('.logo');
   const u = U(), vw = innerWidth, vh = innerHeight;
   const pics = ['ti', 'vk', 'pda', 'kristina', 'sui', 'pu', 'wimhof', 'sup', 'ja', 'pb'];
-  const N = isMobile() ? 8 : 12, D = 1.6, GAP = .09; /* на телефоне загрузка короче */
+  let seen = false; try { seen = sessionStorage.getItem('ld') === '1'; sessionStorage.setItem('ld', '1'); } catch (e) {}
+  const N = isMobile() ? 4 : 12, D = isMobile() ? 1.05 : 1.6, GAP = isMobile() ? .07 : .09; /* на телефоне заставка ~2.5 с */
   ld.insertAdjacentHTML('afterbegin', Array.from({ length: N }, (_, i) => `<span class="ld-card"><img src="assets/d/prev-${pics[i % pics.length]}.webp" alt=""></span>`).join('')
-    + `<span class="ld-photo" id="ldPhoto"><img src="assets/d/photo.webp" alt=""></span>`);
+    + `<span class="ld-photo" id="ldPhoto"><img src="assets/d/${isMobile() ? 'photo-m' : 'photo'}.webp" alt=""></span>`);
   const cards = [...ld.querySelectorAll('.ld-card')], photo = document.getElementById('ldPhoto');
   gsap.set(realLogo, { autoAlpha: 0 });
   const tl = gsap.timeline();
+  if (seen) tl.timeScale(4); /* второй раз за визит – почти мгновенно */
   tl.from(logo, { autoAlpha: 0, scale: .6, duration: .8, ease: 'expo.out' }, 0);
   cards.forEach((c, i) => {
     const side = i % 2 ? 1 : -1, row = (i >> 1) % 3;
@@ -1386,7 +1402,7 @@ function boot(){
   lenis = new Lenis({ lerp: .07, wheelMultiplier: .9 });
   drawPhoto = mountPhoto();
   cutCv = document.getElementById('meCutGl');
-  if (drawPhoto && !isMobile()) drawCut = mountPhoto(cutCv, document.getElementById('meCut'), true);
+  if (drawPhoto && !isMobile()) { const mc = document.getElementById('meCut'); mc.src = mc.dataset.src; drawCut = mountPhoto(cutCv, mc, true); }
   gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0);
   /* пункты меню ведут к своим блокам; длительность зависит от расстояния, чтобы дальние переходы не были рывком */
   [...menu.querySelectorAll('a[href^="#"]:not([href="#"])'), document.querySelector('.desc__cta')].forEach(a => a.addEventListener('click', e => {
