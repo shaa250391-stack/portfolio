@@ -312,6 +312,12 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
   .wk__row{width:100%;max-width:calc(420 * var(--m));margin-inline:auto;grid-template-columns:1fr 1fr;row-gap:calc(10 * var(--m));column-gap:calc(16 * var(--m))}
   .wk__pic{grid-column:1 / -1;grid-row:1;width:100%}
   .wk__side{padding-top:0;gap:calc(4 * var(--m))}
+  /* подсказка «можно открыть»: у активной работы (в центре экрана) в углу превью проявляется метка «Open ↗» */
+  .wk__pic{position:relative}
+  .wk__pic::after{content:"Open \2197";position:absolute;right:calc(10 * var(--m));bottom:calc(10 * var(--m));padding:calc(7 * var(--m)) calc(11 * var(--m));
+    background:var(--ink);color:var(--light);font-size:calc(12 * var(--m));font-weight:500;line-height:1;letter-spacing:0;
+    opacity:0;transform:translateY(calc(6 * var(--m)));transition:opacity .5s,transform .6s cubic-bezier(.16,1,.3,1)}
+  .wk.is-active .wk__pic::after{opacity:1;transform:none}
   .wk__side--l{grid-column:1;grid-row:2}
   .wk__side--r{grid-column:2;grid-row:2}
   /* кейс: одна колонка, всё по порядку; описание не липнет */
@@ -749,9 +755,13 @@ function fitWorks(){
 
 /* ---------- кейсы: данные. Каждый кейс собирается из блоков; заголовок – те же строки, что в списке ---------- */
 const A = 'assets/d/';
+/* на телефоне – облегчённые версии (-m: картинки 800 px, видео 720 px), на экране узкой колонки разницы не видно, а грузится в 3–5 раз меньше.
+   Первые два экрана кейса грузятся сразу, остальные – по мере прокрутки */
+const mob = (f, ext) => isMobile() ? f.replace(new RegExp('\\.' + ext + '$'), '-m.' + ext) : f;
+let shotN = 0;
 const media = m => m.v
-  ? `<video muted loop playsinline preload="none" poster="${A}${m.v}.webp" data-src="${A}${m.v}.mp4" width="${m.w || 1440}" height="${m.h || 780}" aria-label="${m.alt}"></video>`
-  : `<img src="${A}${m.src}" alt="${m.alt}" width="${m.w}" height="${m.h}" loading="lazy"${m.crop ? ` style="object-position:${m.crop}"` : ''}>`;
+  ? `<video muted loop playsinline preload="none" poster="${A}${mob(m.v + '.webp', 'webp')}" data-src="${A}${mob(m.v + '.mp4', 'mp4')}" width="${m.w || 1440}" height="${m.h || 780}" aria-label="${m.alt}"></video>`
+  : `<img src="${A}${mob(m.src, 'webp')}" alt="${m.alt}" width="${m.w}" height="${m.h}" ${shotN++ < 2 ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async"${m.crop ? ` style="object-position:${m.crop}"` : ''}>`;
 const shot = (n, cap, m, cls = '') => `<figure class="cs ${cls}${m.crop ? ' cs--crop' : ''}"${m.speed ? ` data-speed="${m.speed}"` : ''}><div class="cs__img">${media(m)}</div><figcaption class="t-14"><span>(${String(n).padStart(2, '0')})</span><span>${cap}</span></figcaption></figure>`;
 const info = c => `<aside class="case__info t-14"><dl class="case__facts">${c.facts.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>${c.text.map(t => `<p>${t}</p>`).join('')}${c.link ? `<a class="case__link" href="${c.link}" target="_blank" rel="noopener">Open site ↗</a>` : ''}</aside>`;
 const note = t => `<div class="case__note t-14"><p>Note</p><p>${t}</p></div>`;
@@ -940,6 +950,7 @@ function renderCase(id){
   caseEl.style.setProperty('--lines', w.title.length);
   caseTitle.innerHTML = w.title.map(t => `<span>${opticalKern(t)}</span>`).join('');
   fitCaseTitle();
+  shotN = 0;
   caseContent.innerHTML = c.body(c);
   shots = [...caseContent.querySelectorAll('.cs')].map(f => ({ f, box: f.querySelector('.cs__img'), m: f.querySelector('img,video'), speed: +f.dataset.speed || 0 }));
   caseTexts = [...caseContent.querySelectorAll('.case__info, .cs figcaption, .case__note')];
