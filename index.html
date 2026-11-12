@@ -1358,7 +1358,7 @@ function loader(done){
   const cards = [...ld.querySelectorAll('.ld-card')], photo = document.getElementById('ldPhoto');
   gsap.set(realLogo, { autoAlpha: 0 });
   const tl = gsap.timeline();
-  if (seen) tl.timeScale(4); /* второй раз за визит – почти мгновенно */
+  if (seen && isMobile()) tl.timeScale(4); /* на телефоне второй раз за визит – почти мгновенно; на компе всегда полная заставка */
   tl.from(logo, { autoAlpha: 0, scale: .6, duration: .8, ease: 'expo.out' }, 0);
   cards.forEach((c, i) => {
     const side = i % 2 ? 1 : -1, row = (i >> 1) % 3;
