@@ -411,6 +411,7 @@ html[lang="ru"] .desc--old{display:block}
 }
 @media (max-width:768px){
   html[lang="ru"] #title{font-size:var(--tsize, calc(64 * var(--m)))}
+
 }
 </style>
 </head>
@@ -1351,9 +1352,9 @@ function centerSlot(){
   const sl = document.getElementById('slot');
   sl.style.marginTop = '';
   if (!isMobile()) return;
-  const d = document.querySelector('html.no-cta') ? document.querySelector('.desc--old') : document.querySelector('.desc--cta');
+  const d = document.querySelector('.desc--old');
   const t = document.querySelector('#title .mask'), sr = sl.getBoundingClientRect();
-  const gap = (t.getBoundingClientRect().top - d.getBoundingClientRect().bottom - sr.height) / 2;
+  const gap = (t.getBoundingClientRect().top + parseFloat(getComputedStyle(t).fontSize) * .27 - d.getBoundingClientRect().bottom - sr.height) / 2;
   sl.style.marginTop = Math.max(16, gap).toFixed(1) + 'px';
 }
 addEventListener('resize', centerSlot);
