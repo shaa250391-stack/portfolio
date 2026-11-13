@@ -5,7 +5,7 @@
 <meta name="robots" content="noindex, nofollow">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Anton Shatkovski – Web and graphic designer</title>
-<meta name="description" content="Anton Shatkovski, independent designer in Da Nang, Vietnam. Websites, graphics and visual identities. Minimal, type-driven, with a careful sense of space.">
+<meta name="description" content="Anton Shatkovski, web and graphic designer in Da Nang, Vietnam. Websites, graphics, brand identity.">
 <link rel="preload" href="assets/fonts/golos-400-latin.woff2" as="font" type="font/woff2" crossorigin>
 <style>
 /* Golos Text – свой файл (вариативный, 400–600), не с Google Fonts: стабильно везде, в том числе в России и в Safari с защитой от слежения */
@@ -58,6 +58,7 @@ html:not(.no-cta) .desc--old,html.no-cta .desc--cta{display:none}
 /* фото по макету 1400: 114×171p, верх на линии верха букв меню (391p) */
 .slot{margin-top:calc(88 * var(--u) - 3 * var(--p));width:calc(114 * var(--p));height:calc(171 * var(--p));flex:none}
 .slot img{width:100%;height:100%;object-fit:cover}
+@media (min-width:769px){html:not(.no-cta) .slot{margin-top:calc(88 * var(--u) - 3 * var(--p) - 15.4 * var(--p))}} /* между текстом и кнопкой пустая строка – фото остаётся на месте */
 .js .slot img{visibility:hidden}
 .title{align-self:end;padding-bottom:calc(14 * var(--u));color:var(--title);white-space:nowrap;position:relative;z-index:1}
 .title{display:flex;flex-direction:column;align-items:center}
@@ -212,8 +213,9 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
 /* фразы: плоский слой, место считается из глубины (проекция), размер текста постоянный – читаются всегда */
 .zen__words{position:absolute;inset:0;z-index:2;pointer-events:none}
 .zp{pointer-events:none}
-/* фразы – мелким текстом, как подписи: тихо висят в случайных местах */
-.zp p{width:max-content;transform:translate(-50%,-50%);font-size:calc(14 * var(--w));line-height:1.1;letter-spacing:-.03em;font-weight:400;color:var(--title)}
+/* хайку – отдельные текстовые блоки: мельче основного текста (11 вместо 14), приглушённый цвет и свой тёмный фон с тонкой рамкой,
+   чтобы строки читались и поверх светлых рисунков */
+.zp p{width:max-content;transform:translate(-50%,-50%);font-size:calc(11 * var(--w));line-height:1.25;letter-spacing:-.02em;font-weight:400;color:rgba(223,223,223,.72);background:var(--night);padding:calc(14 * var(--w)) calc(18 * var(--w));box-shadow:inset 0 0 0 1px rgba(255,255,255,.12)}
 .zen__text{position:absolute;z-index:3;left:calc(20 * var(--w));bottom:calc(24 * var(--w));width:calc(380 * var(--w));display:flex;flex-direction:column;gap:calc(18 * var(--w));pointer-events:none}
 .zen__title{color:var(--title)}
 .zen__text p:last-child{opacity:.5}
@@ -409,8 +411,8 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
       <h1 class="name t-30 layer" data-depth=".35"><span class="mask"><span>Anton</span></span><span class="mask"><span>Shatkovski</span></span></h1>
       <!-- описание: два варианта. Вариант «cta» (по умолчанию) – польза для клиента + ссылка «Start a project ↓︎» четвёртой строкой
            (высота та же – кадр с фото не сдвигается). Откат к прежнему тексту: CTA = false в начале скрипта или ?cta=0 в адресе -->
-      <p class="desc desc--cta t-14 layer" data-depth=".35">I design and build websites<br>and identities for brands, studios<br>and events. Minimal, type-driven.<br><a class="desc__cta" href="#foot"><span class="roll"><span data-t="Start a project ↓︎">Start a project ↓︎</span></span></a></p>
-      <p class="desc desc--old t-14 layer" data-depth=".35">I'm an independent designer<br>working on websites, graphics<br>and visual identities. Minimal, type-driven,<br>with a careful sense of space.</p>
+      <p class="desc desc--cta t-14 layer" data-depth=".35">I structure space and highlight what matters.<br>Minimalism and attention<br>to clients<br><br><a class="desc__cta" href="#foot"><span class="roll"><span data-t="Start a project ↓︎">Start a project ↓︎</span></span></a></p>
+      <p class="desc desc--old t-14 layer" data-depth=".35">I structure space and highlight what matters.<br>Minimalism and attention<br>to clients</p>
       <figure class="slot layer" data-depth=".7" id="slot"><img src="assets/d/photo.webp" srcset="assets/d/photo-m.webp 1200w, assets/d/photo.webp 1800w" sizes="(max-width: 768px) 400px, 100vw" alt="" width="1800" height="2700"></figure>
       </div>
       <p class="title t-title layer" data-depth="-.4" id="title" aria-hidden="true"><span class="mask"><span>Web &amp;<span class="t-br"> </span>Graphic</span></span><span class="mask"><span>Designer</span></span></p>
@@ -437,8 +439,8 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
       <div class="zen__words" id="zenWords" aria-hidden="true"></div>
       <div class="zen__text t-14">
         <h2 class="zen__title t-56">Zen<br>drawings</h2>
-        <p>I draw mountains, water and clouds because they never stop amazing me. My drawings can’t hold their beauty, and I’ve made peace with that. What I get instead is the hour of drawing itself: the pen, the paper and this moment. In that hour I’m not looking at nature from the side. I’m part of it.</p>
-        <p>(38) Ink on paper</p>
+        <p>I draw mountains, water and clouds. Why those, I don’t really know, they just never get old. I can’t get their beauty onto paper, and I’ve stopped being upset about it. I like the process itself.</p>
+        <p>(38) Ink on paper<br>Haiku by Matsuo Bashō</p>
       </div>
       <div class="zen__bar" aria-hidden="true"><i id="zenBar"></i></div>
       <div class="zen__side t-12 w5">
@@ -451,7 +453,7 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
   <footer class="foot t-14" id="foot">
     <img class="foot__cloud" src="assets/d/cloud.webp" alt="" width="2378" height="752" loading="lazy">
     <div class="foot__float" id="footFloat">
-      <div class="foot__col foot__col--tl"><span>Anton Shatkovski</span><span>Independent designer</span><span>Open for new projects</span></div>
+      <div class="foot__col foot__col--tl"><span>Anton Shatkovski</span><span>Web and graphic designer</span><span>Open for new projects</span></div>
       <div class="foot__col foot__col--tr"><span>Now in Da Nang, Vietnam</span><span>Local time <span id="clock">--:--</span></span><span>Working worldwide</span></div>
       <nav class="foot__col foot__col--bl foot__links" aria-label="Contacts"><a href="https://t.me/anton_shanti" target="_blank" rel="noopener">Telegram</a><a href="https://www.instagram.com/anton.shantiom/" target="_blank" rel="noopener">Instagram</a><a href="https://wa.me/79155349959" target="_blank" rel="noopener">WhatsApp</a><a href="mailto:shaa250391@gmail.com">shaa250391@gmail.com</a></nav>
       <div class="foot__col foot__col--br"><a href="#" id="toTop">Back to top ↑︎</a><span>© 2026</span></div>
@@ -484,7 +486,7 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
 const params = new URLSearchParams(location.search);
 const isStatic = params.has('static');
 /* призыв к действию на первом экране; false – вернуть прежнее описание */
-const CTA = params.get('cta') !== '0';
+const CTA = params.get('cta') !== '0'; /* под описанием кнопка «Start a project»; ?cta=0 – версия без неё */
 if (!CTA) document.documentElement.classList.add('no-cta');
 const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
 const motionOn = !isStatic && !reduce && typeof gsap !== 'undefined' && typeof Lenis !== 'undefined';
@@ -682,7 +684,7 @@ const WORKS = [
   { title: ['Vraj Kirtan', 'festival'], type: ['Brand identity', 'Website, digital, print'], year: '2026', note: ['International kirtan festival, Moscow'], img: 'vk', case: 'vk' },
   { title: ['PDA', 'Architecture', 'redesign'], type: ['Studio website', 'Redesign concept'], year: '2026', note: ['Architecture, Paris, Motion'], img: 'pda', case: 'pda' },
   { title: ['Kristina', 'Kavalevich'], type: ['Developer portfolio'], year: '2024', note: ['Personal site, Dark UI, Frontend'], img: 'kristina', case: 'kristina' },
-  { title: ['Morimoto', 'Naoki, sui'], type: ['Album page', 'Ambient, music release'], year: '2024', note: ['Quiet page for a quiet record'], img: 'sui', case: 'sui' },
+  { title: ['Morimoto', 'Naoki, sui'], type: ['Album page', 'Ambient, music release'], year: '2024', note: ['Ambient-style landing page'], img: 'sui', case: 'sui' },
   { title: ['Kirtan Puri', 'retreat'], type: ['Event landing', 'Kirtan retreat in Puri'], year: '2026', note: ['RU / EN, Registration, Analytics'], img: 'pu', case: 'pu' },
   { title: ['Iceman with', 'a hot heart', '(Wim Hof)'], type: ['Landing page'], year: '2025', note: ['Wim Hof Method, Breathwork, Cold exposure'], img: 'wimhof', case: 'wimhof' },
   { title: ['AmsterSUP,', 'canal tours'], type: ['Landing page', 'SUP rental and tours'], year: '2024', note: ['Light and dark theme, Booking'], img: 'sup', case: 'sup' },
@@ -787,8 +789,8 @@ const END = `<div class="case__end"><a class="case__home t-56" href="#work">Back
 const CASES = {
   sui: {
     facts: [['Project', 'Album landing page'], ['Year', '2024'], ['Role', 'Concept, design, front-end'], ['Status', 'Personal concept, non-commercial']],
-    text: ['Sui is an ambient record by Japanese composer Morimoto Naoki, an album about water as a symbol of purity, fluidity and change.',
-      'The page is my own reading of it: pale glass, slow blurred light and a tracklist that reads like a poem. A quiet page for a quiet record.'],
+    text: ['Sui is an ambient album by the Japanese composer Morimoto Naoki, about water as a symbol of purity, fluidity and change.',
+      'The page is my own reading of it: pale glass, slow blurred light and a tracklist that reads like a poem.'],
     body: c => `<div class="case__top">${info(c)}<div class="case__shots">
         ${shot(1, 'First screen', { src: 'case-sui-1.webp', w: 1360, h: 759, alt: 'Sui landing, first screen with the album title over a blurred photo' })}
         ${shot(2, 'About the artist', { src: 'case-sui-2.webp', w: 1360, h: 787, alt: 'Sui landing, a pink card about the artist over Mount Fuji and power lines' })}
@@ -800,8 +802,8 @@ const CASES = {
   },
   wimhof: {
     facts: [['Project', 'Landing page'], ['Year', '2025'], ['Role', 'Concept, design, Tilda build'], ['Status', 'Non-commercial, educational']],
-    text: ['A landing page about Wim Hof, the Iceman: his story, the three pillars of his method and the science behind it.',
-      'Pink as warm blood, blue as ice. Ragged collage, cut-out photos and huge type that slides as you scroll, so the page feels as raw as the cold water it talks about.'],
+    text: ['A landing page about Wim Hof, the Iceman: his story, the three pillars of the method and its scientific basis.',
+      'Pink like warm blood, blue like ice. Ragged collage, cut-out photos and huge type that slides as you scroll.'],
     link: 'https://hotheart.tilda.ws',
     /* схема как у Sui: описание + колонка справа → один кадр на всю ширину → колонка слева + приписка справа → колонка справа */
     body: c => `<div class="case__top">${info(c)}<div class="case__shots">
@@ -823,7 +825,7 @@ const CASES = {
   sup: {
     facts: [['Project', 'Landing page'], ['Year', '2024'], ['Role', 'Concept, UI design'], ['Status', 'Study project, non-commercial']],
     text: ['AmsterSUP rents paddle boards and runs guided tours along the canals of Amsterdam.',
-      'Blue and orange like a board on the water, big confident type and photos that feel like a morning ride. The whole page also works in a dark theme for evening tours.'],
+      'Blue and orange, big type, photos that feel like a morning ride on the water. There is also a dark theme for evening tours.'],
     body: c => `<div class="case__top">${info(c)}<div class="case__shots">
         ${shot(1, 'First screen', { src: 'case-sup-1.webp', w: 1440, h: 1648, alt: 'First screen: Traveling by SUP on the canals of Amsterdam' })}
         ${shot(2, 'Choose the format', { src: 'case-sup-4.webp', w: 1440, h: 892, alt: 'Choose the format you like best: self-guided walk or guided excursion' })}
@@ -842,7 +844,7 @@ const CASES = {
   kristina: {
     facts: [['Project', 'Developer portfolio'], ['Year', '2024'], ['Role', 'Design'], ['Status', 'Client project']],
     text: ['A personal site for Kristina Kavalevich, a front-end developer with three years in e-commerce and site builders.',
-      'Deep space, a cold blue glow and monospaced type, like a terminal left open at night. Her projects float in a glass carousel, her experience reads like a calm changelog, and the contact form lands on the Moon.'],
+      'Deep space, a cold blue glow and monospaced type, like a terminal left open at night. Her projects sit in a glass carousel, her experience is written like a changelog, and the contact form is on the Moon.'],
     body: c => `<div class="case__top">${info(c)}<div class="case__shots">
         ${shot(1, 'First screen', { src: 'case-kr-1.webp', w: 1440, h: 1308, alt: 'First screen: I’m Kristina, a web developer, over a starry grid' })}
         ${shot(2, 'About me', { src: 'case-kr-2.webp', w: 1440, h: 774, alt: 'About me section with skills in monospaced type' })}
@@ -860,7 +862,7 @@ const CASES = {
   ti: {
     facts: [['Project', 'Product landing'], ['Year', '2026'], ['Role', 'Design, front-end'], ['Status', 'Client project']],
     text: ['KOSMOSKY is a small workshop that made the world’s first titanium tongue drum. The landing tells the story of that experiment and sells four models.',
-      'Dark like a workshop at night, cold steel and a thin technical grid. The story is told by scroll: tongues being cut, 45 people from 10 countries joining in, the numbers counting up. You can enter with sound and hear the drum.'],
+      'A dark site with a space-tech look. An animated 3D crystal lattice of titanium, and a story told through the stages of making the instrument. You can enter with sound and hear the drum.'],
     link: 'https://shaa250391-stack.github.io/kosmosky-titan/',
     body: c => `<div class="case__top">${info(c)}<div class="case__shots">
         ${shot(1, 'First screen', { src: 'case-ti-1.webp', w: 1440, h: 818, alt: 'First screen: We created the world’s first titanium tongue drum' })}
@@ -876,7 +878,7 @@ const CASES = {
   pu: {
     facts: [['Project', 'Event landing'], ['Year', '2026'], ['Role', 'Design, front-end, launch'], ['Status', 'Client project, live']],
     text: ['A landing page for a kirtan retreat in Jagannatha Puri, India, from the creators of Gauradesh Mellows: twelve days of chanting, pilgrimage and the New Year by the ocean.',
-      'Warm paper, temple red and sacred art used like a poster. The page leads from the first screen to the seats left, the daily rhythm, the guides and registration. It lives in two languages, Russian and English.'],
+      'Warm paper, temple red and sacred art used like a poster. From the first screen the page goes to seats left, the daily schedule, the guides and registration. It exists in Russian and English.'],
     link: 'https://gauradeshmellowsretreat.com',
     body: c => `<div class="case__top">${info(c)}<div class="case__shots">
         ${shot(1, 'First screen', { src: 'case-pu-1.webp', w: 1440, h: 812, alt: 'First screen: kirtan retreat in Jagannatha Puri, dates, seats left and registration' })}
@@ -894,8 +896,8 @@ const CASES = {
   },
   vk: {
     facts: [['Project', 'Brand identity, website'], ['Year', '2026'], ['Role', 'Identity, website, digital and print'], ['Status', 'Client project']],
-    text: ['Vraj Kirtan is a large annual kirtan festival in Moscow. Kirtan singers come to it from all over the world.',
-      'I made the whole identity: the hand-drawn logo, the website, digital and print materials. Sage green like temple walls, saffron accents, arches and ornaments from Indian architecture. The site leads from the festival idea to the singers, the venues and the prasad.',
+    text: ['Vraj Kirtan is a big annual kirtan festival in Moscow. Singers come from all over the world.',
+      'I made the whole identity: a hand-drawn logo, the website, digital and print materials. Sage green, saffron accents, arches and ornaments borrowed from Indian temple architecture. The site goes from the idea of the festival to the singers, the venues and the prasad.',
       '<span class="case__dim">Client project. Photos belong to the festival.</span>'],
     body: c => `<div class="case__top">${info(c)}<div class="case__shots">
         ${shot(1, 'First screen', { src: 'case-vk-1.webp', w: 1440, h: 1042, alt: 'First screen: Vraj Kirtan 2026, international kirtan festival, Moscow, June 12–15' })}
@@ -906,7 +908,7 @@ const CASES = {
   pb: {
     facts: [['Project', 'Architect portfolio'], ['Year', '2024'], ['Role', 'Concept, UI design'], ['Status', 'Study project, non-commercial']],
     text: ['A personal site for Paul Baker, an architect who designs public buildings all over the world: museums, stadiums, libraries.',
-      'Cool grey paper, a strict Swiss grid and monospaced captions, like a drawing set. The buildings carry all the drama; the type stays calm, and a pale blue accent marks the only action that matters, contact.'],
+      'Cool grey paper, a strict Swiss grid and monospaced captions, like a set of drawings. The buildings carry the drama, the type stays calm, and the blue accent leads the eye to the contact button.'],
     body: c => `<div class="case__top">${info(c)}<div class="case__shots">
         ${shot(1, 'First screen', { src: 'case-pb-1.webp', w: 1440, h: 1478, alt: 'First screen: Paul Baker, architect, with a concrete building and key numbers' })}
         ${shot(2, 'Projects', { src: 'case-pb-2.webp', w: 1440, h: 1718, alt: 'Projects laid out on a grid with photos, areas and years' })}
@@ -919,8 +921,8 @@ const CASES = {
   },
   pda: {
     facts: [['Project', 'Website redesign'], ['Year', '2026'], ['Role', 'Concept, design, front-end'], ['Status', 'Unsolicited redesign, non-commercial']],
-    text: ['PDA is a Paris architecture firm that refurbishes and transforms existing buildings instead of demolishing them. Thirty-one projects, from 200 to 30,000 m².',
-      'My own take on their site: warm paper, a serif that speaks like an architect, thin drawing ticks and one confident blue. The page moves like a walk through the city: a timeline you scroll sideways, a dark list of projects, a window that opens onto Paris.'],
+    text: ['PDA is a Paris architecture firm that renovates existing buildings instead of tearing them down. Thirty-one projects, from 200 to 30,000 m².',
+      'My own take on their site: warm paper, a serif typeface, thin drawing marks and a single blue. A timeline you scroll sideways, a dark list of projects and a window that opens onto Paris.'],
     link: 'https://pda-architecture-redesign.netlify.app',
     /* две записи, никогда подряд: между ними картинки; запись не стоит рядом с тем же местом на скрине */
     body: c => `<div class="case__top">${info(c)}<div class="case__shots">
@@ -937,7 +939,7 @@ const CASES = {
   ja: {
     facts: [['Project', 'Landing page'], ['Year', '2024'], ['Role', 'Concept, design'], ['Status', 'Personal concept, non-commercial']],
     text: ['A landing page about Japanese ambient music of the 1980s: how the economic boom and corporations like Muji, Sanyo and Misawa Home paid musicians to make quiet records for shops, buildings and products.',
-      'Cherry blossom, temple roofs and a soft ring of light that floats over every screen like a sound. The page reads as a calm longread, from the concept of wa to the legends of the genre: Hosono, Yoshimura, Ojima, Kokubo.'],
+      'Cherry blossom, temple roofs and a soft ring of light that hangs over every screen. A calm longread, from the idea of wa to the genre’s legends: Hosono, Yoshimura, Ojima, Kokubo.'],
     body: c => `<div class="case__top">${info(c)}<div class="case__shots">
         ${shot(1, 'First screen', { src: 'case-ja-1.webp', w: 1440, h: 1768, alt: 'First screen: Japanese Ambient, a ring of light over cherry blossom' })}
         ${shot(2, 'Origins and economic boom', { src: 'case-ja-2.webp', w: 1440, h: 1514, alt: 'Origins of Japanese ambient and the economic boom, with archive photos and a temple roof' })}
@@ -1164,9 +1166,9 @@ const zenFrame = () => isMobile() ? 600 : 1400;
 /* ---------- Zen drawings: блок после работ; прокрутка ведёт камеру сквозь 38 листов, мышь – свечение ---------- */
 const ZEN_DATA = [[518,720],[716,720],[498,720],[498,720],[720,500],[620,720],[720,496],[720,496],[720,496],[500,720],[504,720],[538,720],[496,720],[720,484],[720,484],[538,720],[538,720],[720,474],[492,720],[480,720],[720,508],[720,508],[720,508],[720,508],[720,508],[518,720],[544,720],[550,720],[534,720],[540,720],[554,720],[520,720],[530,720],[522,720],[720,538],[530,720],[530,720],[720,718]];
 /* подписи временные, случайные */
-const ZEN_TITLES = ['Still water','Mountain, before rain','Clouds over the bay','Quiet field','Tide','The long road','Morning mist','Island','Night over the hills','Wind study','Stone garden','Shore','Wave No. 4','Low sky','Fault line','Paper sea','Upstream','First snow','Low clouds','Ridge','Lake','Ink rain','Breath','Valley','Sea of clouds','Moon over the coast','River','Sleeping face','Cliffs','High pass','Horizon','Drift','The tree that dances','Smoke','Distance','Storm coming','After the storm','Layers'];
+const ZEN_TITLES = ['Still water','Mountain, before rain','Clouds over the bay','Quiet field','Tide','The long road','Morning mist','Island','Night over the hills','Wind study','Stone garden','Shore','Wave No. 4','Low sky','Fault line','Paper sea','Upstream','First snow','Low clouds','Ridge','Lake','Rain','Breath','Valley','Sea of clouds','Moon over the coast','River','Sleeping face','Cliffs','High pass','Horizon','Drift','The tree that dances','Smoke','Distance','Storm coming','After the storm','Layers'];
 /* фразы между листами – черновик, Антон пришлёт свой текст */
-const ZEN_PHRASES = ['One line,<br>then the next.', 'No plan.<br>No undo.', 'Empty paper is part<br>of the drawing.', 'Less, until it<br>is enough.', 'Ink keeps every<br>hesitation.', 'Slow hands,<br>quiet head.'];
+const ZEN_PHRASES = ['Old pond.<br>A frog jumps into the water,<br>and a splash.', 'Rough sea.<br>Over the island of Sado<br>the Milky Way stretches.', 'Stillness.<br>Cicada voices<br>soak into the rocks.', 'How many peaks of cloud<br>fell apart, until the moonlit<br>mountain stood.', 'Full moon.<br>All night I walked<br>around the pond.', 'Sick on the road,<br>my dream still runs<br>over a withered field.'];
 const zenSec = document.getElementById('zen'), zenStage = document.getElementById('zenStage'), zenCam = document.getElementById('zenCam'), zenBar = document.getElementById('zenBar');
 const zenView = document.getElementById('zenView'), zenImg = document.getElementById('zenImg'), zenCap = document.getElementById('zenCap');
 const ZEN_STEP = 560, ZEN_N = ZEN_DATA.length, NEAR = 160;
@@ -1236,6 +1238,48 @@ const zenPhrases = ZEN_PHRASES.map((t, k) => {
   const a = rnd() * Math.PI * 2, r = .12 + rnd() * .26;
   return { el, z0: -(3.5 + k * 6) * ZEN_STEP, ph: k * 1.7, x: Math.cos(a) * r * 1.2, y: Math.sin(a) * r * .8 };
 });
+/* хайку не должны ложиться на рисунки: для каждого блока перебираем места в кадре и берём то, где за всё время его появления
+   прямоугольник блока меньше всего пересекается с проекциями листов (листы считаются по той же формуле, что в zenTick:
+   положение в глубине -> масштаб перспективы). Пересчёт при загрузке шрифтов и смене размера окна */
+function placePhrases(){
+  if (isMobile()) return;
+  const vw = innerWidth, vh = innerHeight, w = vw / zenFrame(), P = 900 * w, nearZ = NEAR * w;
+  const fog = z => smooth(nearZ - 3200 * w, nearZ - 1900 * w, z) * (1 - smooth(nearZ - 420 * w, nearZ, z));
+  let seed = 11; const rr = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+  /* неподвижный текст раздела (слева абзац и подпись, справа подсказки) – тоже занятое место */
+  const sr = zenStage.getBoundingClientRect();
+  const fixed = [...document.querySelectorAll('.zen__text, .zen__side')].map(e => { const r = e.getBoundingClientRect(); return { x0: r.left - sr.left - 20, x1: r.right - sr.left + 20, y0: r.top - sr.top - 20, y1: r.bottom - sr.top + 20 }; });
+  const used = [];
+  zenPhrases.forEach(f => {
+    const pe = f.el.firstElementChild, bw = pe.offsetWidth, bh = pe.offsetHeight;
+    if (!bw) return;
+    let best = null;
+    for (let gx = -.40; gx <= .401; gx += .04) for (let gy = -.34; gy <= .341; gy += .04) {
+      let cost = rr() * 500 * w * w;
+      for (const zp of [-1300, -1000, -700, -400, -200]) {
+        const z = zp * w, o = smooth(-1500 * w, -700 * w, z) * (1 - smooth(-80 * w, nearZ, z));
+        const kp = P / (P - Math.min(z, P * .8)), cx = vw / 2 + gx * vw * kp, cy = vh / 2 + gy * vh * kp;
+        const x0 = cx - bw / 2 - 12, x1 = cx + bw / 2 + 12, y0 = cy - bh / 2 - 12, y1 = cy + bh / 2 + 12;
+        zenSheets.forEach(s => {
+          const zs = z + (s.z0 - f.z0) * w;
+          if (zs > P * .9) return;
+          const os = fog(zs); if (os < .12) return;
+          const ks = P / (P - zs), sx = vw / 2 + s.x * vw * ks, sy = vh / 2 + s.y * vh * ks;
+          const dw = ZEN_DATA[s.i], kk = 300 / Math.max(dw[0], dw[1]), hw = dw[0] * kk / 2 * w * ks, hh = dw[1] * kk / 2 * w * ks;
+          const ox = Math.min(x1, sx + hw) - Math.max(x0, sx - hw), oy = Math.min(y1, sy + hh) - Math.max(y0, sy - hh);
+          if (ox > 0 && oy > 0) cost += ox * oy * os * Math.max(o, .15);
+        });
+      }
+      for (const zp of [-1000, -400]) {
+        const z = zp * w, kp = P / (P - Math.min(z, P * .8)), cx = vw / 2 + gx * vw * kp, cy = vh / 2 + gy * vh * kp;
+        fixed.forEach(r => { const ox = Math.min(cx + bw / 2, r.x1) - Math.max(cx - bw / 2, r.x0), oy = Math.min(cy + bh / 2, r.y1) - Math.max(cy - bh / 2, r.y0); if (ox > 0 && oy > 0) cost += ox * oy * 3; });
+      }
+      used.forEach(u => { if (Math.hypot(u.x - gx, u.y - gy) < .25) cost += 4000 * w * w; });
+      if (!best || cost < best.cost) best = { cost, x: gx, y: gy };
+    }
+    f.x = best.x; f.y = best.y; f.cost = best.cost; used.push(best);
+  });
+}
 let zenT = 0, zenTravel = 0, zenOn = true;
 const zcam = { x: 0, y: 0 };
 function zenTick(){
@@ -1274,9 +1318,12 @@ function zenTick(){
     if (o < .01) return;
     const k = P / (P - Math.min(z, P * .8));
     f.el.style.transform = `translate3d(${(vw / 2 + f.x * vw * k).toFixed(1)}px,${(vh / 2 + (f.y * vh + Math.sin(zenT * .3 + f.ph) * 10 * w) * k).toFixed(1)}px,0)`;
-    f.el.style.opacity = (o * .85).toFixed(3);
+    f.el.style.opacity = o.toFixed(3);
   });
 }
+placePhrases();
+document.fonts.ready.then(placePhrases);
+let placeT = 0; addEventListener('resize', () => { clearTimeout(placeT); placeT = setTimeout(placePhrases, 150); });
 function zenShow(s, card){
   const from = (card || s.btn).getBoundingClientRect();
   /* на телефоне: сначала маленькая (уже загружена в ленте), затем 720 px – 2000 px экрану телефона не нужны */
