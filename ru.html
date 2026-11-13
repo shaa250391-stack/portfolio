@@ -1,0 +1,1461 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Антон Шатковский – дизайнер сайтов и графики</title>
+<meta name="description" content="Антон Шатковский, дизайнер сайтов и графики из Дананга, Вьетнам. Сайты, графика, фирменный стиль. Минимализм, сильная типографика и много воздуха.">
+<link rel="preload" href="assets/fonts/golos-400-cyrillic.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+/* Golos Text – свой файл (вариативный, 400–600), не с Google Fonts: стабильно везде, в том числе в России и в Safari с защитой от слежения */
+@font-face{font-family:'Golos Text';font-style:normal;font-weight:400 600;font-display:swap;src:url(assets/fonts/golos-400-latin.woff2) format('woff2');unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2197,U+2212,U+2215,U+FEFF,U+FFFD}
+@font-face{font-family:'Golos Text';font-style:normal;font-weight:400 600;font-display:swap;src:url(assets/fonts/golos-400-cyrillic.woff2) format('woff2');unicode-range:U+0301,U+0400-045F,U+0490-0491,U+04B0-04B1,U+2116}
+/* Концепт D – по макету Антона (мои концепты макеты/1.png, Figma 1200). Только десктоп.
+   1u = 1px макета шириной 1200; экран масштабируется по ширине и по высоте первого экрана (706). */
+:root{
+  --night:#0A0A0A; --light:#ECECEC; --title:#DFDFDF; --sheet:#DFDFDF; --blue:#40A2FF; --ink:#111111;
+  --u:min(calc(100vw / 1200), calc(100vh / 706), 1.6px);
+  --u:min(calc(100vw / 1200), calc(100vh / 706), 1.6px);
+  --pad:calc(20 * var(--u));
+  /* с 12.11 Антон работает в кадре Figma 1400: --p = 1px этого кадра (u · 1200/1400); новые размеры шрифтов – в нём */
+  --p:calc(var(--u) * 12 / 14);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--night);color:var(--light);font-family:'Golos Text',sans-serif;font-weight:400;text-transform:uppercase;-webkit-font-smoothing:antialiased;overflow-x:hidden;overflow-x:clip}
+img{display:block;max-width:100%}
+[hidden]{display:none!important} /* иначе img{display:block} перебивает hidden (так вырезка #meCut вставала под подвалом) */
+a{color:inherit;text-decoration:none}
+
+/* шкала из макета */
+.t-12{font-size:calc(12 * var(--p));line-height:normal;letter-spacing:0}
+/* надписи: Golos Regular 14, интерлиньяж 110 %, трекинг −3 % (панель Figma Антона) */
+.t-14{font-size:calc(14 * var(--p));line-height:1.1;letter-spacing:-.03em;font-weight:400}
+.t-30{font-size:calc(30 * var(--u));line-height:calc(24.7 * var(--u))}
+.t-title{font-size:calc(196 * 100vw / 1400);line-height:.78;letter-spacing:-.08em;font-weight:500}
+.w5{font-weight:500}.w6{font-weight:600}
+
+/* ===== intro: первый экран стоит, пока фото вырастает из маленького кадра ===== */
+.intro{position:relative;z-index:1;height:200vh;height:200svh}
+.stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden;overflow:clip;display:grid;grid-template-areas:'s';justify-items:center;text-align:center;padding-top:calc(18 * var(--u))}
+.stage>*{grid-area:s}
+.top{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;align-self:start}
+.top>*{flex:none}
+.layer{will-change:transform}
+.logo{width:calc(31 * var(--u));height:calc(35 * var(--u));background:var(--title);-webkit-mask:url(assets/d/logo.svg) center/contain no-repeat;mask:url(assets/d/logo.svg) center/contain no-repeat}
+/* круг: размыт целиком вместе с краем, как в макете */
+/* круг по макету 1400 (сверено по форме видимого диска): диаметр 678p, верх 80p от края экрана (59p от начала .top) */
+.orb{position:absolute;left:50%;top:calc(59 * var(--p));width:calc(678 * var(--p));aspect-ratio:1;margin-left:calc(-339 * var(--p));z-index:-1;pointer-events:none}
+.orb__in{width:100%;height:100%;will-change:transform}
+.orb__in img{width:100%;height:100%}
+.name{margin-top:calc(78 * var(--u));font-weight:400}
+.name{display:flex;flex-direction:column;align-items:center}
+.desc{margin-top:calc(17 * var(--u));white-space:nowrap}
+html:not(.no-cta) .desc--old,html.no-cta .desc--cta{display:none}
+.desc__cta{color:var(--blue)}
+.desc__cta .roll{height:1.1em}
+/* фото по макету 1400: 114×171p, верх на линии верха букв меню (391p) */
+.slot{margin-top:calc(88 * var(--u) - 3 * var(--p));width:calc(114 * var(--p));height:calc(171 * var(--p));flex:none}
+.slot img{width:100%;height:100%;object-fit:cover}
+.js .slot img{visibility:hidden}
+.title{align-self:end;padding-bottom:calc(14 * var(--u));color:var(--title);white-space:nowrap;position:relative;z-index:1}
+.title{display:flex;flex-direction:column;align-items:center}
+.mask{display:block;overflow:hidden;overflow:clip;padding:.14em .04em .1em;margin:-.14em -.04em -.1em}
+.mask>span{display:block;width:max-content;margin-inline:auto}
+.is-open .mask{overflow:visible}
+
+/* меню: едет вверх вместе со страницей и мягко прилипает к верху */
+.menu{position:fixed;left:0;right:0;top:0;z-index:30;display:flex;justify-content:space-between;align-items:baseline;padding:0 var(--pad);color:var(--blue);will-change:transform}
+.menu__right{display:flex;gap:calc(56 * var(--u))}
+.menu .off{opacity:.55}
+.roll{display:inline-block;overflow:hidden;vertical-align:top;height:calc(14 * var(--u))}
+.roll>span{display:block;transition:transform .6s cubic-bezier(.7,0,.2,1)}
+.roll>span::after{content:attr(data-t);display:block;color:var(--hov,#fff)}
+.menu{transition:color .5s}
+.menu.on-light{--hov:#111}
+.menu.on-blue{color:var(--ink);--hov:#fff}
+a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
+.menu a:hover.off{opacity:1}
+.menu__btn{display:none}
+.t-br{display:inline}
+
+/* ===== me: фото на всю ширину ===== */
+.me{position:relative;z-index:2;width:100%;aspect-ratio:2/3;margin-top:-100vh;margin-top:-100svh}
+.me__img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transform-origin:0 0;will-change:transform}
+/* плашка: в середине стоит, на входе и выходе скорость меняется плавно */
+/* в верхней половине экрана: верх плашки 71px кадра 1400 (скрин Figma 12.11) */
+.plaque{position:fixed;left:50%;top:calc(71 * var(--p));z-index:3;transform-style:preserve-3d;width:calc(308 * var(--u));height:calc(348 * var(--u));margin:0 0 0 calc(-154 * var(--u));background:rgba(236,236,236,.72);-webkit-backdrop-filter:blur(18px) saturate(1.15);backdrop-filter:blur(18px) saturate(1.15);box-shadow:inset 0 0 0 1px rgba(255,255,255,.35);color:var(--ink);display:flex;align-items:center;justify-content:center;text-align:center;pointer-events:none;opacity:0;will-change:transform,opacity}
+@media (min-width:769px){.plaque{left:0;top:0;width:100%;height:50vh;height:50svh;margin:0}}
+.phrase{white-space:nowrap}
+.phrase .w{display:inline-block;vertical-align:top;will-change:transform}
+
+/* дальше начнётся блок работ */
+/* сверху тот же шаг, что между работами (28u): лист начинается сразу с первой работы */
+.works{position:relative;z-index:2;overflow-x:hidden;overflow-x:clip;background:var(--sheet);color:var(--ink);padding:calc(28 * var(--u)) 0 calc(66 * var(--u));
+  box-shadow:0 calc(-30 * var(--u)) calc(90 * var(--u)) rgba(0,0,0,.45)}
+/* затемнение, когда сверху наезжает подвал */
+.works::after{content:"";position:absolute;inset:0;background:#000;opacity:var(--dim,0);pointer-events:none}
+.works__list{list-style:none;display:flex;flex-direction:column;gap:calc(28 * var(--u))}
+.wk__link{display:flex;flex-direction:column;align-items:center;gap:calc(14 * var(--u));cursor:pointer}
+.t-56{font-size:calc(56 * var(--u));line-height:calc(44 * var(--u));font-weight:600;letter-spacing:var(--t56ls,0)}
+.wk__title{text-align:center;color:#C0C0C0;transition:color .7s cubic-bezier(.16,1,.3,1)}
+.wk__row{align-self:stretch;display:grid;grid-template-columns:1fr calc(308 * var(--u)) 1fr;padding:0 var(--pad);align-items:start}
+.wk__pic{width:calc(308 * var(--u));aspect-ratio:308/348;overflow:hidden;background:#d3d3d3;transition:box-shadow .7s;will-change:transform}
+.wk__pic img{width:100%;height:100%;object-fit:cover;filter:grayscale(1);opacity:.2;transform:scale(1.04);transition:filter .9s cubic-bezier(.16,1,.3,1),opacity .9s cubic-bezier(.16,1,.3,1),transform 1.2s cubic-bezier(.16,1,.3,1)}
+/* подписи: неактивные серые, активные чёрные – меняется только цвет, без движения */
+.wk__side{padding-top:calc(142 * var(--u));display:flex;flex-direction:column;gap:calc(13 * var(--u));color:#8C8C8C;transition:color .7s cubic-bezier(.16,1,.3,1)}
+.wk__side span{display:block}
+.wk__side--r{text-align:right;align-items:flex-end}
+.wk.is-active .wk__title{color:var(--ink)}
+.wk.is-active .wk__pic{box-shadow:0 1px 1px rgba(0,0,0,.25)}
+.wk__pic--stub{background:#cbcbcb;transition:box-shadow .7s,background-color .9s cubic-bezier(.16,1,.3,1)}
+.wk.is-active .wk__pic--stub{background:#b4b4b4}
+.wk.is-active .wk__pic img{filter:grayscale(0);opacity:1;transform:scale(1)}
+.wk.is-active .wk__side{color:var(--ink)}
+
+/* курсор как у Сейтаро: появляется только в движении – шлейф капель матового стекла, на чёрном почти не виден */
+.trail{position:fixed;inset:0;z-index:54;pointer-events:none}
+.blob{position:absolute;left:0;top:0;width:var(--d);aspect-ratio:1;margin:calc(var(--d) / -2) 0 0 calc(var(--d) / -2);border-radius:50%;opacity:0;will-change:transform,opacity;
+  background:radial-gradient(circle,transparent 52%,rgba(255,150,210,.06) 60%,rgba(120,200,255,.08) 66%,rgba(255,240,150,.05) 71%,transparent 75%);
+  -webkit-backdrop-filter:blur(7px) saturate(1.5) brightness(1.06);backdrop-filter:blur(7px) saturate(1.5) brightness(1.06);
+  -webkit-mask:radial-gradient(circle,#000 40%,transparent 72%);mask:radial-gradient(circle,#000 40%,transparent 72%)}
+
+/* ===== foot: голубой подвал с рисунком-облаком ===== */
+/* ===== foot: последний экран на всю высоту. Четыре угла текста образуют квадрат, в центре – логотип.
+   Квадрат с логотипом двигается за мышью как одно целое, облако позади – слабее и с другой скоростью (между ними расстояние) ===== */
+.foot{position:relative;z-index:4;box-shadow:0 calc(-30 * var(--u)) calc(90 * var(--u)) rgba(0,0,0,.3);background:var(--blue);color:var(--ink);height:100vh;height:100svh;overflow:hidden;display:grid;place-items:center}
+.foot__cloud{position:absolute;left:50%;top:50%;width:104vw;height:auto;aspect-ratio:2378/752;max-width:none;margin:calc(-52vw * 752 / 2378 - 3.2vw) 0 0 calc(-52vw + 1.2vw); /* сдвиг по макету Антона: облако чуть выше центра квадрата, верхняя петля на уровне верхних строк */mix-blend-mode:lighten;opacity:.7;pointer-events:none;will-change:transform}
+.foot__float{position:relative;width:49.6vw;height:52.6vh;height:52.6svh;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr;will-change:transform}
+.foot__col{display:flex;flex-direction:column}
+.foot__col>*{line-height:1.1}
+.foot__col--tr,.foot__col--br{text-align:right;align-items:flex-end}
+.foot__col--bl,.foot__col--br{align-self:end}
+/* связь: белым крупно, 30 в кадре 1400 */
+.foot__links{font-size:calc(30 * var(--p));line-height:1.07;letter-spacing:-.02em;color:#fff}
+.foot__links a:hover{color:var(--ink)}
+.foot a{transition:color .3s}
+.foot__col a:not(.foot__links a):hover{color:#fff}
+.foot__logo{position:absolute;left:50%;top:50%;width:calc(31 * var(--u));height:calc(35 * var(--u));margin:calc(-17.5 * var(--u)) 0 0 calc(-15.5 * var(--u));background:var(--title);-webkit-mask:url(assets/d/logo.svg) center/contain no-repeat;mask:url(assets/d/logo.svg) center/contain no-repeat}
+
+/* экран загрузки: работы влетают слева и справа и уходят вглубь к центру, последним влетает фото */
+.loader{position:fixed;inset:0;z-index:80;pointer-events:none;perspective:calc(900 * var(--u));overflow:hidden}
+.ld-card{position:absolute;left:50%;top:47%;width:calc(190 * var(--u));aspect-ratio:930/1044;margin:calc(-106 * var(--u)) 0 0 calc(-95 * var(--u));will-change:transform,opacity}
+.ld-card img,.ld-photo img{width:100%;height:100%;object-fit:cover}
+.ld-photo{position:fixed;left:0;top:0;z-index:2;will-change:left,top,width,height}
+.ld-logo{position:absolute;left:50%;top:37%;width:calc(31 * var(--u));height:calc(35 * var(--u));margin:calc(-17.5 * var(--u)) 0 0 calc(-15.5 * var(--u));z-index:3;background:var(--title);-webkit-mask:url(assets/d/logo.svg) center/contain no-repeat;mask:url(assets/d/logo.svg) center/contain no-repeat}
+.is-static .loader{display:none}
+
+/* ===== кейс: открытая работа поверх главной. 1w = 1px кадра 1400 по ширине (как у заголовка) ===== */
+.case{position:fixed;inset:0;z-index:50;color:var(--light);--w:calc(100vw / 1400);--lines:2;
+  --g:calc(20 * var(--w)); /* единое расстояние в кейсах: между экранами в колонке и между блоками */
+  /* содержимое начинается под заголовком первого экрана (зависит от числа строк); длинный заголовок при прокрутке
+     сжимается до высоты двух строк, поэтому липкое описание и финал считаются от двухстрочного: низ 320w */
+  --ct:calc((64 + var(--lines) * 152.9) * var(--w))}
+.case[hidden]{display:none}
+.case__bg{position:absolute;inset:0;background:var(--night)}
+/* заголовок стоит наверху, картинки едут поверх него */
+.case__title .ch{margin-right:calc(var(--fx, 0) * var(--k, 1) * 1em)}
+.case__title{font-weight:600;position:absolute;top:calc(14 * var(--w));left:0;right:0;margin:0 auto;width:max-content;display:flex;flex-direction:column;align-items:center;text-align:center;color:var(--title);white-space:nowrap;transform-origin:0 0;will-change:transform}
+.case__back{position:absolute;z-index:3;top:calc(20 * var(--w));left:calc(20 * var(--w));display:flex;gap:calc(8 * var(--w));color:var(--blue)}
+.case__back span:last-child{opacity:.55}
+.case__scroll{position:absolute;inset:0;z-index:2;overflow-y:auto;overflow-x:hidden;overscroll-behavior:contain;scrollbar-width:none}
+.case__scroll::-webkit-scrollbar{display:none}
+.case__content{padding:var(--ct) calc(20 * var(--w)) 0}
+.case__top{display:grid;grid-template-columns:1fr calc(660 * var(--w));column-gap:calc(40 * var(--w));align-items:start}
+/* описание стоит слева, пока справа едут первые два экрана */
+.case__info{position:sticky;top:calc(371 * var(--w));display:flex;flex-direction:column;gap:calc(36 * var(--w));width:calc(400 * var(--w))}
+.case__facts{display:grid;grid-template-columns:calc(96 * var(--w)) 1fr;row-gap:calc(6 * var(--w))}
+.case__facts dt{opacity:.5}
+.case__shots{display:flex;flex-direction:column;gap:var(--g)}
+.cs{display:flex;flex-direction:column;gap:calc(10 * var(--w));will-change:transform}
+.cs__img{overflow:hidden;background:#161616}
+.cs__img img,.cs__img video{display:block;width:100%;height:auto;transform-origin:50% 0;will-change:transform}
+.case__link{align-self:flex-start;color:var(--blue)}
+.case__link:hover{color:#fff}
+
+.cs figcaption{display:flex;justify-content:space-between}
+.cs figcaption span:first-child{opacity:.5}
+.case__wide{margin-top:var(--g)}
+/* широкий кадр из высокого экрана: рамка 16:9, видимая часть задаётся object-position */
+.cs--crop .cs__img{aspect-ratio:16/9}
+.cs--crop .cs__img img{height:100%;object-fit:cover}
+.case__pair{margin-top:var(--g);display:grid;grid-template-columns:calc(660 * var(--w)) 1fr;column-gap:calc(40 * var(--w));align-items:end}
+.case__note{justify-self:end;width:calc(400 * var(--w));display:flex;flex-direction:column;gap:calc(14 * var(--w))}
+.case__note p:first-child{opacity:.5}
+.case__dim{opacity:.5}
+/* колонка справа без описания слева – левая половина остаётся воздухом */
+.case__right{margin-top:var(--g);display:flex;justify-content:flex-end}
+.case__right .case__shots{width:calc(660 * var(--w))}
+/* финал: «Back to works» по центру тёмного поля под заголовком */
+.case__end{min-height:100vh;min-height:100svh;padding-top:calc(320 * var(--w));display:flex;flex-direction:column;align-items:center;justify-content:center;gap:calc(18 * var(--w))}
+.case__home{color:var(--title);transition:color .5s}
+/* подпись у курсора внутри кейса: клик в любом месте возвращает к работам */
+.case__cursor{position:absolute;left:0;top:0;z-index:4;pointer-events:none;display:flex;align-items:center;gap:calc(8 * var(--w));padding:calc(7 * var(--w)) calc(10 * var(--w));background:var(--light);color:var(--ink);opacity:0;transition:opacity .3s;will-change:transform}
+.case__cursor.is-on{opacity:1}
+.case__cursor b{font-weight:500;font-size:1.3em;line-height:.6}
+@media (hover:none){.case__cursor{display:none}}
+.case__home:hover,.case__home:focus-visible{color:#fff}
+.case__end p{opacity:.5}
+
+/* ===== Zen drawings: отдельный блок между работами и подвалом. Прокрутка ведёт камеру сквозь листы туши ===== */
+.zen{position:relative;z-index:3;height:600vh;height:600svh;background:var(--night);color:var(--light);--w:calc(100vw / 1400);box-shadow:0 calc(-30 * var(--u)) calc(90 * var(--u)) rgba(0,0,0,.45)}
+.zen__stage{position:sticky;top:0;height:100vh;height:100svh;overflow:hidden}
+.zen__stage::after{content:"";position:absolute;inset:0;z-index:5;background:#000;opacity:var(--dim,0);pointer-events:none}
+.zen__space{position:absolute;inset:0;z-index:1;perspective:calc(900 * var(--w));perspective-origin:50% 50%}
+.zen__cam{position:absolute;left:50%;top:50%;transform-style:preserve-3d;will-change:transform}
+.zs,.zp{position:absolute;left:0;top:0;transform-style:preserve-3d;will-change:transform,opacity}
+.zs__in{display:block;width:var(--sw);height:var(--sh);margin:calc(var(--sh) / -2) 0 0 calc(var(--sw) / -2);padding:0;border:0;background:none;cursor:pointer;transition:transform .7s cubic-bezier(.16,1,.3,1),filter .7s cubic-bezier(.16,1,.3,1)}
+.zs__in img{width:100%;height:100%;object-fit:cover} /* без размытой тени: на тёмном её почти не видно, а 38 теней в 3D тормозили кадр и капли курсора */
+.zs__in:hover,.zs__in:focus-visible{transform:scale(1.07)}
+.zen.has-hover .zs__in:not(:hover){filter:brightness(.5)}
+/* фразы: плоский слой, место считается из глубины (проекция), размер текста постоянный – читаются всегда */
+.zen__words{position:absolute;inset:0;z-index:2;pointer-events:none}
+.zp{pointer-events:none}
+/* фразы – мелким текстом, как подписи: тихо висят в случайных местах */
+.zp p{width:max-content;transform:translate(-50%,-50%);font-size:calc(14 * var(--w));line-height:1.1;letter-spacing:-.03em;font-weight:400;color:var(--title)}
+.zen__text{position:absolute;z-index:3;left:calc(20 * var(--w));bottom:calc(24 * var(--w));width:calc(380 * var(--w));display:flex;flex-direction:column;gap:calc(18 * var(--w));pointer-events:none}
+.zen__title{color:var(--title)}
+.zen__text p:last-child{opacity:.5}
+.zen__side{position:absolute;z-index:3;right:calc(20 * var(--w));bottom:calc(24 * var(--w));display:flex;flex-direction:column;align-items:flex-end;gap:calc(14 * var(--w))}
+.zen__hint{display:flex;flex-direction:column;align-items:flex-end;gap:calc(4 * var(--w));opacity:.5}
+.zen__next{color:var(--blue)}
+.zen__next:hover{color:#fff}
+/* прогресс полёта: тонкая линия справа */
+.zen__bar{position:absolute;z-index:3;right:calc(20 * var(--w));top:calc(70 * var(--w));width:1px;height:calc(160 * var(--w));background:rgba(223,223,223,.15)}
+.zen__bar i{position:absolute;left:0;top:0;width:1px;height:100%;background:var(--title);transform-origin:0 0;transform:scaleY(0)}
+/* просмотр одного листа */
+.zen__view{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:rgba(10,10,10,.8);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);cursor:zoom-out;color:var(--light);--w:calc(100vw / 1400)}
+.zen__fig{display:flex;align-items:flex-end;gap:calc(32 * var(--w))}
+.zen__fig img{max-height:84vh;max-height:84svh;max-width:62vw;width:auto;height:auto;box-shadow:0 calc(40 * var(--w)) calc(120 * var(--w)) rgba(0,0,0,.6)}
+.zen__cap{width:calc(240 * var(--w));display:flex;flex-direction:column;gap:calc(6 * var(--w))}
+.zen__cap span:not(:first-child){opacity:.5}
+.zen__close{position:absolute;top:max(12px, env(safe-area-inset-top, 0px));right:12px;width:48px;height:48px;border:0;background:none;color:var(--light);font:300 34px/1 'Golos Text',sans-serif;cursor:pointer}
+.zen__strip{display:none}
+.is-static .zen{height:auto}
+.is-static .zen__stage{position:relative}
+
+/* зерно на всю страницу */
+/* как у surya-aditya.com: бинарный шум (точка есть или нет), плитка 300 → 150px, чёрные точки 25 %.
+   У Aditya зерно на светлом и на фото; на нашем почти чёрном фоне чёрные точки не видны – поверх те же точки белым, 9 % */
+.grain{position:fixed;inset:-50%;z-index:55;pointer-events:none}
+.grain::before,.grain::after{content:"";position:absolute;inset:0;background-size:150px 150px}
+.grain::before{opacity:.125;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='discrete' tableValues='0 1'/%3E%3C/feComponentTransfer%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.grain::after{opacity:.045;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='discrete' tableValues='0 1'/%3E%3C/feComponentTransfer%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  1 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.js .grain{animation:grain .9s steps(5) infinite}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-4%,3%)}40%{transform:translate(3%,-4%)}60%{transform:translate(-3%,-2%)}80%{transform:translate(4%,2%)}100%{transform:translate(0,0)}}
+
+/* фото во время роста и прокрутки рисуется в WebGL: края гнутся, как у гибкого листа */
+.me__gl{position:fixed;inset:0;width:100%;height:100%;pointer-events:none}
+.me__cutgl{position:fixed;inset:0;z-index:4;width:100%;height:100%;pointer-events:none}
+.me.is-gl .me__img{visibility:hidden}
+
+.is-static .intro{height:auto}
+.is-static .stage{position:relative}
+.is-static .me{margin-top:0}
+.is-static .me__img{transform:none!important}
+.is-static .slot img{visibility:visible}
+.is-static .plaque{opacity:1}
+@media (hover:none){.trail{display:none}}
+/* над 3D-сценой рисунков стекло капель (backdrop-filter) пересчитывает все слои и роняет кадр – там капли без размытия, только кромка */
+.trail.is-lite .blob{-webkit-backdrop-filter:none;backdrop-filter:none}
+@media (prefers-reduced-motion:reduce){.grain{animation:none!important}}
+
+/* ================= ТЕЛЕФОН (≤ 768, проектируется на 390) =================
+   Тот же язык: тёмный фон, зерно, воздух, слои. 1m = 1px кадра 390. --u подобрана так,
+   чтобы десктопные пропорции первого экрана читались на узком экране; мелкий текст – в m */
+/* где svh понимают – единицы от «малой» высоты экрана (без прыжков из-за панели Safari) */
+@supports (height:100svh){:root{--u:min(calc(100vw / 1200), calc(100svh / 706), 1.6px)}}
+@media (max-width: 768px){
+  /* --m не растёт бесконечно: на планшете и низких экранах всё остаётся в пропорциях телефона */
+  :root{--m:min(calc(100vw / 390), calc(100vh / 760), 1.35px);--u:calc(100vw / 520);--pad:max(16px, env(safe-area-inset-left, 0px))}
+  @supports (height:100svh){:root{--m:min(calc(100vw / 390), calc(100svh / 760), 1.35px)}}
+  .t-12{font-size:calc(11 * var(--m))}
+  /* меню и выход из кейса – крупнее, под палец */
+  .menu,.case__back{font-size:calc(15 * var(--m))}
+  .menu .roll{height:1.1em}
+  .t-14{font-size:calc(13 * var(--m))}
+  .t-30{font-size:calc(30 * var(--m));line-height:calc(25 * var(--m))}
+  /* первый экран: колонка сверху вниз, заголовок – плакат в три строки внизу */
+  /* по макету Антона «Frame 1711» (441 шир. → 390): логотип 37, имя, описание, кадр 134×187, плакат внизу; без круга */
+  .stage{padding-top:calc(60 * var(--m))}
+  .logo{width:calc(33 * var(--m));height:calc(37 * var(--m))}
+  .orb{display:none}
+  .name{margin-top:calc(29 * var(--m))}
+  .desc{margin-top:calc(17 * var(--m))}
+  .slot{margin-top:calc(82 * var(--m));width:calc(134 * var(--m));height:calc(187 * var(--m))}
+  .t-br{display:block;height:0;overflow:hidden}
+  .t-title{font-size:var(--tsize, calc(78 * var(--m)));letter-spacing:-.07em}
+  .title{padding-bottom:calc(22 * var(--m))}
+  /* меню: слева время, справа одна кнопка; список – на весь экран */
+  .menu{will-change:auto;align-items:center;height:calc(52 * var(--m));padding-top:env(safe-area-inset-top, 0px)}
+  .menu__btn{display:grid;grid-template-areas:'b';height:44px;min-width:44px;padding:0;border:0;background:none;color:inherit;font:inherit;text-transform:inherit;letter-spacing:inherit;cursor:pointer;justify-items:end;align-items:center}
+  .menu__btn>span{grid-area:b;transition:opacity .4s}
+  .menu__btn>span+span,.menu.is-list .menu__btn>span:first-child{opacity:0}
+  .menu.is-list .menu__btn>span+span{opacity:1}
+  .menu__right{position:fixed;inset:0;z-index:-1;display:flex;flex-direction:column;justify-content:flex-end;gap:calc(10 * var(--m));
+    padding:0 var(--pad) calc(40 * var(--m) + env(safe-area-inset-bottom, 0px));background:var(--night);color:var(--light);
+    font-size:calc(40 * var(--m));line-height:1;letter-spacing:-.03em;font-weight:500;
+    opacity:0;visibility:hidden;transition:opacity .5s,visibility 0s .5s}
+  /* !important: появление меню (gsap autoAlpha) пишет opacity/visibility в style, закрытый список должен оставаться скрытым */
+  .menu:not(.is-list) .menu__right{opacity:0!important;visibility:hidden!important}
+  .menu.is-list{color:var(--light)}
+  .menu.is-list .menu__right{opacity:1;visibility:visible;transition:opacity .5s}
+  .menu__right>a,.menu__right>span{transform:translateY(calc(24 * var(--m)));transition:transform .8s cubic-bezier(.16,1,.3,1)}
+  .menu.is-list .menu__right>a,.menu.is-list .menu__right>span{transform:none}
+  .menu__right>span{margin-top:calc(24 * var(--m));font-size:calc(13 * var(--m));font-weight:500}
+  .menu__right .roll{height:1em}
+  /* фото: на узком экране раскрывается на высоту, а не на ширину – картинка обрезается по бокам */
+  /* фото на телефоне – те же пропорции 2:3 во всю ширину, что и кадр: растёт без искажения, как на макете Антона */
+  .me{aspect-ratio:2/3;height:auto;margin-top:calc(-100vh + (100vh - 150vw) / 2);margin-top:calc(-100svh + (100svh - 150vw) / 2)}
+  /* плашка как на макете: шире, чем выше, лежит на фото над головой */
+  .plaque{width:calc(280 * var(--m));height:calc(176 * var(--m));margin-left:calc(-140 * var(--m));top:0}
+  /* работы: заголовок, превью почти во всю ширину, подписи – под превью в две колонки */
+  .works{padding:calc(56 * var(--m)) 0 calc(48 * var(--m))}
+  .works__list{gap:calc(48 * var(--m))}
+  .wk__link{gap:calc(12 * var(--m))}
+  /* трекинг заголовков работ на десктопе подгоняется под ширину макета (fitWorks, в u) – на телефоне свой, фиксированный */
+  .t-56{font-size:calc(42 * var(--m));line-height:calc(34 * var(--m));letter-spacing:-.02em}
+  .wk__row{width:100%;max-width:calc(420 * var(--m));margin-inline:auto;grid-template-columns:1fr 1fr;row-gap:calc(10 * var(--m));column-gap:calc(16 * var(--m))}
+  .wk__pic{grid-column:1 / -1;grid-row:1;width:100%}
+  .wk__side{padding-top:0;gap:calc(4 * var(--m))}
+  /* подсказка «можно открыть»: у активной работы (в центре экрана) в углу превью проявляется метка «Open ↗︎» */
+  .wk__pic{position:relative}
+  .wk__pic::after{content:"Open \2197\FE0E";position:absolute;right:calc(10 * var(--m));bottom:calc(10 * var(--m));padding:calc(7 * var(--m)) calc(11 * var(--m));
+    background:var(--ink);color:var(--light);font-size:calc(12 * var(--m));font-weight:500;line-height:1;letter-spacing:0;
+    opacity:0;transform:translateY(calc(6 * var(--m)));transition:opacity .5s,transform .6s cubic-bezier(.16,1,.3,1)}
+  .wk.is-active .wk__pic::after{opacity:1;transform:none}
+  .wk__side--l{grid-column:1;grid-row:2}
+  .wk__side--r{grid-column:2;grid-row:2}
+  /* кейс: одна колонка, всё по порядку; описание не липнет */
+  .case{--w:calc(100vw / 390 * .5);--g:calc(14 * var(--m))}
+  .case__title{top:calc(56 * var(--m))}
+  /* «←︎ All works» – полоса во всю ширину, чтобы картинки не проезжали под текстом ссылки */
+  .case__back{top:0;left:0;right:0;background:rgba(10,10,10,.88);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);height:calc(52 * var(--m) + env(safe-area-inset-top, 0px));display:flex;align-items:center;padding:env(safe-area-inset-top, 0px) var(--pad) 0;gap:calc(8 * var(--m))}
+  .case__back span:last-child{display:none}
+  .case__content{padding:var(--ct) var(--pad) 0}
+  .case__top,.case__pair{grid-template-columns:1fr;row-gap:calc(28 * var(--m))}
+  .case__info{position:static;width:auto;gap:calc(20 * var(--m))}
+  .case__facts{grid-template-columns:calc(90 * var(--m)) 1fr;row-gap:calc(4 * var(--m))}
+  .cs{gap:calc(8 * var(--m))}
+  .case__pair>.case__note,.case__note{justify-self:start;width:auto;gap:calc(8 * var(--m))}
+  .case__right{display:block}
+  .case__right .case__shots{width:auto}
+  .case__end{min-height:70vh;min-height:70svh;padding-top:0}
+  .case__end p{display:none}
+  /* рисунки: листы и текст в кадре 600; текст – наверху, у большого пальца – только «дальше» */
+  .zen{--w:calc(100vw / 600)}
+  .zen__text{top:calc(64 * var(--m));bottom:auto;left:var(--pad);right:var(--pad);width:auto;gap:calc(12 * var(--m))}
+  .zen__title{font-size:calc(34 * var(--m));line-height:calc(28 * var(--m))}
+  .zen__text p:first-of-type{max-width:calc(300 * var(--m))}
+  .zen__side{right:var(--pad);bottom:calc(20 * var(--m) + env(safe-area-inset-bottom, 0px))}
+  .zen__hint{display:none}
+  .zen__next{display:flex;align-items:center;min-height:44px}
+  .zen__bar{display:none}
+  .zp p{font-size:calc(12 * var(--m))}
+  .zen__fig{flex-direction:column;align-items:flex-start;gap:calc(14 * var(--m))}
+  .zen__fig img{max-width:calc(100vw - 2 * var(--pad));max-height:72vh;max-height:72svh}
+  .zen__cap{width:auto}
+
+  /* зерно: минимальное и неподвижное (на телефоне дрожание читалось как рябь) */
+  .js .grain{animation:none}
+  .grain::before{opacity:.06}.grain::after{opacity:.025}
+  /* рисунки: обычный блок – текст, лента вбок, «дальше» */
+  .zen{height:auto}
+  .zen__stage{position:relative;height:auto;overflow:visible;display:flex;flex-direction:column;gap:calc(28 * var(--m));padding:calc(72 * var(--m)) 0 calc(40 * var(--m))}
+  .zen__space,.zen__words,.zen__bar,.zen__hint{display:none}
+  .zen__text,.zen__side{position:static;padding:0 var(--pad)}
+  .zen__text{order:-1}
+  .zen__side{align-items:flex-end}
+  /* свободная прокрутка с инерцией (без щелчков по одной картинке) */
+  .zen__strip{overflow:hidden;touch-action:pan-y;height:calc(380 * var(--m));display:flex;align-items:center;cursor:grab}
+  .zen__track{display:flex;align-items:center;gap:calc(14 * var(--m));will-change:transform}
+  .zen__strip::-webkit-scrollbar{display:none}
+  /* лист целиком, без обрезки: вертикальные – по высоте 300, горизонтальные – по ширине 320 */
+  .zst{flex:none;width:min(calc(300 * var(--m) * var(--arn)), calc(320 * var(--m)));height:auto;aspect-ratio:var(--ar);padding:0;border:0;background:none;
+    transform:scale(calc(1 - var(--d, 1) * .22));opacity:calc(1 - var(--d, 1) * .5);transition:transform .15s linear,opacity .15s linear;user-select:none;-webkit-user-drag:none}
+  .zst img{pointer-events:none}
+  .zst img{width:100%;height:100%;object-fit:cover}
+  /* подвал: столбец сверху вниз – имя, время, логотип, связь крупно, наверх */
+  .foot__cloud{width:240vw;margin:calc(-120vw * 752 / 2378) 0 0 -120vw}
+  .foot__float{width:calc(100vw - 2 * var(--pad));height:auto;min-height:78vh;min-height:78svh;display:flex;flex-direction:column;justify-content:space-between;gap:calc(28 * var(--m))}
+  .foot__col--tr,.foot__col--br{text-align:left;align-items:flex-start}
+  .foot__col{align-self:stretch}
+  .foot__logo{position:static;margin:0;width:calc(32 * var(--m));height:calc(36 * var(--m));order:-1;align-self:flex-start}
+  .foot__col--tl{order:0}.foot__col--tr{order:1}.foot__col--bl{order:3}.foot__col--br{order:4}
+  .foot__float{padding-top:calc(52 * var(--m))}
+  .foot__links{font-size:calc(28 * var(--m))}
+  .foot__links a,.foot__col--br a{min-height:calc(36 * var(--m));display:flex;align-items:center}
+}
+
+
+/* ===== Русская версия: типографика по макету Антона (кадр Figma 1440; панели шрифтов 13.11.2026) =====
+   Заголовок: Golos Text SemiBold 159, интерлиньяж 90 %, трекинг −7 %.
+   Имя: Golos Text Regular 36, интерлиньяж 82 %, трекинг −1 %. Подпись: Golos Regular 14, 110 %, −3 %.
+   Меню: Golos Medium 12. Плашка: Golos SemiBold 14, 110 %, −3 %.
+   На десктопе 1px макета 1440 = u · 1200/1440 (раньше макет был в кадре 1200/1400), только для первого экрана, меню и плашки. */
+html[lang="ru"] .name{font-weight:400;letter-spacing:-.01em}
+html[lang="ru"] #title{font-weight:600;line-height:.9;letter-spacing:-.07em}
+html[lang="ru"] .phrase{font-weight:600}
+html[lang="ru"] .desc--cta{display:none}
+html[lang="ru"] .desc--old{display:block}
+@media (min-width:769px){
+  html[lang="ru"] :is(.stage,.menu,.plaque){--p:calc(var(--u) * 1200 / 1440)}
+  /* ролл меню: окно ровно в одну строку, иначе из второй (наведённой) строки снизу торчит верх «Й» в слове «Веб-дизайн» */
+  html[lang="ru"] .menu .roll{height:1.2em}
+  html[lang="ru"] .name{font-size:calc(36 * var(--p));line-height:.82}
+  html[lang="ru"] #title{font-size:calc(159 * 100vw / 1440)}
+  /* сверено с макетом 1440: низ строки «Сайты и графика» стоит в 17px от края чёрного поля; фото 117×176 в 39px под подписью (центр – на линии меню) */
+  html[lang="ru"] .title{padding-bottom:calc(5 * var(--u))}
+  html[lang="ru"] .slot{margin-top:calc(39 * var(--p));width:calc(117.3 * var(--p));height:calc(176 * var(--p))}
+}
+@media (max-width:768px){
+  html[lang="ru"] #title{font-size:var(--tsize, calc(64 * var(--m)))}
+}
+</style>
+</head>
+<body>
+
+<nav class="menu t-12 w5" id="menu" aria-label="Главное меню">
+  <!-- слева вместо дубля «Start a project» – живое местное время: клиенту сразу видно, где ты и который у тебя час -->
+  <a class="menu__time" href="#foot">Обсудить проект</a><span id="clockTop" hidden>--:--</span>
+  <button class="menu__btn" type="button" id="menuBtn" aria-expanded="false" aria-controls="menuList"><span>Меню</span><span>Закрыть</span></button>
+  <span class="menu__right" id="menuList"><a href="#work">Веб-дизайн</a><a href="#zen">Дзен-графика</a><a href="#foot">Контакты</a><span><a href="#" aria-current="true">Ru</a> / <a href="index.html" class="off" hreflang="en">Eng</a></span></span>
+</nav>
+
+<main>
+  <!-- 1. intro -->
+  <section class="intro" id="intro">
+    <div class="stage" id="stage">
+      <div class="orb layer" data-depth="-1"><div class="orb__in"><img src="assets/d/circle-blur.webp" alt="" width="1188" height="1188" loading="lazy"></div></div>
+      <div class="top">
+      <a class="logo layer" data-depth=".15" href="#" aria-label="Антон Шатковский, на главную"></a>
+      <h1 class="name t-30 layer" data-depth=".35"><span class="mask"><span>Антон</span></span><span class="mask"><span>Шатковский</span></span></h1>
+      <!-- описание: два варианта. Вариант «cta» (по умолчанию) – польза для клиента + ссылка «Обсудить проект ↓︎» четвёртой строкой
+           (высота та же – кадр с фото не сдвигается). Откат к прежнему тексту: CTA = false в начале скрипта или ?cta=0 в адресе -->
+      <p class="desc desc--cta t-14 layer" data-depth=".35">Делаю сайты и фирменный стиль<br>для брендов, студий и событий.<br>Минимализм, сильная типографика.<br><a class="desc__cta" href="#foot"><span class="roll"><span data-t="Обсудить проект ↓︎">Обсудить проект ↓︎</span></span></a></p>
+      <p class="desc desc--old t-14 layer" data-depth=".35">Я структурирую пространство и вкладываю<br>в него душу и любовь. Сайты, графика,<br>фирменный стиль.</p>
+      <figure class="slot layer" data-depth=".7" id="slot"><img src="assets/d/photo.webp" srcset="assets/d/photo-m.webp 1200w, assets/d/photo.webp 1800w" sizes="(max-width: 768px) 400px, 100vw" alt="" width="1800" height="2700"></figure>
+      </div>
+      <p class="title t-title layer" data-depth="-.4" id="title" aria-hidden="true"><span class="mask"><span>Дизайнер</span></span><span class="mask"><span>Сайты и<span class="t-br"> </span>графика</span></span></p>
+    </div>
+  </section>
+
+  <!-- 2. me: фото раскрывается на всю ширину -->
+  <section class="me" id="me" aria-label="Антон Шатковский, фото">
+    <canvas class="me__gl" id="meGl" aria-hidden="true"></canvas>
+    <img class="me__img" id="meImg" src="assets/d/photo.webp" srcset="assets/d/photo-m.webp 1200w, assets/d/photo.webp 1800w" sizes="(max-width: 768px) 400px, 100vw" alt="Антон Шатковский с поднятыми руками на лесной тропе" width="1800" height="2700">
+  </section>
+
+  <!-- 3. works: превью работ, одна всегда активная -->
+  <section class="works" id="work" aria-label="Веб-проекты">
+    <ol class="works__list" id="works"></ol>
+  </section>
+
+  <!-- 4. foot -->
+  <!-- 4. zen: рисунки тушью в пространстве, прокрутка ведёт камеру сквозь листы -->
+  <section class="zen" id="zen" aria-label="Дзен-графика">
+    <div class="zen__stage" id="zenStage">
+      <div class="zen__space"><div class="zen__cam" id="zenCam"></div></div>
+      <div class="zen__strip" id="zenStrip" aria-label="Рисунки, листайте вбок"></div>
+      <div class="zen__words" id="zenWords" aria-hidden="true"></div>
+      <div class="zen__text t-14">
+        <h2 class="zen__title t-56">Дзен-<br>графика</h2>
+        <p>Я рисую горы, воду и облака. Почему именно их, сам не знаю, просто они мне не надоедают. Передать их красоту на бумаге у меня не получается, и я перестал из-за этого расстраиваться. Мне нравится сам процесс.</p>
+        <p>(38) Тушь на бумаге</p>
+      </div>
+      <div class="zen__bar" aria-hidden="true"><i id="zenBar"></i></div>
+      <div class="zen__side t-12 w5">
+        <p class="zen__hint"><span>Листайте, чтобы плыть</span><span>Нажмите на рисунок, чтобы рассмотреть</span></p>
+        <a class="zen__next" id="zenNext" href="#foot">Дальше: контакты ↓︎</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="foot t-14" id="foot">
+    <img class="foot__cloud" src="assets/d/cloud.webp" alt="" width="2378" height="752" loading="lazy">
+    <div class="foot__float" id="footFloat">
+      <div class="foot__col foot__col--tl"><span>Антон Шатковский</span><span>Дизайнер сайтов и графики</span><span>Открыт для новых проектов</span></div>
+      <div class="foot__col foot__col--tr"><span>Сейчас в Дананге, Вьетнам</span><span>Местное время <span id="clock">--:--</span></span><span>Работаю по всему миру</span></div>
+      <nav class="foot__col foot__col--bl foot__links" aria-label="Контакты"><a href="https://t.me/anton_shanti" target="_blank" rel="noopener">Telegram</a><a href="https://www.instagram.com/anton.shantiom/" target="_blank" rel="noopener">Instagram</a><a href="https://wa.me/79155349959" target="_blank" rel="noopener">WhatsApp</a><a href="mailto:shaa250391@gmail.com">shaa250391@gmail.com</a></nav>
+      <div class="foot__col foot__col--br"><a href="#" id="toTop">Наверх ↑︎</a><span>© 2026</span></div>
+      <a class="foot__logo" href="#" aria-label="Наверх"></a>
+    </div>
+  </footer>
+</main>
+
+<!-- кейс: Morimoto Naoki, Sui. Открывается поверх главной, заголовок прилетает из списка работ -->
+<section class="case" id="case" aria-label="Кейс" data-lenis-prevent hidden>
+  <div class="case__bg"></div>
+  <h2 class="case__title t-title" id="caseTitle"></h2>
+  <span class="case__cursor t-12 w5" id="caseCursor" aria-hidden="true"><b>×</b><span>Нажмите, чтобы вернуться</span></span>
+  <a class="case__back t-12 w5" id="caseBack" href="#work"><span>←︎ Все работы</span><span>Esc</span></a>
+  <div class="case__scroll" id="caseScroll"><div class="case__content" id="caseContent"></div></div>
+</section>
+
+<!-- вырезка фото: лежит над плашкой, плашка «заезжает» за Антона -->
+<canvas class="me__cutgl" id="meCutGl" aria-hidden="true"></canvas>
+<img id="meCut" data-src="assets/d/photo-cut.webp" alt="" width="1800" height="2700" hidden>
+<div class="zen__view" id="zenView" hidden><button class="zen__close" type="button" aria-label="Закрыть рисунок">×</button><figure class="zen__fig"><img id="zenImg" alt=""><figcaption class="zen__cap t-14" id="zenCap"></figcaption></figure></div>
+<div class="plaque" id="plaque"><p class="phrase t-14" id="phrase">Всё на своих местах</p></div>
+<div class="trail" id="trail" aria-hidden="true"></div>
+<div class="loader" id="loader" aria-hidden="true"><span class="ld-logo" id="ldLogo"></span></div>
+<div class="grain" aria-hidden="true"></div>
+
+<script src="assets/lib/gsap.min.js"></script>
+<script src="assets/lib/lenis.min.js"></script>
+<script>
+const params = new URLSearchParams(location.search);
+const isStatic = params.has('static');
+/* призыв к действию на первом экране; false – вернуть прежнее описание */
+const CTA = params.get('cta') !== '0';
+if (!CTA) document.documentElement.classList.add('no-cta');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const motionOn = !isStatic && !reduce && typeof gsap !== 'undefined' && typeof Lenis !== 'undefined';
+document.documentElement.classList.add(motionOn ? 'js' : 'is-static');
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+/* 1u – из CSS (на телефоне своя формула): меряем пробник шириной 1000u */
+const uProbe = document.createElement('i'); uProbe.style.cssText = 'position:absolute;visibility:hidden;width:calc(1000 * var(--u));height:0';
+document.documentElement.append(uProbe);
+const isMobile = () => matchMedia('(max-width: 768px)').matches;
+let uCache = 0; const measureU = () => uCache = uProbe.getBoundingClientRect().width / 1000;
+addEventListener('resize', measureU);
+const U = () => uCache || measureU();
+const clamp01 = v => Math.max(0, Math.min(1, v));
+const smooth = (a, b, v) => { const t = clamp01((v - a) / (b - a)); return t * t * (3 - 2 * t); };
+const ease = t => .5 - Math.cos(Math.PI * clamp01(t)) / 2; /* синусоида: мягкий старт и мягкая остановка */
+
+/* фраза: две строки, слова по отдельности */
+const phrase = document.getElementById('phrase');
+phrase.innerHTML = phrase.textContent.trim().replace(/\.\s+/g, '.\n').split('\n').map(l => l.split(' ').map(w => `<span class="w">${w}</span>`).join(' ')).join('<br>');
+const words = [...phrase.querySelectorAll('.w')].map((el, i) => ({ el, x: Math.sin(i * 2.1 + 1) * 150, y: Math.cos(i * 1.7) * 130, r: Math.sin(i * 3.3) * 14 }));
+
+
+/* ---------- глубина: слои первого экрана смещаются от мыши с разной силой ---------- */
+const trailEl = document.getElementById('trail');
+const layers = [...document.querySelectorAll('.layer')].map(el => ({ el, d: +el.dataset.depth, x: 0, y: 0 }));
+const mouse = { x: innerWidth / 2, y: innerHeight / 2, nx: 0, ny: 0 };
+addEventListener('pointermove', e => { mouse.x = e.clientX; mouse.y = e.clientY; mouse.nx = e.clientX / innerWidth - .5; mouse.ny = e.clientY / innerHeight - .5; });
+/* сенсорный экран (телефон, планшет): эффекты от курсора выключены – касание пальцем там читалось как движение мыши,
+   и превью, слои, плашка и подвал дёргались. Остаются только эффекты от прокрутки */
+const isTouch = () => matchMedia('(hover: none), (pointer: coarse)').matches || isMobile();
+function parallax(){
+  if (isTouch()) return;
+  const amp = 30 * U();
+  layers.forEach(l => {
+    l.x += (mouse.nx * amp * l.d - l.x) * .05; l.y += (mouse.ny * amp * .6 * l.d - l.y) * .05;
+    l.el.style.translate = `${l.x.toFixed(2)}px ${l.y.toFixed(2)}px`;
+  });
+}
+
+/* ---------- курсор: шлейф из капель матового стекла идёт по следу мыши; виден только пока мышь движется ---------- */
+const N_BLOB = 22;
+trailEl.innerHTML = Array.from({ length: N_BLOB }, (_, i) => `<span class="blob" style="--d:calc(${Math.round(130 - i * 3.6)} * var(--u))"></span>`).join('');
+const blobs = [...trailEl.children];
+const hist = Array.from({ length: N_BLOB * 2 }, () => ({ x: innerWidth / 2, y: innerHeight / 2 }));
+const head = { x: innerWidth / 2, y: innerHeight / 2 };
+let speed = 0;
+function cursor(){
+  if (isTouch()) return;
+  const dx = mouse.x - head.x, dy = mouse.y - head.y;
+  head.x += dx * .25; head.y += dy * .25;
+  const v = Math.hypot(dx, dy);
+  speed += (Math.min(v / 60, 1) - speed) * (v > 1 ? .12 : .04);
+  hist.unshift({ x: head.x, y: head.y }); hist.pop();
+  blobs.forEach((b, i) => {
+    const h = hist[i * 2];
+    b.style.transform = `translate3d(${h.x.toFixed(1)}px,${h.y.toFixed(1)}px,0)`;
+    b.style.opacity = (speed * (1 - i / N_BLOB) * .7).toFixed(3);
+  });
+}
+
+/* ---------- фото в WebGL: прямоугольник из прокрутки, края гнутся при росте и от скорости, лёгкий наезд ---------- */
+/* cut = вырезка (PNG с прозрачностью) поверх плашки: тот же шейдер и те же числа, что у фото, плюс срез по краю листа работ */
+function mountPhoto(cv = document.getElementById('meGl'), img = meImg, cut = false){
+  /* у вырезки прозрачность – цвет отдаём предумноженным: иначе стекло капли курсора (backdrop-filter) читает прозрачные пиксели как яркие и мигает */
+  const gl = cv.getContext('webgl', { premultipliedAlpha: cut, alpha: true, antialias: false });
+  if (!gl) return null;
+  const vs = `attribute vec2 p;void main(){gl_Position=vec4(p,0.,1.);}`;
+  const fs = `precision highp float;
+  uniform sampler2D uImg;uniform vec2 uRes,uImgRes;uniform vec4 uRect;uniform float uBend,uFlex,uZoom,uReveal,uDpr,uDim,uClip;
+  vec2 cover(vec2 uv,vec2 box){float ra=box.x/box.y,ia=uImgRes.x/uImgRes.y;vec2 s=ra>ia?vec2(1.,ia/ra):vec2(ra/ia,1.);
+    s/=uZoom;vec2 c=clamp(vec2(.5,.42),s*.5,1.-s*.5);return (uv-.5)*s+c;}
+  void main(){
+    vec2 px=vec2(gl_FragCoord.x,uRes.y-gl_FragCoord.y)/uDpr;
+    vec2 c=(px-uRect.xy)/uRect.zw*2.-1.;
+    /* рост: середины сторон выгибаются наружу; прокрутка: лист прогибается по вертикали, как гибкий */
+    vec2 cs=vec2(c.x/(1.+uBend*(1.-c.y*c.y)),c.y/(1.+uBend*.7*(1.-c.x*c.x)));
+    cs.y+=uFlex*(1.-cs.x*cs.x);
+    if(abs(cs.x)>1.||abs(cs.y)>1.||cs.y*.5+.5<1.-uReveal||px.y>uClip){gl_FragColor=vec4(0.);return;}
+    vec4 t=texture2D(uImg,cover(cs*.5+.5,uRect.zw));
+    gl_FragColor=${cut ? 'vec4(t.rgb*t.a*(1.-uDim),t.a)' : 'vec4(t.rgb*(1.-uDim),1.)'};}`;
+  const sh = (t, src) => { const o = gl.createShader(t); gl.shaderSource(o, src); gl.compileShader(o); return o; };
+  const pr = gl.createProgram(); gl.attachShader(pr, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(pr);
+  if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) return null;
+  gl.useProgram(pr);
+  const b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1,1,-1,-1,1,1,1]), gl.STATIC_DRAW);
+  const loc = gl.getAttribLocation(pr, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  const Un = n => gl.getUniformLocation(pr, n);
+  const t = gl.createTexture(); gl.bindTexture(gl.TEXTURE_2D, t);
+  [gl.TEXTURE_WRAP_S, gl.TEXTURE_WRAP_T].forEach(k => gl.texParameteri(gl.TEXTURE_2D, k, gl.CLAMP_TO_EDGE));
+  gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+  gl.clearColor(0, 0, 0, 0);
+  const size = () => { const d = Math.min(devicePixelRatio, 2); cv.width = Math.round(innerWidth * d); cv.height = Math.round(innerHeight * d);
+    gl.viewport(0, 0, cv.width, cv.height); gl.uniform2f(Un('uRes'), cv.width, cv.height); gl.uniform1f(Un('uDpr'), d); };
+  let ready = false;
+  const start = () => { const F = cut ? gl.RGBA : gl.RGB; gl.texImage2D(gl.TEXTURE_2D, 0, F, F, gl.UNSIGNED_BYTE, img); gl.uniform2f(Un('uImgRes'), img.naturalWidth, img.naturalHeight);
+    size(); addEventListener('resize', size); if (!cut) me.classList.add('is-gl'); ready = true; };
+  img.complete && img.naturalWidth ? start() : img.addEventListener('load', start, { once: true });
+  return (r, bend, flex, zoom, dim = 0, clip = 1e5) => {
+    if (!ready) return;
+    gl.uniform1f(Un('uClip'), clip);
+    gl.uniform4f(Un('uRect'), r.x, r.y, r.w, r.h);
+    gl.uniform1f(Un('uBend'), bend); gl.uniform1f(Un('uFlex'), flex); gl.uniform1f(Un('uZoom'), zoom); gl.uniform1f(Un('uReveal'), reveal.v); gl.uniform1f(Un('uDim'), dim);
+    gl.clear(gl.COLOR_BUFFER_BIT);
+    if (r.y < innerHeight && r.y + r.h > 0) gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  };
+}
+const reveal = { v: motionOn ? 0 : 1 };
+let cutVis = true, cutCv = null, drawCut = null, drawPhoto = null, lenis = null, flex = 0;
+
+/* ---------- плашка чуть наклоняется и сдвигается за курсором ---------- */
+const pt = { x: 0, y: 0 };
+
+/* ---------- прокрутка ---------- */
+const slot = document.getElementById('slot'), me = document.getElementById('me'), meImg = document.getElementById('meImg');
+const menu = document.getElementById('menu'), plaque = document.getElementById('plaque');
+const fades = [...document.querySelectorAll('.name,.desc,.title,.logo')];
+const orb = document.querySelector('.orb');
+const softplus = (x, k) => x > 20 * k ? x : k * Math.log1p(Math.exp(x / k));
+function scroll(){
+  const vh = innerHeight, s = scrollY, u = U(), p = s / vh;
+  /* 1. рост: первый экран стоит, фото из маленького кадра встаёт на всю ширину за один экран прокрутки */
+  const k = ease(p);
+  const W = me.getBoundingClientRect(), S = slot.getBoundingClientRect();
+  /* телефон: фото растёт на месте – цель роста неподвижна (фото по центру экрана), а не едет снизу вместе с блоком.
+     Блок .me поставлен так, что к концу роста его верх как раз в этой точке – дальше фото просто уезжает со страницей */
+  const Wt = isMobile() ? Math.min(W.top, (vh - W.height) / 2) : W.top;
+  const x = S.left + (W.left - S.left) * k, y = S.top + (Wt - S.top) * k, sc = (S.width + (W.width - S.width) * k) / W.width;
+  meImg.style.transform = `translate3d(${(x - W.left).toFixed(2)}px,${(y - W.top).toFixed(2)}px,0) scale(${sc.toFixed(5)})`;
+  if (drawPhoto) {
+    /* после роста фото продолжает медленно наезжать, пока проезжает экран */
+    const zoom = 1 + smooth(0, 1, (s - vh) / (me.offsetHeight - vh)) * .12; /* наезд совсем лёгкий: фигура не разрастается */
+    const v = lenis ? Math.max(-1, Math.min(1, lenis.velocity / 45)) : 0;
+    flex += (v * .035 - flex) * .1;
+    /* переход к работам: лист работ наезжает, фото под ним притормаживает (едет на 45 % скорости) и темнеет */
+    /* на телефоне фото короче экрана – отставать начинает, только когда уходит за верх, иначе сверху остаётся чёрная полоса */
+    const under = isMobile() ? Math.max(0, -W.top) : Math.max(0, vh - W.bottom);
+    const R0 = { x, y: y + under * .55, w: W.width * sc, h: W.height * sc }, bend = Math.sin(k * Math.PI) * .12, dim = Math.min(1, under / vh) * .6;
+    drawPhoto(R0, bend, flex, zoom, dim);
+    if (drawCut) {
+      /* второй холст живёт только пока фото на экране: вне его не рисуем и прячем (иначе лишний полноэкранный слой каждый кадр) */
+      const vis = R0.y < vh && R0.y + R0.h > 0;
+      if (vis) drawCut(R0, bend, flex, zoom, dim, worksSec.getBoundingClientRect().top);
+      if (vis !== cutVis) { cutVis = vis; cutCv.style.visibility = vis ? 'visible' : 'hidden'; }
+    }
+  }
+  /* круг на фоне раскрывается вместе с фото: растёт, поднимается и тает */
+  /* фото едет на нас, круг уходит вглубь: уменьшается, тускнеет */
+  orb.style.transform = `translate3d(0,${(-k * 30 * u).toFixed(2)}px,0) scale(${(1 - k * .45).toFixed(4)})`;
+  orb.style.opacity = (1 - smooth(.1, 1, p) * .7).toFixed(3);
+  const fo = (1 - smooth(.15, .7, p)).toFixed(3);
+  fades.forEach(el => el.style.opacity = fo);
+
+  /* 2. меню: едет вверх со страницей и мягко (без рывка) останавливается у верхнего края */
+  const stop = 20 * u;
+  /* на телефоне меню всегда наверху, на десктопе – едет со страницей с линии кадра */
+  menu.style.transform = isMobile() ? 'none' : `translate3d(0,${(stop + softplus((341 - 9 * 12 / 14) * u - s - stop, 30 * u)).toFixed(2)}px,0)`;
+
+  /* 3. плашка: пока не дошла до середины – едет вместе с фото, в середине стоит; в конце не улетает вверх,
+        а опускается вниз за Антона (вырезка лежит выше) и тает.
+        Сглаживание входа: off = x − K·tanh(x/K) – скорость плашки меняется от «как фото» до «стоит» плавно */
+  const start = vh * .85, end = me.offsetTop + me.offsetHeight - vh * 1.6;
+  const over = s < start ? start - s : 0;
+  const K = vh * .4;
+  let sink = smooth(0, 1, (s - end) / (vh * .7));
+  let off = over - K * Math.tanh(over / K) + sink * vh * .45;
+  if (isTouch()) { pt.x = 0; pt.y = 0; } else { pt.x += (mouse.nx - pt.x) * .06; pt.y += (mouse.ny - pt.y) * .06; }
+  let e = smooth(.98, 1.4, p);
+  if (isMobile()) {
+    /* телефон: фото короче экрана, поэтому плашка не стоит на месте, а лежит на фото над головой (как на макете)
+       и едет вместе с ним; проявляется, когда фото раскрылось, уходит вместе с ним */
+    const top = parseFloat(getComputedStyle(plaque).top), ph = W.height * sc;
+    const lag = Math.max(0, -W.top) * .55; /* то же отставание, что у фото */
+    off = y + lag + ph * .2 - top;
+    e = smooth(.85, 1, p); sink = 0;
+  }
+  /* десктоп: плашка во всю ширину и прибита к верху экрана: не едет, не наклоняется, не масштабируется – только проявляется и тает на месте */
+  plaque.style.transform = !isMobile() ? 'none' : `perspective(${(900 * u).toFixed(0)}px) translate3d(${(pt.x * 14 * u).toFixed(2)}px,${(off + pt.y * 10 * u + (1 - e) * 70 * u).toFixed(2)}px,0) rotateX(${(-pt.y * 7 + (1 - e) * 12).toFixed(2)}deg) rotateY(${(pt.x * 9).toFixed(2)}deg) scale(${(.92 + e * .08).toFixed(4)})`;
+  plaque.style.opacity = (e * (1 - sink)).toFixed(3);
+  plaque.style.filter = e < .999 ? `blur(${((1 - e) * 10).toFixed(2)}px)` : 'none';
+  plaque.style.visibility = Math.abs(off) > vh || sink >= 1 ? 'hidden' : 'visible';
+  /* слова раскладываются по местам вместе с прокруткой */
+  /* на телефоне фото короче, поэтому слова собираются раньше – к моменту, когда плашка проявилась */
+  const lay = isMobile() ? 1 - smooth(.8, 1, p) : 1 - smooth(1.05, 1.7, p);
+  words.forEach(w => {
+    w.el.style.transform = `translate3d(${(w.x * lay * u).toFixed(1)}px,${(w.y * lay * u).toFixed(1)}px,0) rotate(${(w.r * lay).toFixed(2)}deg)`;
+    w.el.style.opacity = (1 - lay * .9).toFixed(3);
+  });
+}
+
+/* ---------- работы: список из данных, всегда одна активная – ближайшая к центру экрана, наведение её перебивает ---------- */
+const WORKS = [
+  /* порядок (12.11): сильные клиентские работы первыми, похожие темы разведены (два киртана, два японских эмбиента), светлые и тёмные превью чередуются */
+  { title: ['Kosmosky', 'титановый', 'глюкофон'], type: ['Лендинг продукта', 'Титановый глюкофон'], year: '2026', note: ['Скролл-история, звук, магазин'], img: 'ti', case: 'ti' },
+  { title: ['Vraj Kirtan', 'фестиваль'], type: ['Фирменный стиль', 'Сайт, digital, печать'], year: '2026', note: ['Международный киртан-фестиваль, Москва'], img: 'vk', case: 'vk' },
+  { title: ['PDA', 'Architecture', 'редизайн'], type: ['Сайт студии', 'Концепт редизайна'], year: '2026', note: ['Архитектура, Париж, анимация'], img: 'pda', case: 'pda' },
+  { title: ['Kristina', 'Kavalevich'], type: ['Портфолио разработчика'], year: '2024', note: ['Личный сайт, тёмный интерфейс, фронтенд'], img: 'kristina', case: 'kristina' },
+  { title: ['Morimoto', 'Naoki, sui'], type: ['Страница альбома', 'Эмбиент, музыкальный релиз'], year: '2024', note: ['Тихая страница для тихой пластинки'], img: 'sui', case: 'sui' },
+  { title: ['Киртан ретрит', 'в Пури'], type: ['Лендинг события', 'Киртан-ретрит в Пури'], year: '2026', note: ['RU / EN, регистрация, аналитика'], img: 'pu', case: 'pu' },
+  { title: ['Ледяной человек', 'с горячим сердцем', '(Вим Хоф)'], type: ['Лендинг'], year: '2025', note: ['Метод Вима Хофа, дыхание, холод'], img: 'wimhof', case: 'wimhof' },
+  { title: ['AmsterSUP,', 'экскурсии', 'по каналам'], type: ['Лендинг', 'Аренда и прогулки на SUP'], year: '2024', note: ['Светлая и тёмная тема, бронирование'], img: 'sup', case: 'sup' },
+  { title: ['Японский', 'эмбиент'], type: ['Лендинг', 'История музыки, 1980-е'], year: '2024', note: ['Лонгрид, артисты, альбомы'], img: 'ja', case: 'ja' },
+  { title: ['Paul Baker', 'архитектор'], type: ['Портфолио архитектора'], year: '2024', note: ['Личный сайт, проекты, клиенты'], img: 'pb', case: 'pb' },
+];
+const worksEl = document.getElementById('works');
+worksEl.innerHTML = WORKS.map((w, i) => `
+  <li class="wk">
+    <a class="wk__link" href="#">
+      <h3 class="wk__title t-56">${w.title.join('<br>')}</h3>
+      <div class="wk__row t-14">
+        <div class="wk__side wk__side--l"><span>(${String(i + 1).padStart(2, '0')})</span><span>${w.type.map(t => `<span>${t}</span>`).join('')}</span></div>
+        ${w.img ? `<figure class="wk__pic"><img src="assets/d/work-${w.img}.webp" alt="${w.title.join(' ')}, превью сайта" width="930" height="1044" loading="lazy"></figure>` : `<figure class="wk__pic wk__pic--stub" aria-label="${w.title.join(' ')}, превью скоро"></figure>`}
+        <div class="wk__side wk__side--r"><span>${w.year}</span><span>${w.note.map(t => `<span>${t}</span>`).join('')}</span></div>
+      </div>
+    </a>
+  </li>`).join('');
+const wks = [...worksEl.children];
+/* до появления подписи скрыты */
+if (motionOn) gsap.set(worksEl.querySelectorAll('.wk__side'), { autoAlpha: 0 });
+let hovered = -1, activeWk = -1;
+wks.forEach((li, i) => { li.addEventListener('mouseenter', () => hovered = i); li.querySelector('a').addEventListener('click', e => { e.preventDefault(); if (WORKS[i].case) openFromList(WORKS[i].case); }); });
+worksEl.addEventListener('mouseleave', () => hovered = -1);
+const worksSec = document.getElementById('work'), footEl = document.getElementById('foot');
+function menuTone(){
+  const y = menu.getBoundingClientRect().top + 7 * U();
+  const w = worksSec.getBoundingClientRect(), f = footEl.getBoundingClientRect(), z = zenSec.getBoundingClientRect();
+  /* блок рисунков лежит поверх уходящих работ: если он под меню, фон тёмный, хотя работы геометрически ещё там */
+  const onBlue = f.top <= y && f.bottom > y, onDark = !onBlue && z.top <= y && z.bottom > y;
+  const onLight = !onBlue && !onDark && w.top <= y && w.bottom > y;
+  menu.classList.toggle('on-blue', onBlue); menu.classList.toggle('on-light', onLight);
+}
+/* превью работ наклоняются и сдвигаются за курсором, как плашка */
+const pics = wks.map(li => li.querySelector('.wk__pic'));
+function tiltPics(){
+  if (isTouch()) { pics.forEach(el => el.style.transform = ''); return; }
+  const u = U(), per = (900 * u).toFixed(0);
+  const t = `perspective(${per}px) translate3d(${(pt.x * 14 * u).toFixed(2)}px,${(pt.y * 10 * u).toFixed(2)}px,0) rotateX(${(-pt.y * 7).toFixed(2)}deg) rotateY(${(pt.x * 9).toFixed(2)}deg)`;
+  pics.forEach(el => { const r = el.getBoundingClientRect(); if (r.bottom > 0 && r.top < innerHeight) el.style.transform = t; });
+}
+/* переход к подвалу: подвал наезжает, работы под ним притормаживают и темнеют */
+function sink(){
+  /* работы уходят под блок рисунков: притормаживают и темнеют */
+  const z = zenSec.getBoundingClientRect(), vh = innerHeight, under = Math.max(0, Math.min(vh, vh - z.top));
+  worksSec.style.transform = under ? `translate3d(0,${(under * .5).toFixed(1)}px,0)` : '';
+  worksSec.style.setProperty('--dim', (under / vh * .55).toFixed(3));
+  /* сцена рисунков темнеет, когда наезжает подвал */
+  const f = footEl.getBoundingClientRect(), fu = Math.max(0, Math.min(f.height, vh - f.top));
+  zenStage.style.setProperty('--dim', (fu / f.height * .5).toFixed(3));
+}
+function works(){
+  menuTone();
+  if (motionOn) { sink(); zenTick(); footMove(); }
+  if (motionOn) { tiltPics(); revealSides(); }
+  let best = 0, bd = 1e9;
+  if (hovered >= 0) best = hovered;
+  else wks.forEach((li, i) => { const r = li.querySelector('.wk__pic').getBoundingClientRect(); const d = Math.abs(r.top + r.height / 2 - innerHeight / 2); if (d < bd) { bd = d; best = i; } });
+  if (best === activeWk) return;
+  if (activeWk >= 0) wks[activeWk].classList.remove('is-active');
+  activeWk = best; const li = wks[best]; li.classList.add('is-active');
+}
+/* появление подписей – один раз за всю жизнь страницы: когда превью работы входит в экран,
+   подписи плавно въезжают из-за краёв страницы. Дальше они стоят на месте. */
+function revealSides(){
+  wks.forEach(li => {
+    if (li.dataset.seen) return;
+    if (li.querySelector('.wk__pic').getBoundingClientRect().top > innerHeight * .8) return;
+    li.dataset.seen = '1';
+    [['.wk__side--l', -1], ['.wk__side--r', 1]].forEach(([sel, dir]) => {
+      const el = li.querySelector(sel);
+      gsap.set(el, { x: 0 });
+      const r = el.firstElementChild.getBoundingClientRect();
+      const out = dir < 0 ? -(r.right + 10) : innerWidth - r.left + 10; /* ровно за край страницы */
+      gsap.fromTo(el, { x: out, autoAlpha: 1 }, { x: 0, duration: 1.6, ease: 'expo.out', overwrite: true });
+    });
+  });
+}
+/* заголовок работы: трекинг подобран под ширину строки из макета (MORIMOTO = 297u при кегле 56) */
+function fitWorks(){
+  const root = document.documentElement, u = U();
+  root.style.setProperty('--t56ls', '0px');
+  const probe = document.createElement('span'); probe.className = 't-56'; probe.style.cssText = 'position:absolute;visibility:hidden;white-space:nowrap'; probe.textContent = 'MORIMOTO';
+  document.body.append(probe); const w = probe.getBoundingClientRect().width; probe.remove();
+  root.style.setProperty('--t56ls', ((297.3 * u - w) / 8).toFixed(3) + 'px');
+}
+
+/* ---------- кейсы: данные. Каждый кейс собирается из блоков; заголовок – те же строки, что в списке ---------- */
+const A = 'assets/d/';
+/* на телефоне – облегчённые версии (-m: картинки 800 px, видео 720 px), на экране узкой колонки разницы не видно, а грузится в 3–5 раз меньше.
+   Первые два экрана кейса грузятся сразу, остальные – по мере прокрутки */
+const mob = (f, ext) => isMobile() ? f.replace(new RegExp('\\.' + ext + '$'), '-m.' + ext) : f;
+let shotN = 0;
+const media = m => m.v
+  ? `<video muted loop playsinline preload="none" poster="${A}${mob(m.v + '.webp', 'webp')}" data-src="${A}${mob(m.v + '.mp4', 'mp4')}" width="${m.w || 1440}" height="${m.h || 780}" aria-label="${m.alt}"></video>`
+  : `<img src="${A}${mob(m.src, 'webp')}" alt="${m.alt}" width="${m.w}" height="${m.h}" ${shotN++ < 2 ? 'fetchpriority="high"' : 'loading="lazy"'} decoding="async"${m.crop ? ` style="object-position:${m.crop}"` : ''}>`;
+const shot = (n, cap, m, cls = '') => `<figure class="cs ${cls}${m.crop ? ' cs--crop' : ''}"${m.speed ? ` data-speed="${m.speed}"` : ''}><div class="cs__img">${media(m)}</div><figcaption class="t-14"><span>(${String(n).padStart(2, '0')})</span><span>${cap}</span></figcaption></figure>`;
+const info = c => `<aside class="case__info t-14"><dl class="case__facts">${c.facts.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>${c.text.map(t => `<p>${t}</p>`).join('')}${c.link ? `<a class="case__link" href="${c.link}" target="_blank" rel="noopener">Открыть сайт ↗︎</a>` : ''}</aside>`;
+const note = t => `<div class="case__note t-14"><p>Примечание</p><p>${t}</p></div>`;
+const END = `<div class="case__end"><a class="case__home t-56" href="#work">Ко всем работам</a><p class="t-14">или нажмите Esc</p></div>`;
+/* индекс строки в списке берётся из WORKS: порядок работ можно менять свободно */
+const CASES = {
+  sui: {
+    facts: [['Проект', 'Лендинг альбома'], ['Год', '2024'], ['Роль', 'Концепт, дизайн, вёрстка'], ['Статус', 'Личный концепт, некоммерческий']],
+    text: ['Sui, эмбиент-альбом японского композитора Morimoto Naoki, посвящён воде как символу чистоты, текучести и перемен.',
+      'Страница получилась моим прочтением альбома: бледное стекло, медленный размытый свет и список треков, который читается как стихотворение. Тихая страница для тихой пластинки.'],
+    body: c => `<div class="case__top">${info(c)}<div class="case__shots">
+        ${shot(1, 'Первый экран', { src: 'case-sui-1.webp', w: 1360, h: 759, alt: 'Лендинг Sui, первый экран с названием альбома поверх размытой фотографии' })}
+        ${shot(2, 'Об артисте', { src: 'case-sui-2.webp', w: 1360, h: 787, alt: 'Лендинг Sui, розовая карточка об артисте на фоне горы Фудзи и линий электропередачи' })}
+      </div></div>
+      ${shot(3, 'Треклист', { src: 'case-sui-3.webp', w: 1360, h: 814, alt: 'Лендинг Sui, список треков на мягком розово-голубом градиенте' }, 'case__wide')}
+      <div class="case__pair">${shot(4, 'Звук', { src: 'case-sui-4.webp', w: 1360, h: 812, alt: 'Лендинг Sui, цитаты о музыке вокруг портрета артиста' })}
+        ${note('Неофициальный концепт для моего портфолио. Morimoto Naoki и его лейбл его не заказывали и к нему не причастны. Музыка, имя, фотографии и обложка принадлежат их владельцам.')}</div>
+      ${END}`
+  },
+  wimhof: {
+    facts: [['Проект', 'Лендинг'], ['Год', '2025'], ['Роль', 'Концепт, дизайн, сборка на Tilda'], ['Статус', 'Некоммерческий, учебный']],
+    text: ['Лендинг о Виме Хофе, «Ледяном человеке»: его история, три опоры его метода и наука, которая за ним стоит.',
+      'Розовый, как тёплая кровь, и голубой, как лёд. Рваный коллаж, вырезанные фотографии и огромный шрифт, который скользит при прокрутке, чтобы страница получилась такой же резкой, как ледяная вода, о которой она говорит.'],
+    link: 'https://hotheart.tilda.ws',
+    /* схема как у Sui: описание + колонка справа → один кадр на всю ширину → колонка слева + приписка справа → колонка справа */
+    body: c => `<div class="case__top">${info(c)}<div class="case__shots">
+        ${shot(1, 'Загрузка и история, запись экрана', { v: 'case-wim-v1', alt: 'Запись экрана: загрузка, первый экран и история Вима Хофа' })}
+        ${shot(2, 'Метод', { src: 'case-wim-2.webp', w: 1324, h: 1197, alt: 'Экран про метод Вима Хофа с коллажем из дыхательных упражнений' })}
+      </div></div>
+      ${shot(3, 'Первый экран', { src: 'case-wim-1.webp', w: 1324, h: 1612, crop: '50% 35%', alt: 'Первый экран: «Ледяной человек с горячим сердцем» над глыбой льда' }, 'case__wide')}
+      <div class="case__pair"><div class="case__shots">
+        ${shot(4, 'Три опоры, запись экрана', { v: 'case-wim-v2', alt: 'Запись экрана: разделы про дыхание, холод и концентрацию' })}
+        ${shot(5, 'Научная основа', { src: 'case-wim-4.webp', w: 1325, h: 1700, alt: 'Экран с научной основой и фотографиями исследований' })}
+      </div>${note('Некоммерческий учебный проект. Не связан с Вимом Хофом и официальным Методом Вима Хофа. Все фотографии принадлежат их владельцам.')}</div>
+      <div class="case__right"><div class="case__shots">
+        ${shot(6, 'Польза, запись экрана', { v: 'case-wim-v3', alt: 'Запись экрана: научная основа и польза с крупным движущимся шрифтом' })}
+        ${shot(7, 'Польза', { src: 'case-wim-5.webp', w: 1325, h: 1700, alt: 'Экран с пользой: список поверх огромных белых букв' })}
+        ${shot(8, 'Мобильная версия', { src: 'case-wim-mob3.webp', w: 1008, h: 693, alt: 'Три мобильных экрана: первый экран, цитата про сердце и цитата про ледяную воду' })}
+      </div></div>
+      ${END}`
+  },
+  sup: {
+    facts: [['Проект', 'Лендинг'], ['Год', '2024'], ['Роль', 'Концепт, UI-дизайн'], ['Статус', 'Учебный проект, некоммерческий']],
+    text: ['AmsterSUP сдаёт в аренду SUP-борды и проводит экскурсии по каналам Амстердама.',
+      'Синий и оранжевый, как борд на воде, крупный уверенный шрифт и фотографии с ощущением утренней прогулки. Вся страница работает и в тёмной теме, для вечерних экскурсий.'],
+    body: c => `<div class="case__top">${info(c)}<div class="case__shots">
+        ${shot(1, 'Первый экран', { src: 'case-sup-1.webp', w: 1440, h: 1648, alt: 'Первый экран: путешествие на SUP по каналам Амстердама' })}
+        ${shot(2, 'Выбор формата', { src: 'case-sup-4.webp', w: 1440, h: 892, alt: 'Выберите формат, который вам больше нравится: самостоятельная прогулка или экскурсия с гидом' })}
+      </div></div>
+      ${shot(3, 'Экскурсия с гидом', { src: 'case-sup-3.webp', w: 2400, h: 856, alt: 'Экскурсия с гидом за 80 евро, сапбордисты на канале' }, 'case__wide')}
+      <div class="case__pair"><div class="case__shots">
+        ${shot(4, 'Борды, тёмная тема', { src: 'case-sup-5.webp', w: 1440, h: 1406, alt: 'Каталог бордов с комплектом MOAI 10’6, тёмная тема' })}
+        ${shot(5, 'Этапы маршрута', { src: 'case-sup-6.webp', w: 1440, h: 1048, alt: 'Этапы маршрута: старт, путь, возвращение, финиш, воспоминания' })}
+      </div>${note('Учебный проект, сделанный на курсе по дизайну. AmsterSUP не настоящая компания, фотографии использованы только для демонстрации.')}</div>
+      <div class="case__right"><div class="case__shots">
+        ${shot(6, 'Отзывы, тёмная тема', { src: 'case-sup-7.webp', w: 1440, h: 692, alt: 'Раздел с отзывами в тёмной теме' })}
+        ${shot(7, 'Мобильная версия', { src: 'case-sup-mob3.webp', w: 2016, h: 1386, alt: 'Три мобильных экрана: первый экран, борд MOAI и отзывы' })}
+      </div></div>
+      ${END}`
+  },
+  kristina: {
+    facts: [['Проект', 'Портфолио разработчика'], ['Год', '2024'], ['Роль', 'Дизайн'], ['Статус', 'Клиентский проект']],
+    text: ['Личный сайт Kristina Kavalevich, фронтенд-разработчика с трёхлетним опытом в e-commerce и на конструкторах сайтов.',
+      'Глубокий космос, холодное синее свечение и моноширинный шрифт, как терминал, оставленный открытым на ночь. Проекты плывут в стеклянной карусели, опыт читается как спокойный changelog, а форма связи приземляется на Луне.'],
+    body: c => `<div class="case__top">${info(c)}<div class="case__shots">
+        ${shot(1, 'Первый экран', { src: 'case-kr-1.webp', w: 1440, h: 1308, alt: 'Первый экран: «Я Кристина, веб-разработчик» над звёздной сеткой' })}
+        ${shot(2, 'Обо мне', { src: 'case-kr-2.webp', w: 1440, h: 774, alt: 'Раздел «Обо мне» с навыками моноширинным шрифтом' })}
+      </div></div>
+      ${shot(3, 'Контакты на Луне', { src: 'case-kr-3.webp', w: 2400, h: 1350, alt: 'Форма связи и подвал над лунным кратером со стеклянной планетой' }, 'case__wide')}
+      <div class="case__pair"><div class="case__shots">
+        ${shot(4, 'Проекты', { src: 'case-kr-4.webp', w: 1440, h: 1374, alt: 'Проекты в стеклянной карусели, внизу хрустальная сфера' })}
+        ${shot(5, 'Опыт', { src: 'case-kr-5.webp', w: 1440, h: 732, alt: 'Опыт: e-commerce платформа для бутиков очков' })}
+      </div>${note('Дизайн мой, вёрстку сделала сама Кристина.')}</div>
+      <div class="case__right"><div class="case__shots">
+        ${shot(6, 'Мобильная версия', { src: 'case-kr-mob3.webp', w: 2016, h: 1386, alt: 'Три мобильных экрана: первый экран, проекты и подвал с контактами' })}
+      </div></div>
+      ${END}`
+  },
+  ti: {
+    facts: [['Проект', 'Лендинг продукта'], ['Год', '2026'], ['Роль', 'Дизайн, вёрстка'], ['Статус', 'Клиентский проект']],
+    text: ['KOSMOSKY это небольшая мастерская, сделавшая первый в мире титановый глюкофон. Лендинг рассказывает историю этого эксперимента и продаёт четыре модели.',
+      'Тёмный, как мастерская ночью, с холодной сталью и тонкой технической сеткой. История рассказывается прокруткой: вырезаются язычки, подключаются 45 человек из 10 стран, растут цифры. Войти можно со звуком и услышать глюкофон.'],
+    link: 'https://shaa250391-stack.github.io/kosmosky-titan/',
+    body: c => `<div class="case__top">${info(c)}<div class="case__shots">
+        ${shot(1, 'Первый экран', { src: 'case-ti-1.webp', w: 1440, h: 818, alt: 'Первый экран: «Мы создали первый в мире титановый глюкофон»' })}
+        ${shot(2, 'Никакого массового производства', { src: 'case-ti-2.webp', w: 1440, h: 820, alt: 'Титановые инструменты никогда не будут массовыми, контур глюкофона в темноте' })}
+      </div></div>
+      ${shot(3, 'Четыре модели', { src: 'case-ti-3.webp', w: 2400, h: 1366, alt: 'Четыре модели на выбор: глюкофон New Wave 15 с ценой и кнопкой заказа' }, 'case__wide')}
+      <div class="case__pair"><div class="case__shots">
+        ${shot(4, 'Эксперимент, запись экрана', { v: 'case-ti-v1', w: 1440, h: 820, alt: 'Запись экрана: история эксперимента со счётчиками людей, стран и собранных денег' })}
+        ${shot(5, 'Следите за нами', { src: 'case-ti-4.webp', w: 1440, h: 820, alt: 'Следите за нами: фотографии мастерской и ссылки на Instagram и YouTube' })}
+      </div>${note('Клиентский проект для KOSMOSKY. Фотографии, видео и звук принадлежат мастерской.')}</div>
+      ${END}`
+  },
+  pu: {
+    facts: [['Проект', 'Лендинг события'], ['Год', '2026'], ['Роль', 'Дизайн, вёрстка, запуск'], ['Статус', 'Клиентский проект, работает']],
+    text: ['Лендинг киртан-ретрита в Джаганнатха-Пури, Индия, от создателей Gauradesh Mellows: двенадцать дней киртана, паломничества и встреча Нового года у океана.',
+      'Тёплая бумага, храмовый красный и священное искусство, поданное как плакат. Страница ведёт от первого экрана к оставшимся местам, распорядку дня, гидам и регистрации. Сайт живёт на двух языках, русском и английском.'],
+    link: 'https://gauradeshmellowsretreat.com',
+    body: c => `<div class="case__top">${info(c)}<div class="case__shots">
+        ${shot(1, 'Первый экран', { src: 'case-pu-1.webp', w: 1440, h: 812, alt: 'Первый экран: киртан-ретрит в Джаганнатха-Пури, даты, оставшиеся места и регистрация' })}
+        ${shot(2, 'Что остаётся после возвращения домой', { src: 'case-pu-2.webp', w: 1440, h: 870, alt: 'Что остаётся после возвращения домой: вдохновение, вкус и мысли, на фоне искусства Джаганнатхи' })}
+      </div></div>
+      ${shot(3, 'До встречи в Пури', { src: 'case-pu-3.webp', w: 2400, h: 1350, alt: 'Картина: Чайтанья Махапрабху танцует в киртане со своими спутниками' }, 'case__wide')}
+      <div class="case__pair"><div class="case__shots">
+        ${shot(4, 'Наши гиды', { src: 'case-pu-4.webp', w: 1440, h: 1916, alt: 'Наши гиды: карточки с фотографиями на красном орнаменте' })}
+        ${shot(5, 'Сева, киртан, катха, запись экрана', { v: 'case-pu-v1', w: 1440, h: 820, alt: 'Запись экрана английской версии: сева, киртан, катха, что остаётся после возвращения домой, книга, которую вы напишете в Пури' })}
+      </div>${note('Клиентский проект для Gauradesh Mellows. Фотографии и священное искусство принадлежат их владельцам.')}</div>
+      <div class="case__right"><div class="case__shots">
+        ${shot(6, 'Мобильная версия', { src: 'case-pu-mob3.webp', w: 2010, h: 1386, alt: 'Три мобильных экрана: первый экран, паломничество и прасад, распорядок дня' })}
+      </div></div>
+      ${END}`
+  },
+  vk: {
+    facts: [['Проект', 'Фирменный стиль, сайт'], ['Год', '2026'], ['Роль', 'Стиль, сайт, digital и печать'], ['Статус', 'Клиентский проект']],
+    text: ['Vraj Kirtan это большой ежегодный киртан-фестиваль в Москве. На него приезжают певцы киртана со всего мира.',
+      'Я сделал весь фирменный стиль: нарисованный от руки логотип, сайт, цифровые и печатные материалы. Шалфейно-зелёный, как стены храма, шафрановые акценты, арки и орнаменты индийской архитектуры. Сайт ведёт от идеи фестиваля к певцам, площадкам и прасаду.',
+      '<span class="case__dim">Клиентский проект. Фотографии принадлежат фестивалю.</span>'],
+    body: c => `<div class="case__top">${info(c)}<div class="case__shots">
+        ${shot(1, 'Первый экран', { src: 'case-vk-1.webp', w: 1440, h: 1042, alt: 'Первый экран: Vraj Kirtan 2026, международный киртан-фестиваль, Москва, 12–15 июня' })}
+        ${shot(2, 'Страница целиком', { src: 'case-vk-2.webp', w: 1440, h: 4432, alt: 'Страница целиком: цитата, 15 певцов киртана из 4 стран, даты и площадки, прасад' })}
+      </div></div>
+      ${END}`
+  },
+  pb: {
+    facts: [['Проект', 'Портфолио архитектора'], ['Год', '2024'], ['Роль', 'Концепт, UI-дизайн'], ['Статус', 'Учебный проект, некоммерческий']],
+    text: ['Личный сайт Paul Baker, архитектора, который проектирует общественные здания по всему миру: музеи, стадионы, библиотеки.',
+      'Холодная серая бумага, строгая швейцарская сетка и моноширинные подписи, как в комплекте чертежей. Всю драму берут на себя здания, шрифт остаётся спокойным, а бледно-голубой акцент отмечает единственное важное действие: связаться.'],
+    body: c => `<div class="case__top">${info(c)}<div class="case__shots">
+        ${shot(1, 'Первый экран', { src: 'case-pb-1.webp', w: 1440, h: 1478, alt: 'Первый экран: Paul Baker, архитектор, бетонное здание и ключевые цифры' })}
+        ${shot(2, 'Проекты', { src: 'case-pb-2.webp', w: 1440, h: 1718, alt: 'Проекты на сетке с фотографиями, площадями и годами' })}
+      </div></div>
+      ${shot(3, 'Клиенты и связь', { src: 'case-pb-3.webp', w: 2400, h: 1902, alt: 'Таблица клиентов и проектов по годам и крупный призыв обсудить проект' }, 'case__wide')}
+      <div class="case__pair"><div class="case__shots">
+        ${shot(4, 'Мобильная версия', { src: 'case-pb-mob3.webp', w: 2082, h: 1432, alt: 'Три мобильных экрана: первый экран, обо мне и клиенты с призывом связаться' })}
+      </div>${note('Учебный проект, сделанный на курсе по дизайну. Paul Baker вымышленный архитектор, изображения зданий использованы только для демонстрации.')}</div>
+      ${END}`
+  },
+  pda: {
+    facts: [['Проект', 'Редизайн сайта'], ['Год', '2026'], ['Роль', 'Концепт, дизайн, вёрстка'], ['Статус', 'Редизайн без заказа, некоммерческий']],
+    text: ['PDA это парижское архитектурное бюро, которое реконструирует и преобразует существующие здания вместо того, чтобы сносить их. Тридцать один проект, от 200 до 30 000 м².',
+      'Моё прочтение их сайта: тёплая бумага, шрифт с засечками, который говорит как архитектор, тонкие чертёжные штрихи и один уверенный синий. Страница движется как прогулка по городу: таймлайн, который прокручивается вбок, тёмный список проектов и окно, открывающееся на Париж.'],
+    link: 'https://pda-architecture-redesign.netlify.app',
+    /* две записи, никогда подряд: между ними картинки; запись не стоит рядом с тем же местом на скрине */
+    body: c => `<div class="case__top">${info(c)}<div class="case__shots">
+        ${shot(1, 'Проекты', { src: 'case-pda-3.webp', w: 1440, h: 764, alt: 'Тёмный список проектов с площадью, энергопотреблением и статусом' })}
+        ${shot(2, 'Реконструкция и таймлайн, запись экрана', { v: 'case-pda-v1', w: 1440, h: 820, alt: 'Запись экрана: раздел о реконструкции и горизонтальный таймлайн проектов' })}
+      </div></div>
+      ${shot(3, 'Первый экран', { src: 'case-pda-1.webp', w: 2400, h: 1366, alt: 'Первый экран: «Реконструировать, а не сносить», вид сверху на преобразованное здание' }, 'case__wide')}
+      <div class="case__pair"><div class="case__shots">
+        ${shot(4, 'Строить там, где город уже построен', { src: 'case-pda-2.webp', w: 1440, h: 762, alt: 'Терраса на крыше в окне на тёмной сетке, крупный шрифт с засечками' })}
+        ${shot(5, 'Отзывы и контакты, запись экрана', { v: 'case-pda-v3', w: 1440, h: 820, alt: 'Запись экрана: цитаты клиентов, блок контактов и крупные буквы PDA в подвале' })}
+      </div>${note('Редизайн без заказа, некоммерческий, сделанный для практики. PDA его не заказывало и к нему не причастно. Фотографии и данные о проектах принадлежат студии.')}</div>
+      ${END}`
+  },
+  ja: {
+    facts: [['Проект', 'Лендинг'], ['Год', '2024'], ['Роль', 'Концепт, дизайн'], ['Статус', 'Личный концепт, некоммерческий']],
+    text: ['Лендинг о японской эмбиент-музыке 1980-х: как экономический бум и корпорации вроде Muji, Sanyo и Misawa Home платили музыкантам за тихие записи для магазинов, зданий и товаров.',
+      'Цветущая сакура, крыши храмов и мягкое кольцо света, которое парит над каждым экраном, как звук. Страница читается как спокойный лонгрид: от понятия ва до легенд жанра, Hosono, Yoshimura, Ojima, Kokubo.'],
+    body: c => `<div class="case__top">${info(c)}<div class="case__shots">
+        ${shot(1, 'Первый экран', { src: 'case-ja-1.webp', w: 1440, h: 1768, alt: 'Первый экран: «Японский эмбиент», кольцо света над цветущей сакурой' })}
+        ${shot(2, 'Истоки и экономический бум', { src: 'case-ja-2.webp', w: 1440, h: 1514, alt: 'Истоки японского эмбиента и экономический бум, архивные фотографии и крыша храма' })}
+      </div></div>
+      ${shot(3, 'Легенды', { src: 'case-ja-4.webp', w: 2400, h: 1388, alt: 'Легенды: пагода над городом на закате внутри кольца света' }, 'case__wide')}
+      <div class="case__pair"><div class="case__shots">
+        ${shot(4, 'Yoshio Ojima', { src: 'case-ja-3.webp', w: 1440, h: 984, alt: 'Карточка артиста: Yoshio Ojima и его Music for Spirals' })}
+        ${shot(5, 'Артисты и альбомы', { src: 'case-ja-5.webp', w: 1440, h: 1776, alt: 'Артисты и альбомы: Takashi Kokubo и Haruomi Hosono' })}
+      </div>${note('Личный концепт для моего портфолио. Не связан с артистами и их лейблами. Фотографии, имена и обложки принадлежат их владельцам.')}</div>
+      ${END}`
+  },
+};
+Object.keys(CASES).forEach(id => CASES[id].work = WORKS.findIndex(w => w.case === id));
+
+/* ---------- кейс: открытие из списка, закрытие обратно в список ---------- */
+const caseEl = document.getElementById('case'), caseTitle = document.getElementById('caseTitle'), caseBg = caseEl.querySelector('.case__bg');
+const caseScroll = document.getElementById('caseScroll'), caseContent = document.getElementById('caseContent'), caseBack = document.getElementById('caseBack');
+let caseOpen = false, caseBusy = false, casePushed = false, caseLenis = null, caseV = 0, curCase = null;
+let shots = [], caseTexts = [];
+const listTitle = () => wks[CASES[curCase].work].querySelector('.wk__title');
+const inView = r => r.bottom > 0 && r.top < innerHeight;
+/* собрать содержимое кейса из данных */
+function renderCase(id){
+  const c = CASES[id], w = WORKS[c.work];
+  curCase = id;
+  caseEl.setAttribute('aria-label', w.title.join(' '));
+  caseEl.style.setProperty('--lines', w.title.length);
+  caseTitle.innerHTML = w.title.map(t => `<span>${opticalKern(t)}</span>`).join('');
+  fitCaseTitle();
+  shotN = 0;
+  caseContent.innerHTML = c.body(c);
+  shots = [...caseContent.querySelectorAll('.cs')].map(f => ({ f, box: f.querySelector('.cs__img'), m: f.querySelector('img,video'), speed: +f.dataset.speed || 0 }));
+  caseTexts = [...caseContent.querySelectorAll('.case__info, .cs figcaption, .case__note')];
+  caseContent.querySelector('.case__home').addEventListener('click', e => { e.preventDefault(); requestClose(); });
+  if (!motionOn) caseContent.querySelectorAll('video').forEach(v => v.removeAttribute('data-src'));
+}
+/* оптический кернинг заголовка кейса: при трекинге −8 % у некоторых пар (E и T, F и T…) перекладины смыкаются.
+   Для каждой пары рисуем буквы на холсте и меряем реальный просвет между контурами по каждой высоте;
+   если он меньше минимума – добавляем недостающее (в em, через --fx). Пары вроде A–T, где буквы заходят
+   друг под друга, но не касаются, не трогаются. --k: 0 = вид строки списка, 1 = вид кейса (во время перелёта растёт) */
+const KERN_MIN = .012, glyphCache = {}; /* минимальный просвет ~2 px при 196: правим только смыкающиеся пары */
+function glyphProfile(ch){
+  if (glyphCache[ch]) return glyphCache[ch];
+  const F = 200, cv = document.createElement('canvas'); cv.width = 400; cv.height = 300;
+  const x = cv.getContext('2d', { willReadFrequently: true });
+  x.font = `600 ${F}px "Golos Text"`; x.fillStyle = '#000'; x.fillText(ch, 100, 230);
+  const d = x.getImageData(0, 0, 400, 300).data, L = [], Rt = [];
+  for (let y = 0; y < 300; y++) {
+    let l = -1, r = -1;
+    for (let i = 0; i < 400; i++) if (d[(y * 400 + i) * 4 + 3] > 60) { if (l < 0) l = i; r = i; }
+    L.push(l < 0 ? null : l - 100); Rt.push(r < 0 ? null : r - 100);
+  }
+  return glyphCache[ch] = { L, R: Rt, w: x.measureText(ch).width, x };
+}
+/* строка заголовка остаётся обычным текстом (со встроенным кернингом шрифта); в span заворачивается только
+   первая буква смыкающейся пары. На границе span браузер кернинг пары не применяет, поэтому зазор считаем без него */
+const esc = c => c === '&' ? '&amp;' : c === '<' ? '&lt;' : c;
+/* страховка: самая длинная строка заголовка не шире экрана минус поля 20w; иначе кегль уменьшается */
+function fitCaseTitle(){
+  caseTitle.style.fontSize = '';
+  const was = caseEl.hidden; caseEl.hidden = false;
+  const keep = caseTitle.style.transform; caseTitle.style.transform = 'none';
+  const max = innerWidth - 2 * Math.max(16, innerWidth * 20 / 1400), wd = Math.max(...[...caseTitle.children].map(l => l.getBoundingClientRect().width));
+  if (wd > max) caseTitle.style.fontSize = (parseFloat(getComputedStyle(caseTitle).fontSize) * max / wd).toFixed(2) + 'px';
+  /* на телефоне содержимое начинается сразу под реальной высотой заголовка */
+  if (isMobile()) caseEl.style.setProperty('--ct', (caseTitle.getBoundingClientRect().bottom + innerWidth / 390 * 40).toFixed(1) + 'px');
+  else caseEl.style.removeProperty('--ct');
+  caseTitle.style.transform = keep; caseEl.hidden = was;
+}
+function opticalKern(t){
+  const F = 200, ls = parseFloat(CASE_LS) * F, chars = [...t];
+  return chars.map((c, i) => {
+    const n = chars[i + 1], a = c.toUpperCase(), b = n && n.toUpperCase();
+    if (!n || !a.trim() || !b.trim()) return esc(c);
+    const A = glyphProfile(a), B = glyphProfile(b);
+    const kern = A.x.measureText(a + b).width - A.w - B.w;
+    let gap = Infinity;
+    for (let y = 0; y < 300; y++) if (A.R[y] !== null && B.L[y] !== null) gap = Math.min(gap, A.w + kern + ls + B.L[y] - A.R[y]);
+    if (gap >= KERN_MIN * F) return esc(c);
+    const fx = (KERN_MIN * F - (gap - kern)) / F; /* без кернинга пары + недостающий просвет */
+    return `<span class="ch" style="--fx:${fx.toFixed(4)}">${esc(c)}</span>`;
+  }).join('');
+}
+/* чтобы перелёт был без скачка: масштаб считаем по кеглю, а трекинг и интерлиньяж списка переводим в em
+   и плавно перетекаем к значениям кейса (−8 %, .78) */
+const CASE_LS = '-0.08em', CASE_LH = .78;
+function listLook(lt){
+  const s = getComputedStyle(lt), fs = parseFloat(s.fontSize);
+  return { k: fs / parseFloat(getComputedStyle(caseTitle).fontSize), ls: (parseFloat(s.letterSpacing) / fs).toFixed(4) + 'em', lh: +(parseFloat(s.lineHeight) / fs).toFixed(4), color: s.color };
+}
+function rectWith(ls, lh){
+  const keep = [caseTitle.style.letterSpacing, caseTitle.style.lineHeight, caseTitle.style.transform, caseTitle.style.getPropertyValue('--k')];
+  caseTitle.style.letterSpacing = ls; caseTitle.style.lineHeight = lh; caseTitle.style.transform = 'none'; caseTitle.style.setProperty('--k', '0');
+  const r = caseTitle.getBoundingClientRect();
+  [caseTitle.style.letterSpacing, caseTitle.style.lineHeight, caseTitle.style.transform] = keep;
+  caseTitle.style.setProperty('--k', keep[3] || '1');
+  return r;
+}
+function openCase(id, fly){
+  if (caseOpen || caseBusy || !CASES[id]) return;
+  renderCase(id);
+  caseOpen = true; caseEl.hidden = false; caseScroll.scrollTop = 0;
+  cc.x = mouse.x; cc.y = mouse.y;
+  if (lenis) lenis.stop();
+  caseBack.focus({ preventScroll: true, focusVisible: false });
+  if (!motionOn) return;
+  caseBusy = true;
+  caseLenis = new Lenis({ wrapper: caseScroll, content: caseContent, lerp: .07, wheelMultiplier: .9 });
+  caseTick();
+  const lt = listTitle(), a = lt.getBoundingClientRect();
+  /* строка списка прячется при любом открытии (и по прямой ссылке #id тоже) – иначе при закрытии
+     заголовок кейса садится поверх видимого заголовка списка и их на экране два */
+  lt.style.visibility = 'hidden';
+  const tl = gsap.timeline({ onComplete: () => { caseBusy = false; gsap.set(caseContent, { clearProps: 'transform' }); gsap.set(caseTitle, { clearProps: 'letterSpacing,lineHeight' }); } });
+  if (fly && inView(a) && !isMobile()) {
+    /* заголовок вырастает из строки списка, меняет цвет и встаёт наверх; светлый лист темнеет */
+    const L = listLook(lt), b = rectWith(L.ls, L.lh);
+    tl.fromTo(caseTitle, { x: a.left - b.left, y: a.top - b.top, scale: L.k, color: L.color, letterSpacing: L.ls, lineHeight: L.lh, '--k': 0 },
+        { x: 0, y: 0, scale: 1, color: '#DFDFDF', letterSpacing: CASE_LS, lineHeight: CASE_LH, '--k': 1, duration: 1.3, ease: 'expo.inOut' }, 0)
+      .fromTo(caseBg, { autoAlpha: 0 }, { autoAlpha: 1, duration: 1.1, ease: 'power2.inOut' }, 0);
+  } else {
+    tl.fromTo(caseBg, { autoAlpha: 0 }, { autoAlpha: 1, duration: .6 }, 0)
+      .fromTo(caseTitle, { autoAlpha: 0, y: 60 }, { autoAlpha: 1, y: 0, duration: 1.3, ease: 'expo.out' }, .1);
+  }
+  /* картинки и описание въезжают снизу, когда заголовок уже почти на месте */
+  tl.fromTo(caseContent, { y: innerHeight * .6 }, { y: 0, duration: 1.6, ease: 'expo.out' }, .8)
+    .fromTo(caseBack, { autoAlpha: 0 }, { autoAlpha: 1, duration: .8 }, 1);
+}
+function closeCase(){
+  if (!caseOpen || caseBusy) return;
+  const lt = listTitle(), work = wks[CASES[curCase].work];
+  const done = () => {
+    caseCursor.classList.remove('is-on'); caseEl.hidden = true; caseOpen = false; caseBusy = false; lt.style.visibility = '';
+    caseContent.querySelectorAll('video').forEach(v => v.pause());
+    caseContent.innerHTML = ''; shots = []; caseTexts = [];
+    gsap.set([caseTitle, caseBg, caseContent, caseBack], { clearProps: 'all' });
+    if (caseLenis) { caseLenis.destroy(); caseLenis = null; }
+    if (lenis) lenis.start();
+    work.querySelector('a').focus({ preventScroll: true, focusVisible: false });
+  };
+  if (!motionOn) return done();
+  caseBusy = true; caseCursor.classList.remove('is-on');
+  caseTitle.style.opacity = 1;
+  const a = lt.getBoundingClientRect(), L = listLook(lt), b = rectWith(L.ls, L.lh);
+  const tl = gsap.timeline({ onComplete: done });
+  tl.to(caseContent, { y: innerHeight * .5, autoAlpha: 0, duration: .7, ease: 'power3.in' }, 0)
+    .to(caseBack, { autoAlpha: 0, duration: .3 }, 0);
+  if (inView(a) && !isMobile()) {
+    /* обратный путь: заголовок уменьшается и садится на своё место в списке, тёмный фон тает */
+    tl.fromTo(caseTitle, { letterSpacing: CASE_LS, lineHeight: CASE_LH, '--k': 1 },
+        { x: a.left - b.left, y: a.top - b.top, scale: L.k, color: L.color, letterSpacing: L.ls, lineHeight: L.lh, '--k': 0, duration: 1.2, ease: 'expo.inOut' }, .35)
+      .to(caseBg, { autoAlpha: 0, duration: 1, ease: 'power2.inOut' }, .5);
+  } else {
+    tl.to([caseTitle, caseBg], { autoAlpha: 0, duration: .6 }, .3);
+  }
+}
+function openFromList(id){
+  if (caseOpen) return;
+  history.pushState({ case: id }, '', '#' + id); casePushed = true;
+  openCase(id, true);
+}
+function requestClose(){
+  if (!caseOpen || caseBusy) return;
+  if (casePushed) { casePushed = false; history.back(); }
+  else { history.replaceState(null, '', location.pathname + location.search); closeCase(); }
+}
+const hashCase = () => CASES[location.hash.slice(1)] ? location.hash.slice(1) : null;
+addEventListener('popstate', () => { const id = hashCase(); if (id) openCase(id, false); else { casePushed = false; closeCase(); } });
+addEventListener('keydown', e => {
+  if (e.key !== 'Escape') return;
+  if (!zenView.hidden) { zenHide(); return; }
+  if (caseOpen) requestClose();
+});
+/* клик в любом месте кейса (кроме ссылок) – назад к работам */
+/* на сенсорном экране тап по картинке – это прокрутка и разглядывание, не выход: закрывают «←︎ All works» и «Back to works» */
+caseScroll.addEventListener('click', e => { if (matchMedia('(hover: none)').matches) return; if (!e.target.closest('a')) requestClose(); });
+const caseCursor = document.getElementById('caseCursor'), cc = { x: -100, y: -100 };
+caseEl.addEventListener('pointermove', e => caseCursor.classList.toggle('is-on', !e.target.closest('a') && !caseBusy));
+caseEl.addEventListener('pointerleave', () => caseCursor.classList.remove('is-on'));
+caseBack.addEventListener('click', e => { e.preventDefault(); requestClose(); });
+/* картинки с весом: верхний край сразу на месте (шаг колонки ровный), картинка разворачивается вниз по мере подъёма, внутри лёгкий наезд; от скорости прокрутки чуть наклоняются;
+   у пары «лесенкой» – разная скорость (data-speed). Видео грузится и играет, только когда на экране */
+function caseTick(){
+  if (!caseOpen || !caseLenis) return;
+  const vh = innerHeight, w = innerWidth / 1400;
+  caseV += (Math.max(-1, Math.min(1, caseLenis.velocity / 40)) - caseV) * .12;
+  shots.forEach(s => {
+    const { f, box, m } = s, r = f.getBoundingClientRect();
+    const vis = r.top < vh && r.bottom > 0;
+    if (m.tagName === 'VIDEO') {
+      if (vis) { if (m.dataset.src) { m.src = m.dataset.src; m.removeAttribute('data-src'); } if (m.paused) m.play().catch(() => {}); }
+      else if (!m.paused) m.pause();
+    }
+    if (!vis && !s.speed) return;
+    const top = r.top - (s.y || 0);
+    s.y = s.speed ? (top + r.height / 2 - vh / 2) * -s.speed : 0;
+    const t = clamp01((vh - top) / (vh * .55)), e = 1 - Math.pow(1 - t, 3);
+    box.style.clipPath = `inset(0 0 ${((1 - e) * 100).toFixed(2)}% 0)`;
+    m.style.transform = `scale(${(1.14 - .14 * e).toFixed(4)})`;
+    f.style.transform = `translate3d(0,${s.y.toFixed(1)}px,0) skewY(${(isTouch() ? 0 : caseV * 1.6).toFixed(3)}deg)`;
+  });
+  /* мелкий текст не лезет на большой заголовок: гаснет, подъезжая к его низу (картинки при этом перекрывают заголовок) */
+  caseTexts.forEach(el => { const r = el.getBoundingClientRect(); el.style.opacity = clamp01((r.top - 60 * w) / (260 * w)).toFixed(3); });
+  /* подпись догоняет курсор */
+  cc.x += (mouse.x - cc.x) * .25; cc.y += (mouse.y - cc.y) * .25;
+  /* у правого и нижнего края плашка перескакивает на другую сторону курсора */
+  const cw = caseCursor.offsetWidth, ch = caseCursor.offsetHeight;
+  const px = cc.x + 16 + cw > innerWidth - 8 ? cc.x - 16 - cw : cc.x + 16;
+  const py = cc.y + 16 + ch > innerHeight - 8 ? cc.y - 16 - ch : cc.y + 16;
+  caseCursor.style.transform = `translate3d(${px.toFixed(1)}px,${py.toFixed(1)}px,0)`;
+  if (!caseBusy) {
+    caseTitle.style.opacity = (1 - Math.min(1, caseScroll.scrollTop / vh) * .45).toFixed(3);
+    /* длинный заголовок: на первом экране – плакат, при прокрутке сжимается к высоте двух строк (по центру сверху) */
+    const lines = WORKS[CASES[curCase].work].title.length;
+    if (lines > 2) {
+      const k = clamp01(caseScroll.scrollTop / (vh * .7)), e = 1 - Math.pow(1 - k, 3), sc = 1 - (1 - 2 / lines) * e;
+      gsap.set(caseTitle, { scale: sc, x: (1 - sc) * caseTitle.offsetWidth / 2, y: 0 });
+    }
+  }
+}
+
+/* на телефоне пространство рисунков считается в кадре 600 (листы крупнее, глубина короче) – как --w в CSS */
+const zenFrame = () => isMobile() ? 600 : 1400;
+/* ---------- Zen drawings: блок после работ; прокрутка ведёт камеру сквозь 38 листов, мышь – свечение ---------- */
+const ZEN_DATA = [[518,720],[716,720],[498,720],[498,720],[720,500],[620,720],[720,496],[720,496],[720,496],[500,720],[504,720],[538,720],[496,720],[720,484],[720,484],[538,720],[538,720],[720,474],[492,720],[480,720],[720,508],[720,508],[720,508],[720,508],[720,508],[518,720],[544,720],[550,720],[534,720],[540,720],[554,720],[520,720],[530,720],[522,720],[720,538],[530,720],[530,720],[720,718]];
+/* подписи временные, случайные */
+const ZEN_TITLES = ['Тихая вода','Гора перед дождём','Облака над заливом','Тихое поле','Прилив','Долгая дорога','Утренний туман','Остров','Ночь над холмами','Этюд ветра','Каменный сад','Берег','Волна №4','Низкое небо','Линия разлома','Бумажное море','Против течения','Первый снег','Низкие облака','Хребет','Озеро','Дождь из туши','Дыхание','Долина','Море облаков','Луна над побережьем','Река','Спящее лицо','Скалы','Высокий перевал','Горизонт','Дрейф','Танцующее дерево','Дым','Даль','Надвигается гроза','После грозы','Слои'];
+/* фразы между листами – черновик, Антон пришлёт свой текст */
+const ZEN_PHRASES = ['Начал с угла.<br>Дальше как пойдёт.', 'Тут рука дрогнула.<br>Оставил.', 'Клякса.<br>Значит, будет облако.', 'Не вышло,<br>рисую следующий.', 'Час прошёл,<br>я и не заметил.', 'Тушь не стирается.<br>Привык.'];
+const zenSec = document.getElementById('zen'), zenStage = document.getElementById('zenStage'), zenCam = document.getElementById('zenCam'), zenBar = document.getElementById('zenBar');
+const zenView = document.getElementById('zenView'), zenImg = document.getElementById('zenImg'), zenCap = document.getElementById('zenCap');
+const ZEN_STEP = 560, ZEN_N = ZEN_DATA.length, NEAR = 160;
+const rnd = (seed => () => (seed = (seed * 16807) % 2147483647) / 2147483647)(7);
+const zenSheets = ZEN_DATA.map(([w, h], i) => {
+  const n = String(i + 1).padStart(2, '0');
+  const el = document.createElement('div'); el.className = 'zs';
+  const k = 300 / Math.max(w, h); /* длинная сторона 300w */
+  el.innerHTML = `<button class="zs__in" style="--sw:calc(${(w * k).toFixed(1)} * var(--w));--sh:calc(${(h * k).toFixed(1)} * var(--w))" aria-label="${ZEN_TITLES[i]}, открыть"><img src="assets/zen/zen-${n}-s.webp" alt="${ZEN_TITLES[i]}, рисунок тушью" width="${w}" height="${h}" loading="lazy" decoding="async"></button>`;
+  zenCam.append(el);
+  /* кольцо вокруг оси полёта, соседние листы – по золотому углу; центр свободен для фраз */
+  const a = i * 2.399963 + rnd() * .6, r = .24 + rnd() * .28;
+  const s = { el, btn: el.firstElementChild, n, i, z0: -i * ZEN_STEP, x: Math.cos(a) * r * 1.35, y: Math.sin(a) * r * .9, ph: rnd() * 6.28, rz: (rnd() - .5) * 6, lit: .6 };
+  s.btn.addEventListener('click', () => zenShow(s));
+  s.btn.addEventListener('mouseenter', () => zenSec.classList.add('has-hover'));
+  s.btn.addEventListener('mouseleave', () => zenSec.classList.remove('has-hover'));
+  return s;
+});
+/* телефон: те же рисунки лентой – листаются вбок, ближайший к центру крупнее и ярче */
+const zenStrip = document.getElementById('zenStrip');
+/* лента зациклена без нативной прокрутки: на iPhone перескок scrollLeft во время инерции давал пустые экраны.
+   Свой «бесконечный» трек: позиция берётся по модулю ширины одного набора, на экране всегда средняя из трёх копий.
+   Палец/трекпад двигают позицию, после отпускания – инерция с затуханием */
+const stripCard = ([w, h], i) => { const n = String(i + 1).padStart(2, '0');
+  return `<button class="zst" type="button" style="--ar:${w}/${h};--arn:${(w / h).toFixed(4)}" data-i="${i}" aria-label="${ZEN_TITLES[i]}, открыть"><img data-src="assets/zen/zen-${n}-xs.webp" alt="${ZEN_TITLES[i]}, рисунок тушью" width="${w}" height="${h}" decoding="async"></button>`; };
+const stripSet = ZEN_DATA.map(stripCard).join('');
+zenStrip.innerHTML = `<div class="zen__track" id="zenTrack">${stripSet + stripSet + stripSet}</div>`;
+const zenTrack = document.getElementById('zenTrack');
+const zenCards = [...zenTrack.children];
+let setW = 0, sPos = 0, sVel = 0, sDrag = null, sMoved = 0;
+const measureStrip = () => { setW = zenCards[ZEN_DATA.length].offsetLeft - zenCards[0].offsetLeft; };
+function stripTick(){
+  if (!isMobile()) return;
+  if (!setW) measureStrip(); if (!setW) return;
+  if (!sDrag) { sPos += sVel; sVel *= .95; if (Math.abs(sVel) < .05) sVel = 0; }
+  const x = ((sPos % setW) + setW) % setW;          /* 0…setW */
+  zenTrack.style.transform = `translate3d(${(-setW - x + innerWidth / 2 - zenCards[0].offsetWidth / 2).toFixed(1)}px,0,0)`;
+  const c = innerWidth / 2;
+  /* картинки ленты грузятся, только когда блок рисунков близко и карточка рядом с экраном */
+  const zr = zenSec.getBoundingClientRect(), near = zr.top < innerHeight * 2 && zr.bottom > -innerHeight;
+  zenCards.forEach(b => { const r = b.getBoundingClientRect();
+    if (near && r.right > -innerWidth && r.left < innerWidth * 2) { const im = b.firstElementChild; if (im.dataset.src) { im.src = im.dataset.src; im.removeAttribute('data-src'); } }
+    if (r.right < -200 || r.left > innerWidth + 200) return;
+    b.style.setProperty('--d', Math.min(1, Math.abs(r.left + r.width / 2 - c) / (innerWidth * .6)).toFixed(3)); });
+}
+zenStrip.addEventListener('pointerdown', e => { sDrag = { x: e.clientX, y: e.clientY, p: sPos, t: performance.now(), lx: e.clientX, axis: 0 }; sMoved = 0; sVel = 0; });
+addEventListener('pointermove', e => {
+  if (!sDrag) return;
+  const dx = e.clientX - sDrag.x, dy = e.clientY - sDrag.y;
+  if (!sDrag.axis && Math.hypot(dx, dy) > 6) sDrag.axis = Math.abs(dx) > Math.abs(dy) ? 'x' : 'y';
+  if (sDrag.axis !== 'x') return;
+  sMoved = Math.abs(dx);
+  const now = performance.now(); sVel = (sDrag.lx - e.clientX) / Math.max(1, now - sDrag.t) * 16; sDrag.t = now; sDrag.lx = e.clientX;
+  sPos = sDrag.p - dx;
+}, { passive: true });
+addEventListener('pointerup', () => { sDrag = null; });
+addEventListener('pointercancel', () => { sDrag = null; });
+zenStrip.addEventListener('wheel', e => { if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) { e.preventDefault(); sPos += e.deltaX; sVel = 0; } }, { passive: false });
+zenCards.forEach(b => b.addEventListener('click', e => { if (sMoved > 8) { e.preventDefault(); return; } zenShow(zenSheets[+b.dataset.i], b); }));
+const stripStart = () => { setW = 0; measureStrip(); stripTick(); };
+addEventListener('resize', stripStart); addEventListener('load', stripStart);
+typeof gsap !== 'undefined' ? gsap.ticker.add(stripTick) : (function f(){ stripTick(); requestAnimationFrame(f); })();
+/* фразы стоят по центру, каждая между листами, примерно через шесть */
+const zenPhrases = ZEN_PHRASES.map((t, k) => {
+  const el = document.createElement('div'); el.className = 'zp'; el.innerHTML = `<p>${t}</p>`; document.getElementById('zenWords').append(el);
+  /* случайное место в кадре, не по центру и не в углах с текстом */
+  const a = rnd() * Math.PI * 2, r = .12 + rnd() * .26;
+  return { el, z0: -(3.5 + k * 6) * ZEN_STEP, ph: k * 1.7, x: Math.cos(a) * r * 1.2, y: Math.sin(a) * r * .8 };
+});
+let zenT = 0, zenTravel = 0, zenOn = true;
+const zcam = { x: 0, y: 0 };
+function zenTick(){
+  if (isMobile()) return; /* на телефоне вместо полёта – лента */
+  const r = zenSec.getBoundingClientRect(), vh = innerHeight, vw = innerWidth, w = vw / zenFrame();
+  /* вне экрана 3D-сцена целиком выключена: 38 слоёв не нагружают видеокарту, пока смотришь другие блоки */
+  const on = r.bottom > 0 && r.top < vh;
+  if (on !== zenOn) { zenOn = on; zenCam.style.display = on ? '' : 'none'; trailEl.classList.toggle('is-lite', on); }
+  if (!on) return;
+  zenT += 1 / 60;
+  /* прогресс блока: камера пролетает весь ряд листов за его высоту; до входа стоит у начала */
+  const p = clamp01(-r.top / (r.height - vh));
+  const target = p * (ZEN_N - 1.5) * ZEN_STEP * w;
+  zenTravel += (target - zenTravel) * .12;
+  zenBar.style.transform = `scaleY(${p.toFixed(4)})`;
+  /* камера чуть поворачивается за мышью */
+  zcam.x += (mouse.nx - zcam.x) * .05; zcam.y += (mouse.ny - zcam.y) * .05;
+  zenCam.style.transform = `rotateY(${(zcam.x * 8).toFixed(2)}deg) rotateX(${(-zcam.y * 6).toFixed(2)}deg) translate3d(${(-zcam.x * 60 * w).toFixed(1)}px,${(-zcam.y * 40 * w).toFixed(1)}px,0)`;
+  const nearZ = NEAR * w;
+  const fog = z => smooth(nearZ - 3200 * w, nearZ - 1900 * w, z) * (1 - smooth(nearZ - 420 * w, nearZ, z));
+  zenSheets.forEach(s => {
+    const z = s.z0 * w + zenTravel + nearZ - 200 * w;
+    const o = fog(z);
+    s.el.style.visibility = o < .01 ? 'hidden' : 'visible';
+    if (o < .01) return;
+    const bob = Math.sin(zenT * .35 + s.ph) * 14 * w;
+    s.el.style.transform = `translate3d(${(s.x * vw).toFixed(1)}px,${(s.y * vh + bob).toFixed(1)}px,${z.toFixed(1)}px) rotateZ(${(s.rz + Math.sin(zenT * .2 + s.ph) * 1.2).toFixed(2)}deg)`;
+    s.el.style.opacity = o.toFixed(3);
+    s.el.style.pointerEvents = o < .5 ? 'none' : '';
+  });
+  zenPhrases.forEach(f => {
+    /* фраза проявляется, когда её место подлетает ближе, и тает перед камерой; положение – проекция точки в глубине */
+    const z = f.z0 * w + zenTravel + nearZ - 200 * w, P = 900 * w;
+    const o = smooth(-1500 * w, -700 * w, z) * (1 - smooth(-80 * w, nearZ, z));
+    f.el.style.visibility = o < .01 ? 'hidden' : 'visible';
+    if (o < .01) return;
+    const k = P / (P - Math.min(z, P * .8));
+    f.el.style.transform = `translate3d(${(vw / 2 + f.x * vw * k).toFixed(1)}px,${(vh / 2 + (f.y * vh + Math.sin(zenT * .3 + f.ph) * 10 * w) * k).toFixed(1)}px,0)`;
+    f.el.style.opacity = (o * .85).toFixed(3);
+  });
+}
+function zenShow(s, card){
+  const from = (card || s.btn).getBoundingClientRect();
+  /* на телефоне: сначала маленькая (уже загружена в ленте), затем 720 px – 2000 px экрану телефона не нужны */
+  zenImg.src = `assets/zen/zen-${s.n}-${isMobile() ? 'xs' : 's'}.webp`;
+  const big = new Image(); big.src = `assets/zen/zen-${s.n}-${isMobile() ? 's' : 'l'}.webp`; big.onload = () => { if (!zenView.hidden) zenImg.src = big.src; };
+  zenCap.innerHTML = `<span>${ZEN_TITLES[s.i]}</span><span>Тушь на бумаге</span><span>(${s.n})</span>`;
+  zenView.hidden = false;
+  if (lenis) lenis.stop();
+  if (!motionOn) return;
+  const to = zenImg.getBoundingClientRect();
+  gsap.fromTo(zenView, { autoAlpha: 0 }, { autoAlpha: 1, duration: .6 });
+  gsap.fromTo(zenImg, { x: from.left + from.width / 2 - (to.left + to.width / 2), y: from.top + from.height / 2 - (to.top + to.height / 2), scale: from.width / to.width },
+    { x: 0, y: 0, scale: 1, duration: 1, ease: 'expo.out' });
+  gsap.fromTo(zenCap, { autoAlpha: 0, x: -20 }, { autoAlpha: 1, x: 0, duration: .8, delay: .35, ease: 'expo.out' });
+}
+function zenHide(){
+  if (zenView.hidden) return;
+  const fin = () => { zenView.hidden = true; gsap.set([zenView, zenImg, zenCap], { clearProps: 'all' }); if (lenis) lenis.start(); };
+  if (!motionOn) return fin();
+  gsap.to(zenView, { autoAlpha: 0, duration: .45, ease: 'power2.in', onComplete: fin });
+}
+zenView.addEventListener('click', zenHide);
+/* смахнуть рисунок вверх или вниз – закрыть; во время жеста он едет за пальцем */
+let zsw = null;
+zenView.addEventListener('touchstart', e => { zsw = { y: e.touches[0].clientY, x: e.touches[0].clientX }; }, { passive: true });
+zenView.addEventListener('touchmove', e => { if (!zsw) return; const dy = e.touches[0].clientY - zsw.y; zenImg.style.transform = `translate3d(0,${dy}px,0)`; zenView.style.opacity = (1 - Math.min(1, Math.abs(dy) / 400)).toFixed(3); e.preventDefault(); }, { passive: false });
+zenView.addEventListener('touchend', e => { if (!zsw) return; const dy = e.changedTouches[0].clientY - zsw.y; zsw = null;
+  if (Math.abs(dy) > 70) zenHide(); else { zenImg.style.transform = ''; zenView.style.opacity = ''; } });
+document.getElementById('zenNext').addEventListener('click', e => { e.preventDefault(); if (lenis) lenis.scrollTo('#foot', { duration: 2 }); else footEl.scrollIntoView(); });
+/* пункт меню «Zen drawings» ведёт к блоку – обработчик общий для меню (внизу) */
+
+/* ---------- подвал: квадрат с логотипом – одно целое за мышью; облако позади – слабее, медленнее и с собственным дыханием ---------- */
+const footFloat = document.getElementById('footFloat'), footCloud = footEl.querySelector('.foot__cloud');
+const fm = { x: 0, y: 0, cx: 0, cy: 0 }; let footT = 0;
+function footMove(){
+  if (isTouch()) { footFloat.style.transform = ''; footCloud.style.transform = ''; return; }
+  const r = footEl.getBoundingClientRect();
+  if (r.top > innerHeight || r.bottom < 0) return;
+  const w = innerWidth / 1400; footT += 1 / 60;
+  fm.x += (mouse.nx - fm.x) * .07; fm.y += (mouse.ny - fm.y) * .07;     /* ближний план: быстрее, сильнее */
+  fm.cx += (mouse.nx - fm.cx) * .025; fm.cy += (mouse.ny - fm.cy) * .025; /* дальний план: медленнее, слабее */
+  footFloat.style.transform = `translate3d(${(fm.x * 34 * w).toFixed(2)}px,${(fm.y * 24 * w).toFixed(2)}px,0)`;
+  footCloud.style.transform = `translate3d(${(fm.cx * 14 * w + Math.sin(footT * .22) * 10 * w).toFixed(2)}px,${(fm.cy * 9 * w + Math.cos(footT * .17) * 5 * w).toFixed(2)}px,0) scale(${(1.02 + Math.sin(footT * .13) * .015).toFixed(4)})`;
+}
+
+/* ---------- телефон: кадр с фото ровно посередине между описанием и плакатом ---------- */
+function centerSlot(){
+  const sl = document.getElementById('slot');
+  sl.style.marginTop = '';
+  if (!isMobile()) return;
+  const d = document.querySelector('html.no-cta') ? document.querySelector('.desc--old') : document.querySelector('.desc--cta');
+  const t = document.querySelector('#title .mask'), sr = sl.getBoundingClientRect();
+  const gap = (t.getBoundingClientRect().top - d.getBoundingClientRect().bottom - sr.height) / 2;
+  sl.style.marginTop = Math.max(16, gap).toFixed(1) + 'px';
+}
+addEventListener('resize', centerSlot);
+document.fonts.ready.then(centerSlot);
+
+/* ---------- меню на телефоне: кнопка Menu открывает список на весь экран ---------- */
+const menuBtn = document.getElementById('menuBtn');
+const setMenu = open => { menu.classList.toggle('is-list', open); menuBtn.setAttribute('aria-expanded', open); if (lenis) open ? lenis.stop() : lenis.start(); };
+menuBtn.addEventListener('click', () => setMenu(!menu.classList.contains('is-list')));
+/* закрываем список ДО перехода (фаза захвата): пока список открыт, прокрутка остановлена и переход к блоку игнорировался */
+document.getElementById('menuList').addEventListener('click', e => { if (e.target.closest('a')) setMenu(false); }, true);
+
+/* ---------- местное время в Дананге ---------- */
+const clockEl = document.getElementById('clock');
+const clockTop = document.getElementById('clockTop');
+const tickClock = () => { const t = new Intl.DateTimeFormat('en-GB', { hour: '2-digit', minute: '2-digit', timeZone: 'Asia/Ho_Chi_Minh' }).format(new Date()); clockEl.textContent = t; clockTop.textContent = t; };
+tickClock(); setInterval(tickClock, 20000);
+
+/* ---------- экран загрузки ---------- */
+function loader(done){
+  const ld = document.getElementById('loader'), logo = document.getElementById('ldLogo'), realLogo = document.querySelector('.logo');
+  const u = U(), vw = innerWidth, vh = innerHeight;
+  const pics = ['ti', 'vk', 'pda', 'kristina', 'sui', 'pu', 'wimhof', 'sup', 'ja', 'pb'];
+  let seen = false; try { seen = sessionStorage.getItem('ld') === '1'; sessionStorage.setItem('ld', '1'); } catch (e) {}
+  const N = isMobile() ? 4 : 12, D = isMobile() ? 1.05 : 1.6, GAP = isMobile() ? .07 : .09; /* на телефоне заставка ~2.5 с */
+  ld.insertAdjacentHTML('afterbegin', Array.from({ length: N }, (_, i) => `<span class="ld-card"><img src="assets/d/prev-${pics[i % pics.length]}.webp" alt=""></span>`).join('')
+    + `<span class="ld-photo" id="ldPhoto"><img src="assets/d/${isMobile() ? 'photo-m' : 'photo'}.webp" alt=""></span>`);
+  const cards = [...ld.querySelectorAll('.ld-card')], photo = document.getElementById('ldPhoto');
+  gsap.set(realLogo, { autoAlpha: 0 });
+  const tl = gsap.timeline();
+  if (seen && isMobile()) tl.timeScale(4); /* на телефоне второй раз за визит – почти мгновенно; на компе всегда полная заставка */
+  tl.from(logo, { autoAlpha: 0, scale: .6, duration: .8, ease: 'expo.out' }, 0);
+  cards.forEach((c, i) => {
+    const side = i % 2 ? 1 : -1, row = (i >> 1) % 3;
+    const y = (row - 1) * 24 * u, sc = 1.1 + (row === 1 ? .3 : 0);
+    const t0 = .2 + i * GAP;
+    tl.fromTo(c, { x: side * (vw * .5 + 40 * u), y, z: 0, rotationY: side * -16, scale: sc, autoAlpha: 1 },
+      { x: 0, y: 0, z: -2200 * u, rotationY: 0, duration: D, ease: 'power3.inOut' }, t0);
+    tl.to(c, { autoAlpha: 0, duration: .45, ease: 'power1.in' }, t0 + D - .5);
+  });
+  /* фото – последняя карточка того же потока: влетает справа, но не уходит вглубь, а встаёт по центру под логотипом,
+     затем мягко съезжает вниз на своё место на главном экране */
+  const S = () => slot.getBoundingClientRect();
+  const tP = .2 + N * GAP, w0 = 190 * u, h0 = w0 * 1.5;
+  tl.fromTo(photo, { left: vw + 40 * u, top: vh * .47 - h0 / 2, width: w0, height: h0 },
+      { left: () => vw / 2 - S().width / 2, top: () => vh * .47 - S().height / 2, width: () => S().width, height: () => S().height, duration: D, ease: 'power3.inOut' }, tP)
+    .to(photo, { left: () => S().left, top: () => S().top, duration: .9, ease: 'expo.inOut' }, tP + D + .1)
+    .add(() => { reveal.v = 1; photo.remove(); }, tP + D + 1.02)
+    .add(() => intro(), tP + D + .2)
+    .to(logo, { x: () => realLogo.getBoundingClientRect().left + realLogo.offsetWidth / 2 - vw / 2,
+      y: () => realLogo.getBoundingClientRect().top + realLogo.offsetHeight / 2 - vh * .37, duration: 1, ease: 'expo.inOut' }, tP + D + .1)
+    .add(() => { gsap.set(realLogo, { autoAlpha: 1 }); ld.remove(); done(); }, tP + D + 1.15);
+}
+
+/* ---------- первый показ главного экрана (после загрузки) ---------- */
+function intro(){
+  const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
+  tl.fromTo('.orb__in', { scale: .6, autoAlpha: 0 }, { scale: 1, autoAlpha: 1, duration: 2, ease: 'expo.inOut' }, 0)
+    .to('.name .mask > span', { yPercent: 0, duration: 1.4, stagger: .1 }, .35)
+    .fromTo('.desc', { y: 12 }, { autoAlpha: 1, y: 0, duration: 1.4 }, .6)
+    .to('.title .mask > span', { yPercent: 0, duration: 1.6, stagger: .12 }, .45)
+    .to(menu.children, { autoAlpha: 1, duration: 1.2, stagger: .08 }, .9)
+    .add(() => document.body.classList.add('is-open'));
+}
+
+/* старт: ждём шрифт, но не дольше 2.5 с (в некоторых Safari fonts.ready не приходит).
+   Если при запуске что-то упало – не оставляем пустой экран, а перезагружаем страницу в спокойном режиме без анимаций */
+const bootFail = err => { console.error(err); if (!isStatic) location.replace(location.pathname + '?static' + location.hash); };
+addEventListener('error', e => { if (!booted) bootFail(e.error || e.message); });
+let booted = false;
+Promise.race([document.fonts ? document.fonts.ready : Promise.resolve(), new Promise(r => setTimeout(r, 2500))]).then(() => { try { boot(); booted = true; } catch (e) { bootFail(e); } });
+function boot(){
+  fitWorks(); addEventListener('resize', fitWorks);
+  /* меню: копия текста для прокрутки при наведении */
+  menu.querySelectorAll('a').forEach(a => { const t = a.textContent; a.innerHTML = `<span class="roll"><span data-t="${t}">${t}</span></span>`; });
+  works();
+  if (!motionOn) { document.body.classList.add('is-open'); if (hashCase()) openCase(hashCase(), false); return; }
+  scrollTo(0, 0);
+  lenis = new Lenis({ lerp: .07, wheelMultiplier: .9 });
+  drawPhoto = mountPhoto();
+  cutCv = document.getElementById('meCutGl');
+  if (drawPhoto && !isMobile()) { const mc = document.getElementById('meCut'); mc.src = mc.dataset.src; drawCut = mountPhoto(cutCv, mc, true); }
+  gsap.ticker.add(t => lenis.raf(t * 1000)); gsap.ticker.lagSmoothing(0);
+  /* пункты меню ведут к своим блокам; длительность зависит от расстояния, чтобы дальние переходы не были рывком */
+  [...menu.querySelectorAll('a[href^="#"]:not([href="#"])'), document.querySelector('.desc__cta')].forEach(a => a.addEventListener('click', e => {
+    e.preventDefault();
+    const to = document.querySelector(a.getAttribute('href')); if (!to) return;
+    /* цель – по раскладке, без transform: работы в момент клика могут быть сдвинуты (уходят под рисунки) */
+    let y = 0; for (let el = to; el; el = el.offsetParent) y += el.offsetTop;
+    const dist = Math.abs(y - scrollY) / innerHeight;
+    lenis.scrollTo(y, { duration: Math.min(3.2, 1.2 + dist * .12) });
+  }));
+  document.querySelectorAll('.logo, #toTop, .foot__logo').forEach(a => a.addEventListener('click', e => { e.preventDefault(); lenis.scrollTo(0, { duration: Math.min(3.6, 1.4 + scrollY / innerHeight * .1) }); }));
+  gsap.ticker.add(() => { if (scrollY < innerHeight * 1.2) parallax(); cursor(); scroll(); works(); });
+  gsap.ticker.add(t => { if (caseLenis) caseLenis.raf(t * 1000); caseTick(); });
+  /* до конца загрузки главный экран скрыт и прокрутка стоит */
+  gsap.set(['.orb__in', '.desc', menu.children], { autoAlpha: 0 });
+  gsap.set('.name .mask > span, .title .mask > span', { yPercent: 150 });
+  lenis.stop();
+  /* прямой заход по ссылке на кейс: главная встаёт на блок работ, кейс открывается без перелёта */
+  loader(() => { lenis.start(); if (location.hash === '#zen') lenis.scrollTo('#zen', { immediate: true }); else if (hashCase()) { lenis.scrollTo(wks[CASES[hashCase()].work], { immediate: true, offset: -60 }); openCase(hashCase(), false); } });
+}
+</script>
+</body>
+</html>
