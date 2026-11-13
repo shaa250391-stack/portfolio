@@ -86,6 +86,7 @@ a:hover>.roll>span,a:focus-visible>.roll>span{transform:translateY(-50%)}
 /* плашка: в середине стоит, на входе и выходе скорость меняется плавно */
 /* в верхней половине экрана: верх плашки 71px кадра 1400 (скрин Figma 12.11) */
 .plaque{position:fixed;left:50%;top:calc(71 * var(--p));z-index:3;transform-style:preserve-3d;width:calc(308 * var(--u));height:calc(348 * var(--u));margin:0 0 0 calc(-154 * var(--u));background:rgba(236,236,236,.72);-webkit-backdrop-filter:blur(18px) saturate(1.15);backdrop-filter:blur(18px) saturate(1.15);box-shadow:inset 0 0 0 1px rgba(255,255,255,.35);color:var(--ink);display:flex;align-items:center;justify-content:center;text-align:center;pointer-events:none;opacity:0;will-change:transform,opacity}
+@media (min-width:769px){.plaque{left:0;top:0;width:100%;height:50vh;height:50svh;margin:0}}
 .phrase{white-space:nowrap}
 .phrase .w{display:inline-block;vertical-align:top;will-change:transform}
 
@@ -660,7 +661,8 @@ function scroll(){
     off = y + lag + ph * .2 - top;
     e = smooth(.85, 1, p); sink = 0;
   }
-  plaque.style.transform = `perspective(${(900 * u).toFixed(0)}px) translate3d(${(pt.x * 14 * u).toFixed(2)}px,${(off + pt.y * 10 * u + (1 - e) * 70 * u).toFixed(2)}px,0) rotateX(${(-pt.y * 7 + (1 - e) * 12).toFixed(2)}deg) rotateY(${(pt.x * 9).toFixed(2)}deg) scale(${(.92 + e * .08).toFixed(4)})`;
+  /* десктоп: плашка во всю ширину и прибита к верху экрана: не едет, не наклоняется, не масштабируется – только проявляется и тает на месте */
+  plaque.style.transform = !isMobile() ? 'none' : `perspective(${(900 * u).toFixed(0)}px) translate3d(${(pt.x * 14 * u).toFixed(2)}px,${(off + pt.y * 10 * u + (1 - e) * 70 * u).toFixed(2)}px,0) rotateX(${(-pt.y * 7 + (1 - e) * 12).toFixed(2)}deg) rotateY(${(pt.x * 9).toFixed(2)}deg) scale(${(.92 + e * .08).toFixed(4)})`;
   plaque.style.opacity = (e * (1 - sink)).toFixed(3);
   plaque.style.filter = e < .999 ? `blur(${((1 - e) * 10).toFixed(2)}px)` : 'none';
   plaque.style.visibility = Math.abs(off) > vh || sink >= 1 ? 'hidden' : 'visible';
