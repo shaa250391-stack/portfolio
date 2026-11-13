@@ -1465,14 +1465,21 @@ document.getElementById('zenNext').addEventListener('click', e => { e.preventDef
 const footFloat = document.getElementById('footFloat'), footCloud = footEl.querySelector('.foot__cloud');
 const fm = { x: 0, y: 0, cx: 0, cy: 0 }; let footT = 0;
 function footMove(){
-  if (isTouch()) { footFloat.style.transform = ''; footCloud.style.transform = ''; return; }
   const r = footEl.getBoundingClientRect();
   if (r.top > innerHeight || r.bottom < 0) return;
+  /* 13.11: глубина при прокрутке – облако (дальний план) отстаёт сильнее, буквы (ближний) почти идут со страницей */
+  const sc = r.top;                                /* > 0, пока подвал въезжает снизу; 0 – стоит целиком */
+  const cy = sc * -.32, fy = sc * -.1;
+  if (isTouch()) {
+    footFloat.style.transform = `translate3d(0,${fy.toFixed(2)}px,0)`;
+    footCloud.style.transform = `translate3d(0,${cy.toFixed(2)}px,0)`;
+    return;
+  }
   const w = innerWidth / 1400; footT += 1 / 60;
   fm.x += (mouse.nx - fm.x) * .07; fm.y += (mouse.ny - fm.y) * .07;     /* ближний план: быстрее, сильнее */
   fm.cx += (mouse.nx - fm.cx) * .025; fm.cy += (mouse.ny - fm.cy) * .025; /* дальний план: медленнее, слабее */
-  footFloat.style.transform = `translate3d(${(fm.x * 34 * w).toFixed(2)}px,${(fm.y * 24 * w).toFixed(2)}px,0)`;
-  footCloud.style.transform = `translate3d(${(fm.cx * 14 * w + Math.sin(footT * .22) * 10 * w).toFixed(2)}px,${(fm.cy * 9 * w + Math.cos(footT * .17) * 5 * w).toFixed(2)}px,0) scale(${(1.02 + Math.sin(footT * .13) * .015).toFixed(4)})`;
+  footFloat.style.transform = `translate3d(${(fm.x * 34 * w).toFixed(2)}px,${(fm.y * 24 * w + fy).toFixed(2)}px,0)`;
+  footCloud.style.transform = `translate3d(${(fm.cx * 14 * w + Math.sin(footT * .22) * 10 * w).toFixed(2)}px,${(fm.cy * 9 * w + Math.cos(footT * .17) * 5 * w + cy).toFixed(2)}px,0) scale(${(1.02 + Math.sin(footT * .13) * .015).toFixed(4)})`;
 }
 
 /* ---------- телефон: кадр с фото ровно посередине между описанием и плакатом ---------- */
@@ -1519,7 +1526,7 @@ function loader(done){
     photo.firstElementChild.style.objectPosition = '50% ' + p.toFixed(1) + '%'; }
   gsap.set(realLogo, { autoAlpha: 0 });
   const tl = gsap.timeline();
-  if (seen && isMobile()) tl.timeScale(1.6); /* на телефоне второй раз за визит – чуть быстрее (при перезагрузках в эмуляторе ×4 выглядело как мелькание); на компе всегда полная заставка */
+  if (isMobile()) tl.timeScale(seen ? 2.1 : 1.35); /* 13.11: на телефоне первый показ ×1.35 (фото «зависало» у середины), повторный ×2.1 */
   tl.from(logo, { autoAlpha: 0, scale: .6, duration: .8, ease: 'expo.out' }, 0);
   cards.forEach((c, i) => {
     const side = i % 2 ? 1 : -1, row = (i >> 1) % 3;
