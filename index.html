@@ -726,14 +726,14 @@ function scroll(){
 const WORKS = [
   /* порядок (12.11): сильные клиентские работы первыми, похожие темы разведены (два киртана, два японских эмбиента), светлые и тёмные превью чередуются */
   { title: ['Kosmosky', 'titanium', 'drum'], type: ['Product landing', 'Titanium tongue drum'], year: '2026', note: ['Scroll story, Sound, Shop'], img: 'ti', case: 'ti' },
-  { title: ['Vraj Kirtan', 'festival'], type: ['Brand identity', 'Website, digital, print'], year: '2026', note: ['International kirtan festival, Moscow'], img: 'vk', case: 'vk' },
+  { title: ['Japanese', 'Ambient'], type: ['Landing page', 'Music history, 1980s'], year: '2024', note: ['Longread, Artists, Albums'], img: 'ja', case: 'ja' },
   { title: ['PDA', 'Architecture', 'redesign'], type: ['Studio website', 'Redesign concept'], year: '2026', note: ['Architecture, Paris, Motion'], img: 'pda', case: 'pda' },
   { title: ['Kristina', 'Kavalevich'], type: ['Developer portfolio'], year: '2024', note: ['Personal site, Dark UI, Frontend'], img: 'kristina', case: 'kristina' },
   { title: ['Morimoto', 'Naoki, sui'], type: ['Album page', 'Ambient, music release'], year: '2024', note: ['Ambient-style landing page'], img: 'sui', case: 'sui' },
   { title: ['Kirtan Puri', 'retreat'], type: ['Event landing', 'Kirtan retreat in Puri'], year: '2026', note: ['RU / EN, Registration, Analytics'], img: 'pu', case: 'pu' },
   { title: ['Iceman with', 'a hot heart', '(Wim Hof)'], type: ['Landing page'], year: '2025', note: ['Wim Hof Method, Breathwork, Cold exposure'], img: 'wimhof', case: 'wimhof' },
   { title: ['AmsterSUP,', 'canal tours'], type: ['Landing page', 'SUP rental and tours'], year: '2024', note: ['Light and dark theme, Booking'], img: 'sup', case: 'sup' },
-  { title: ['Japanese', 'Ambient'], type: ['Landing page', 'Music history, 1980s'], year: '2024', note: ['Longread, Artists, Albums'], img: 'ja', case: 'ja' },
+  { title: ['Vraj Kirtan', 'festival'], type: ['Brand identity', 'Website, digital, print'], year: '2026', note: ['International kirtan festival, Moscow'], img: 'vk', case: 'vk' },
   { title: ['Paul Baker', 'architect'], type: ['Architect portfolio'], year: '2024', note: ['Personal site, Projects, Clients'], img: 'pb', case: 'pb' },
 ];
 const worksEl = document.getElementById('works');
@@ -994,7 +994,7 @@ const CASES = {
     facts: [['Project', 'Landing page'], ['Year', '2024'], ['Role', 'Concept, design'], ['Status', 'Personal concept, non-commercial']],
     link: 'https://antonshatkovski.com/japanese-ambient/',   /* живая версия макета (демо, лежит в site-public/japanese-ambient) */
     text: ['A landing page about Japanese ambient music of the 1980s: how the economic boom and corporations like Muji, Sanyo and Misawa Home paid musicians to make quiet records for shops, buildings and products.',
-      'Cherry blossom, temple roofs and a soft ring of light that hangs over every screen. A calm longread, from the idea of wa to the genre’s legends: Hosono, Yoshimura, Ojima, Kokubo.'],
+      'Editorial minimalism with a Japanese sense of ma: empty space is part of the composition, not a gap between blocks. An invisible Swiss grid ties text, photos and small markers together, so they echo each other across the page, while light paper panels lie over full-bleed photos like a collage. In the live version that paper space opens from the centre as you scroll.'],
     body: c => `<div class="case__top">${info(c)}<div class="case__shots">
         ${shot(1, 'First screen', { src: 'case-ja-1.webp', w: 1440, h: 1768, alt: 'First screen: Japanese Ambient, a ring of light over cherry blossom' })}
         ${shot(2, 'Origins and economic boom', { src: 'case-ja-2.webp', w: 1440, h: 1514, alt: 'Origins of Japanese ambient and the economic boom, with archive photos and a temple roof' })}
