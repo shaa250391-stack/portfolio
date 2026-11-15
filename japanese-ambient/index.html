@@ -1,0 +1,822 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex, nofollow">
+<title>Japanese Ambient</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700&display=swap" rel="stylesheet">
+<link rel="preload" as="image" href="assets/ja/photo1.webp" media="(min-width: 769px)">
+<link rel="preload" as="image" href="assets/ja/photo1-m.webp" media="(max-width: 768px)">
+<script>
+  /* движение включено, если нет ?static и пользователь не просил меньше анимации: прячем то, что появится, до первого кадра */
+  (function(){ var q = new URLSearchParams(location.search);
+    if (!q.has('static') && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('mo');
+    if (q.has('reel')) document.documentElement.classList.add('reel'); })();
+</script>
+<style>
+/* Демо «Japanese Ambient», экраны 1–3 макета Антона (Figma, фрейм 1200). Паспорт – concepts/README.md, данные – brief/source/figma-screens-1-3.md.
+   Десктоп: экран = сетка 1200 колонок × высота экрана в строках; один шаг сетки = 1/1200 ширины страницы (--u).
+   Элементы ставятся по координатам Figma: --c = x + 1, --r = y + 1 (от верха экрана), --w и --h – размер в пикселях макета. */
+*{box-sizing:border-box;margin:0;padding:0}
+html{background:#F4F3F2;-webkit-text-size-adjust:100%}
+body{background:#F4F3F2;color:#252727;font-family:'Manrope',sans-serif;font-weight:500;-webkit-font-smoothing:antialiased;overflow-x:clip}
+html.reel, html.reel *{cursor:none !important}
+html.reel::-webkit-scrollbar{display:none}
+img{display:block;max-width:none}
+main{container-type:inline-size;--u:calc(100cqw / 1200)}
+
+/* ---------- шкала текста (размеры из макета, в шагах сетки) ---------- */
+.t62{font-size:calc(62 * var(--u));line-height:calc(85 * var(--u));letter-spacing:.02em;text-transform:uppercase;font-weight:400}
+.t46{font-size:calc(46 * var(--u));line-height:1.12;text-transform:uppercase;font-weight:400}
+.t32{font-size:calc(32 * var(--u));line-height:1.12;font-weight:400}
+.t32n{font-size:calc(32 * var(--u));line-height:1.16;font-weight:400}
+.t20{font-size:calc(20 * var(--u));line-height:calc(27 * var(--u));font-weight:400}
+.t14{font-size:calc(14 * var(--u));line-height:1.3;font-weight:500}
+.t14u{font-size:calc(14 * var(--u));line-height:calc(19 * var(--u));letter-spacing:.02em;text-transform:uppercase;font-weight:500}
+.t13{font-size:calc(13 * var(--u));line-height:calc(18 * var(--u));font-weight:400}
+.t12{font-size:calc(12 * var(--u));line-height:1.12;font-weight:400}
+.t9{font-size:calc(9 * var(--u));line-height:1.12;font-weight:700}
+b{font-weight:700}
+
+/* ---------- экран ---------- */
+.scr{position:relative;isolation:isolate;overflow:clip;display:grid;
+  grid-template-columns:repeat(1200,minmax(0,1fr));grid-template-rows:repeat(var(--rows),var(--u))}
+.g,.pan{grid-column:var(--c) / span var(--w);grid-row:var(--r) / span var(--h,1);align-self:start;position:relative;z-index:2}
+.pan{background:#F4F3F2;align-self:stretch;z-index:1}
+.pan.pm{display:none}   /* плашки мобильной раскладки */
+h1,.nowrap{white-space:nowrap}
+.on{color:#fff}
+.c{text-align:center}
+.nav{display:flex;justify-content:space-between}
+.nav a{color:inherit;text-decoration:none}
+.lab{text-align:right}
+
+/* фото экрана – холст под плашками: заполняет ширину, по высоте обрезано по центру (как Fill в Figma); при прокрутке едет в пределах запаса */
+.ph{position:absolute;inset:0;z-index:0;overflow:hidden;pointer-events:none}
+.ph img{position:absolute;left:0;width:100%;height:auto;top:calc(var(--t) * var(--u));will-change:transform}
+.ph--flip img{transform:scaleX(-1)}
+
+/* кольцо света – четыре размытых круга с режимами наложения, как Group 1 в Figma (группа Lighten поверх фото, слои снизу вверх: 1, 3, 2, 4) */
+.ring{--ru:var(--u);position:absolute;z-index:1;pointer-events:none;width:calc(1072.18 * var(--ru));height:calc(1072.18 * var(--ru));
+  left:calc(50% - 536.09 * var(--ru) - 13.91 * var(--ru));top:calc(-310 * var(--ru));mix-blend-mode:lighten;isolation:isolate}
+.ring__in{position:absolute;inset:0;will-change:transform}
+.ring i{position:absolute;display:block;border-radius:50%;will-change:transform}
+.e1{left:calc(85.17 * var(--ru));top:calc(125.22 * var(--ru));width:calc(901.83 * var(--ru));height:calc(901.83 * var(--ru));background:#5DE0E9;filter:blur(calc(67.64 * var(--ru)))}
+.e3{left:calc(263.04 * var(--ru));top:calc(451.38 * var(--ru));width:calc(546.11 * var(--ru));height:calc(546.11 * var(--ru));background:#FF9090;mix-blend-mode:overlay;filter:blur(calc(70.18 * var(--ru)))}
+.e2{left:calc(128.13 * var(--ru));top:calc(227.15 * var(--ru));width:calc(815.39 * var(--ru));height:calc(815.39 * var(--ru));background:#252D13;mix-blend-mode:darken;opacity:.96;filter:blur(calc(50.1 * var(--ru)))}
+.e4{left:0;top:0;width:calc(1072.18 * var(--ru));height:calc(1072.18 * var(--ru));background:#BE4949;mix-blend-mode:color-dodge;opacity:.96;filter:blur(calc(50.1 * var(--ru)))}
+
+/* лепестки сакуры – декоративный слой над фото первого экрана, под плашками; создаются скриптом только при включённом движении */
+.petals{position:absolute;left:0;right:0;top:0;height:calc(1100 * var(--u));z-index:1;pointer-events:none;overflow:hidden}
+.petal{position:absolute;left:0;top:0;width:calc(11 * var(--u));height:calc(8 * var(--u));border-radius:80% 10% 80% 10%;
+  background:linear-gradient(135deg,#fff 20%,#F6D3DD 100%);opacity:.85;will-change:transform}
+
+/* портреты */
+.pic{overflow:hidden;align-self:stretch}
+/* окно с фото внутри экрана (улица Токио): под плашками, с запасом по высоте для сдвига */
+.g.phw{overflow:hidden;align-self:stretch;z-index:0;pointer-events:none}
+.phw img{width:100%;height:112%;object-fit:cover;position:relative;top:-6%}
+/* портрет артиста: запас по высоте для медленного сдвига; ярлык с именем – плашка поверх угла портрета */
+.pp img{height:112%;position:relative;top:-6%}
+.g.tab{background:#F4F3F2;align-self:stretch;z-index:3}
+.g.nm{z-index:4;white-space:nowrap}
+/* второе кольцо (Legends): Group 7 – 689×672, центр 602.5 × 260 от верха экрана, повёрнуто на 180° */
+/* поворот на 180° – у внутреннего слоя; внешний масштабируется от центра «дырки» кольца (после поворота она на 40.86 % высоты группы) */
+.ring--leg{--ru:calc(.643 * var(--u));left:calc(50% - 536.09 * var(--ru));top:calc(50% - 438 * var(--ru));transform-origin:50% 40.86%}
+.ring--leg .ring__in{transform:rotate(180deg)}
+#legends .ph img{transform-origin:50% 65%}
+/* Legends закрепляется на экране – поэтому он не ниже окна: сетка макета (694) стоит по центру, фото и кольцо отсчитываются от центра */
+#legends{min-height:100vh;min-height:100svh;align-content:center}
+#legends .ph img{top:calc(50% + (-320 - 347) * var(--u))}
+/* холст «линзы» поверх фото; когда он готов, сама картинка прячется (её размеры и движение холст продолжает брать у неё) */
+.lens{position:absolute;inset:0;width:100%;height:100%;display:block;pointer-events:none;opacity:0;transition:opacity .5s}
+.lens-on > .lens{opacity:1}
+.lens-on > img,.lens-on > picture img{visibility:hidden}
+/* финал: светлый, одна фотография в рамке листа, мелкие надписи по краям. Фото живёт в WebGL: бесконечная мягкая «рябь воздуха»
+   и искажение под курсором (с лёгким расслоением цвета); поверх всего финала – плёночный шум. Без WebGL и без движения – обычная картинка */
+.fin{position:relative;isolation:isolate;overflow:clip;height:100vh;height:100svh;display:grid;grid-template-rows:auto 1fr auto auto;gap:calc(12 * var(--u));
+  padding:calc(14 * var(--u)) calc(20 * var(--u)) calc(16 * var(--u));background:#F4F3F2;color:#252727}
+.fin__row{display:flex;justify-content:space-between;align-items:baseline;gap:calc(20 * var(--u))}
+.fin__row a{color:inherit;text-decoration:none}
+/* подпись о правах – мелко, по центру под строкой меню (та же формулировка, что у кейса в портфолио) */
+.fin__note{text-align:center;font-weight:500}
+.fin__ph{position:relative;overflow:hidden;min-height:0}
+.fin__ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block}
+.fin__k{position:absolute;z-index:2;right:calc(20 * var(--u));bottom:calc(18 * var(--u));writing-mode:vertical-rl;letter-spacing:.35em;color:#fff}
+/* «створки» – светлые половины листа поверх фото, расходятся от центра и открывают снимок (тот же жест, что у коллажа); без движения уже разведены */
+.fin__cur{position:absolute;top:0;bottom:0;width:50%;z-index:3;background:#F4F3F2;pointer-events:none}
+.fin__cur--l{left:0;transform:translateX(-100%)}
+.fin__cur--r{right:0;transform:translateX(100%)}
+
+/* шум на весь сайт – как в портфолио (два слоя зерна, дрожит 5 кадров в секунду); на светлом листе слабее: тёмное зерно .05 вместо .125 */
+.grain{position:fixed;inset:-50%;z-index:55;pointer-events:none}
+.grain::before,.grain::after{content:"";position:absolute;inset:0;background-size:150px 150px}
+.grain::before{opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='discrete' tableValues='0 1'/%3E%3C/feComponentTransfer%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  1 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+.grain::after{opacity:.035;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='1' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3CfeComponentTransfer%3E%3CfeFuncR type='discrete' tableValues='0 1'/%3E%3C/feComponentTransfer%3E%3CfeColorMatrix type='matrix' values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  1 0 0 0 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")}
+html.mo .grain{animation:grain .9s steps(5) infinite}
+@keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-4%,3%)}40%{transform:translate(3%,-4%)}60%{transform:translate(-3%,-2%)}80%{transform:translate(4%,2%)}100%{transform:translate(0,0)}}
+@media (prefers-reduced-motion:reduce){.grain{animation:none!important}}
+/* искажение под курсором всего экрана (фото, светлые плашки, буквы) – SVG-фильтр смещения в области вокруг курсора */
+.fxsvg{position:absolute;width:0;height:0;overflow:hidden}
+
+/* слоистость: каждый следующий крупный блок лежит выше предыдущего и отбрасывает мягкую тень вверх – видно, что он наезжает */
+#boom{z-index:1}
+#arts,#artists,#finale{position:relative;box-shadow:0 calc(-30 * var(--u)) calc(90 * var(--u)) rgba(37,39,39,.14)}
+#arts{z-index:2;background:#F4F3F2}
+#artists{z-index:3}
+#finale{z-index:4}
+/* «альбом»: Legends – обложка, артисты – страницы. Без движения страницы стоят друг под другом во весь экран;
+   с движением на десктопе сцена закрепляется, страницы лежат стопкой и въезжают справа. --sp – ширина корешка с иероглифами */
+.hs{position:relative}
+.hs__stage{position:relative;background:#F4F3F2;--sp:calc(56 * var(--u))}
+.hs__page{position:relative;height:100vh;height:100svh;background:#F4F3F2;overflow:hidden}
+.hs__page:not(.hs__page--cover){box-shadow:calc(-26 * var(--u)) 0 calc(70 * var(--u)) rgba(37,39,39,.12)}
+.hs__body{position:absolute;top:0;bottom:0;right:0;left:var(--sp);container-type:size}
+.hs__grid{--u:min(calc(100cqw / 1200), calc(100cqh / (var(--rows) + 150)));position:absolute;inset:0;display:grid;
+  grid-template-columns:repeat(1200,var(--u));grid-template-rows:repeat(var(--rows),var(--u));place-content:center}
+.hs__spine{position:absolute;left:0;top:0;bottom:0;width:var(--sp);z-index:5;background:#ECE9E5;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.hs__k{writing-mode:vertical-rl;font-size:calc(15 * var(--u));line-height:1;letter-spacing:.35em;font-weight:500;white-space:nowrap;will-change:transform}
+@media (min-width:769px){
+  html.mo .hs__stage{height:100vh;height:100svh;overflow:hidden}
+  html.mo .hs__page{position:absolute;inset:0;height:auto}
+}
+.pic img{width:100%;height:100%;object-fit:cover}
+
+/* пока движение не запустилось – появляющиеся элементы скрыты (только при включённом движении) */
+html.mo [data-a],html.mo [data-art]{visibility:hidden}
+/* до запуска заставки не показываем кольцо и плашки (иначе на долю секунды мелькает готовый кадр); на десктопе плашки показывает сборка */
+html.mo .ring{opacity:0}
+@media (min-width:769px){html.mo .pan{visibility:hidden}}
+
+/* ---------- телефон: экран – колонка, фото прилипает к экрану, плашки с текстом проезжают поверх, между ними – окна в фото ---------- */
+@media (max-width:768px){
+  main{--m:calc(100cqw / 390)}
+  .t62{font-size:calc(34 * var(--m));line-height:1.12}   /* как у заголовков в тексте (t46 – 112 %) */
+  .t46{font-size:calc(25 * var(--m))}
+  .t32,.t32n{font-size:calc(24 * var(--m))}
+  .t20{font-size:calc(18 * var(--m));line-height:1.3}
+  .t14{font-size:calc(14 * var(--m))}
+  .t14u{font-size:calc(11 * var(--m));line-height:1.3}
+  .t13{font-size:calc(11 * var(--m));line-height:1.3}
+  .t12{font-size:calc(12 * var(--m))}
+  .t9{font-size:calc(9 * var(--m))}
+
+  /* коллажи на телефоне – та же логика, что на десктопе: экран = сетка 390 колонок × строки по 1/390 ширины, фото подложкой на весь экран,
+     светлые плашки (.pm – свои, мобильные) складываются поверх фото в форму, тексты лежат на них. Строка 1 – обложка во весь экран (только у #wa) */
+  .scr{grid-template-columns:repeat(390,minmax(0,1fr));grid-template-rows:var(--mhero,0px) repeat(var(--mrows),var(--m))}
+  #wa{--mhero:100vh;--mhero:100svh}
+  .g,.pan{grid-column:var(--mc) / span var(--mw);grid-row:var(--mr) / span var(--mh,1)}
+  .pan:not(.pm),.dt{display:none}
+  .pan.pm{display:block}
+  h1{white-space:normal}
+  .ph img{top:0;height:100%;object-fit:cover}
+  #wa .ph img{object-position:68% 50%}
+  #boom .ph img{object-position:55% 50%}
+  .ring{--ru:calc(.44 * var(--m));top:calc(-60 * var(--m))}
+  .petals{height:100svh}
+  .petal{width:calc(9 * var(--m));height:calc(6.5 * var(--m))}
+  /* обложка: меню сверху, заголовок и подзаголовок под ним, 和 – в центре экрана */
+  .nav{padding:calc(10 * var(--m)) calc(16 * var(--m))}
+  /* заголовок обложки – как LEGENDS: две строки по центру на 38 % высоты, кольцо вокруг; 和 – ниже, на 59 % (ниже – теряется на белых цветах) */
+  .hero-t{margin-top:calc(38vh - 60 * var(--m));margin-top:calc(38svh - 60 * var(--m))}   /* блок «заголовок + подзаголовок» центрирован на кольце */
+  #wa [data-a="sub"]{margin-top:calc(38vh + 38 * var(--m));margin-top:calc(38svh + 38 * var(--m))}
+  .hero-k{align-self:start;margin-top:59vh;margin-top:59svh}
+  #wa .ring{--ru:calc(.36 * var(--m));left:calc(50% - 536.09 * var(--ru));top:calc(38vh - 634 * var(--ru));top:calc(38svh - 634 * var(--ru))}   /* размер и положение – как у кольца LEGENDS */
+  .pic img{width:100%;height:100%}
+  .mid{padding:0}
+  #origins .t9{text-align:center}
+  #arts .t32{font-size:calc(20 * var(--m))}
+  #arts .mA.t9{text-align:center}
+  #arts .phw img{top:-6%;height:112%}
+
+  /* альбом на телефоне – страницы друг под другом обычным потоком: сверху корешок с именем иероглифами (горизонтально),
+     дальше портрет, имя, тексты, обложка; портреты чередуются слева и справа */
+  .hs__page{height:auto;overflow:visible;display:flex;flex-direction:column}
+  .hs__page--cover{height:100vh;height:100svh;justify-content:center}
+  /* обложка Legends на телефоне – не сетка: слово по центру на 38 % высоты, кольцо вокруг него; обрезка краёв обязательна, иначе фото вылезает за экран */
+  #legends{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:calc(38vh - 24 * var(--m));padding-top:calc(38svh - 24 * var(--m));gap:calc(10 * var(--m));overflow:clip}
+  #legends .g{grid-column:auto;grid-row:auto;align-self:center}
+  #legends .ph{position:absolute;inset:0;height:auto;margin:0}   /* экран центрирован – фото не «прилипает», а лежит подложкой */
+  #legends .ph img{top:-10%;height:135%;object-position:50% 0}   /* больше неба, гора ниже слова */
+  #legends .ring--leg{--ru:calc(.36 * var(--m));left:calc(50% - 536.09 * var(--ru));top:calc(38% - 438 * var(--ru))}
+  #legends .t9{position:absolute;top:calc(24 * var(--m));left:0;right:0;text-align:center}
+  .hs__spine{position:relative;order:-1;width:auto;height:auto;padding:calc(16 * var(--m)) calc(20 * var(--m));justify-content:flex-start}
+  .hs__k{writing-mode:horizontal-tb;font-size:calc(13 * var(--m));letter-spacing:.3em}
+  .hs__body{position:relative;left:0;container-type:normal}
+  .hs__grid{position:relative;inset:auto;display:flex;flex-direction:column;gap:calc(14 * var(--m));padding:calc(28 * var(--m)) calc(20 * var(--m)) calc(56 * var(--m))}
+  .hs__grid .pp{align-self:flex-start;width:calc(280 * var(--m));height:calc(292 * var(--m))}
+  .hs__page:nth-child(odd) .hs__grid .pp{align-self:flex-end}
+  .hs__grid .tab{display:none}
+  .hs__grid .nm{white-space:normal;margin-top:calc(4 * var(--m))}
+  .hs__grid .pic:not(.pp){align-self:flex-start;width:calc(140 * var(--m));height:calc(140 * var(--m));margin-top:calc(6 * var(--m))}
+
+  /* финал: фото по высоте экрана, надписи переносятся */
+  .fin{height:auto;min-height:100vh;min-height:100svh;grid-template-rows:auto minmax(calc(440 * var(--m)),1fr) auto auto;padding:calc(12 * var(--m)) calc(16 * var(--m)) calc(18 * var(--m))}
+  .fin__row{flex-wrap:wrap;gap:calc(6 * var(--m)) calc(14 * var(--m))}
+  .fin__note{text-align:left}
+}
+</style>
+</head>
+<body>
+<main>
+
+<!-- ЭКРАН 1: обложка и идея ва. Высота в макете 1474 -->
+<section class="scr" id="wa" style="--mrows:860;--rows:1474;--end:220">
+  <div class="ph" aria-hidden="true">
+    <picture><source media="(max-width:768px)" srcset="assets/ja/photo1-m.webp"><img src="assets/ja/photo1.webp" alt="" style="--t:-35" width="1800" height="2699"></picture>
+  </div>
+  <div class="ring" aria-hidden="true"><div class="ring__in"><i class="e1"></i><i class="e3"></i><i class="e2"></i><i class="e4"></i></div></div>
+
+  <div class="pan" style="--c:1;--r:666;--w:615;--h:300"></div>
+  <div class="pan" style="--c:311;--r:892;--w:305;--h:583"></div>
+  <div class="pan" style="--c:511;--r:1043;--w:690;--h:309"></div>
+  <div class="pan pm" style="--mc:1;--mr:2;--mw:300;--mh:212"></div>
+  <div class="pan pm" style="--mc:151;--mr:206;--mw:240;--mh:268"></div>
+  <div class="pan pm" style="--mc:1;--mr:562;--mw:272;--mh:206"></div>
+  <div class="pan pm" style="--mc:211;--mr:750;--mw:180;--mh:112"></div>
+
+  <nav class="g nav t13 on" style="--c:21;--r:8;--w:1160;--mc:1;--mr:1;--mw:390" data-a="nav">
+    <a href="#wa">1980s</a><a href="#boom">Commercial music</a><a href="#origins">Artists</a><a href="#origins">New wave</a><a href="#wa">Heritage</a>
+  </nav>
+  <h1 class="g t62 on c hero-t" style="--c:311;--r:91;--w:580;--mc:61;--mr:1;--mw:270" data-a="hero">Japanese Ambient</h1>
+  <p class="g t14u on c" style="--c:311;--r:176;--w:580;--mc:1;--mr:1;--mw:390" data-a="sub">Music inside the silence</p>
+  <p class="g t20 on c hero-k" style="--c:591;--r:373;--w:20;--mc:186;--mr:1;--mw:20" data-a="kanji" lang="ja">和</p>
+
+  <p class="g t12 tx r pt" style="--c:579;--r:688;--w:22;--mc:353;--mr:448;--mw:22" data-a="fade" lang="ja">[和]</p>
+  <h2 class="g t46 tx" style="--c:21;--r:686;--w:580;--mc:17;--mr:18;--mw:272" data-a="lines">The concept of wa, embodying harmony and serenity, is fundamental to Japanese culture.</h2>
+  <p class="g t14 tx pb" style="--c:321;--r:965;--w:290;--mc:167;--mr:226;--mw:212" data-a="fade">This mindset's significance in Japanese society fosters a profound respect for nature, a minimalist aesthetic, and traditional values centered on maintaining peace.</p>
+  <p class="g t14 tx pt wt" style="--c:520;--r:1053;--w:305;--win:260;--mc:167;--mr:376;--mw:212" data-a="fade">A cultural phenomenon that encapsulates these principles is <b>ambient music.</b></p>
+  <p class="g t9 dt" style="--c:1166;--r:1192;--w:25" data-a="fade">[P.01]</p>
+  <p class="g t14 tx" style="--c:520;--r:1288;--w:380;--mc:17;--mr:580;--mw:242" data-a="fade">Ambient music focuses on creating soundscapes and atmosphere rather than traditional song structure. It's often used for meditation, relaxation, and setting a mood.</p>
+  <p class="g t32n tx" style="--c:520;--r:1384;--w:88;--mc:17;--mr:698;--mw:110" data-a="fade">1980s</p>
+  <p class="g t14 tx pb" style="--c:321;--r:1421;--w:233;--mc:227;--mr:760;--mw:150" data-a="fade">Japanese ambient music gained popularity due to its unique approach and usage.</p>
+</section>
+
+<!-- ЭКРАН 2: заголовок «Origins». В макете 1474–1937, фон страницы -->
+<section class="scr" id="origins" style="--mrows:300;--rows:463">
+  <p class="g t9 c mid" style="--c:584;--r:178;--w:27;--mc:1;--mr:72;--mw:390" data-a="fade">[P.02]</p>
+  <h2 class="g t46 mid" style="--c:18;--r:340;--w:492;--mc:17;--mr:172;--mw:358" data-a="lines">Origins<br>of Japanese ambient</h2>
+</section>
+
+<!-- ЭКРАН 3: экономический бум и новый звук. В макете 1937–3069 -->
+<section class="scr" id="boom" style="--mrows:1090;--rows:1132;--end:160">
+  <div class="ph" aria-hidden="true">
+    <picture><source media="(max-width:768px)" srcset="assets/ja/photo2-m.webp"><img src="assets/ja/photo2.webp" alt="" style="--t:-333.6" width="2319" height="3477" loading="lazy"></picture>
+  </div>
+
+  <div class="pan" style="--c:301;--r:1;--w:390;--h:1132"></div>
+  <div class="pan" style="--c:627;--r:102;--w:315;--h:540"></div>
+  <div class="pan" style="--c:1;--r:378;--w:509;--h:154"></div>
+  <div class="pan" style="--c:497;--r:630;--w:294;--h:62"></div>
+  <div class="pan pm" style="--mc:1;--mr:2;--mw:306;--mh:236"></div>
+  <div class="pan pm" style="--mc:121;--mr:390;--mw:270;--mh:236"></div>
+  <div class="pan pm" style="--mc:1;--mr:614;--mw:256;--mh:84"></div>
+  <div class="pan pm" style="--mc:1;--mr:792;--mw:390;--mh:300"></div>
+
+  <p class="g t14 tx pt wt" style="--c:311;--r:1;--w:324;--win:60;--mc:17;--mr:18;--mw:274" data-a="fade">In the 1980s, a new wave of Japanese ambient musicians emerged, influenced by Western ideas and local cultural trends. Unlike the traditional approach, these musicians were funded by large corporations rather than record labels.</p>
+  <p class="g t14 tx" style="--c:601;--r:107;--w:321;--mc:17;--mr:148;--mw:274" data-a="fade">Their works were stored on corporate hard drives and became widely accessible only decades later thanks to YouTube and reissues.</p>
+  <figure class="g pic pic-y" style="--c:1;--r:147;--w:300;--h:231;--mc:171;--mr:238;--mw:220;--mh:152" data-a="wipe"><img src="assets/ja/yoshimura.webp" alt="Hiroshi Yoshimura at his synthesizers" width="686" height="458" loading="lazy"></figure>
+  <p class="g t9 tx pb" style="--c:306;--r:147;--w:79;--mc:137;--mr:402;--mw:150" data-a="fade">Hiroshi Yoshimura</p>
+
+  <p class="g t9 dt" style="--c:588;--r:389;--w:26" data-a="fade">[P.03]</p>
+  <p class="g t12 tx r pt wt" style="--c:910;--r:387;--w:22;--win:240;--mc:357;--mr:400;--mw:22" data-a="fade" lang="ja">[空]</p>
+  <h2 class="g t46 tx" style="--c:18;--r:401;--w:479;--mc:137;--mr:424;--mw:244" data-a="lines">Economic boom<br>and new sounds</h2>
+  <p class="g t14 tx" style="--c:601;--r:532;--w:298;--mc:137;--mr:490;--mw:242" data-a="fade">In the 1980s, Japan experienced an economic boom known as the "economic miracle." During this period, the economy shifted from exports to the domestic market, and cities like Tokyo and Osaka developed rapidly.</p>
+  <p class="g t14 tx pb" style="--c:509;--r:638;--w:324;--mc:17;--mr:628;--mw:228" data-a="fade">Ambient music was used as a means for relaxation and recovery in the bustling metropolis.</p>
+
+  <p class="g t32 tx pt wt" style="--c:311;--r:773;--w:280;--win:240;--mc:17;--mr:808;--mw:300" data-a="words">Brian Eno's "Music for Airports" significantly influenced the Japanese minimalist scene, offering a musical escape from urban life.</p>
+  <figure class="g pic pic-e" style="--c:601;--r:783;--w:90;--h:111;--mc:17;--mr:998;--mw:72;--mh:88" data-a="wipe"><img src="assets/ja/eno.webp" alt="Brian Eno" width="300" height="370" loading="lazy"></figure>
+  <p class="g t9 tx pb" style="--c:601;--r:904;--w:41;--mc:99;--mr:1072;--mw:100" data-a="fade">Brian Eno</p>
+</section>
+
+<!-- ЭКРАН 4: как компании поддерживали искусство. В макете 3069–5368; фото улицы – окно 0,3625 · 1200×734 под плашками -->
+<section class="scr" id="arts" style="--mrows:1420;--rows:2299">
+  <figure class="g phw" style="--c:1;--r:557;--w:1200;--h:734;--mc:1;--mr:362;--mw:390;--mh:520" aria-hidden="true"><img src="assets/ja/tokyo.webp" alt="" loading="lazy"></figure>
+  <div class="pan" style="--c:1;--r:401;--w:509;--h:415"></div>
+  <div class="pan" style="--c:301;--r:793;--w:300;--h:498"></div>
+  <div class="pan" style="--c:601;--r:793;--w:178;--h:512"></div>
+  <div class="pan" style="--c:714;--r:883;--w:228;--h:408"></div>
+  <div class="pan pm" style="--mc:191;--mr:362;--mw:200;--mh:190"></div>
+  <div class="pan pm" style="--mc:1;--mr:682;--mw:264;--mh:200"></div>
+  <p class="g mA t9" style="--c:587;--r:255;--w:27;--mc:1;--mr:42;--mw:390" data-a="fade">[P.04]</p>
+  <h2 class="g mA t46" style="--c:21;--r:401;--w:468;--mc:17;--mr:112;--mw:320" data-a="lines">How Companies<br>Supported<br>the Arts</h2>
+  <p class="g mA t12" style="--c:1147;--r:412;--w:34;--mc:341;--mr:116;--mw:34" data-a="fade" lang="ja">[喧噪]</p>
+  <p class="g mA t32" style="--c:22;--r:579;--w:451;--mc:17;--mr:222;--mw:352" data-a="fade">To support the development of the domestic market, the Japanese government offered large tax breaks for creative investments.</p>
+  <p class="g t14" style="--c:511;--r:815;--w:263;--mc:207;--mr:378;--mw:172" data-a="fade">As a result, many companies began funding albums for their commercials, private buildings, and even product packaging.</p>
+  <p class="g t14" style="--c:510;--r:1167;--w:420;--mc:17;--mr:698;--mw:234" data-a="fade">Companies like Muji, Seiko, and Honda provided musicians with complete creative freedom and access to cutting-edge equipment.</p>
+  <p class="g t14" style="--c:700;--r:1237;--w:230;--mc:17;--mr:796;--mw:234" data-a="fade">This created a renaissance-like environment of patronage, but with corporations instead of kings.</p>
+  <p class="g t12" style="--c:510;--r:1278;--w:34;--mc:341;--mr:898;--mw:34" data-a="fade" lang="ja">[空寂]</p>
+  <p class="g t9" style="--c:511;--r:1501;--w:54;--mc:17;--mr:942;--mw:120" data-a="fade">For instance</p>
+  <figure class="g pic" style="--c:311;--r:1559;--w:189;--h:189;--mc:17;--mr:964;--mw:176;--mh:176" data-a="wipe"><img src="assets/ja/a-measure.webp" alt="Yasuaki Shimizu – Made to Measure Vol. 12" loading="lazy"></figure>
+  <p class="g t9" style="--c:21;--r:1714;--w:100;--mc:207;--mr:1076;--mw:170" data-a="fade">Yasuaki Shimizu music for commercials, 1987</p>
+  <p class="g t9" style="--c:510;--r:1720;--w:126;--mc:207;--mr:1112;--mw:170" data-a="fade">Music for commercials for companies like Seiko, Sharp and Honda</p>
+  <p class="g t12" style="--c:1159;--r:1735;--w:22;--mc:353;--mr:964;--mw:22" data-a="fade" lang="ja">[間]</p>
+  <p class="g t9" style="--c:511;--r:1837;--w:10;--mc:17;--mr:1172;--mw:30" data-a="fade">or</p>
+  <figure class="g pic" style="--c:701;--r:1840;--w:188;--h:188;--mc:199;--mr:1172;--mw:176;--mh:176" data-a="wipe"><img src="assets/ja/a-flower.webp" alt="Haruomi Hosono – Watering a Flower" loading="lazy"></figure>
+  <p class="g t9" style="--c:510;--r:1991;--w:84;--mc:17;--mr:1302;--mw:170" data-a="fade">Watering a flower by Haruomi Hosono, 1984</p>
+  <p class="g t9" style="--c:899;--r:1988;--w:282;--mc:17;--mr:1362;--mw:358" data-a="fade">This unique work was commissioned by the Japanese retail company Muji. Hosono, a pioneer in electronic and ambient music, crafted this album specifically to be played in Muji stores, creating a serene and atmospheric shopping experience.</p>
+</section>
+
+<!-- ЭКРАНЫ 5–6: «альбом». Закреплённая сцена во весь экран: обложка – Legends (кольцо распускается), потом страницы артистов
+     въезжают справа поверх предыдущей; у каждой – корешок с именем иероглифами: сначала широкая отбивка, потом сжимается в поле страницы.
+     Раскладка страницы – координаты Figma относительно верха карточки (без иероглифов – они на корешке). Без движения – страницы стоят друг под другом. -->
+<section class="hs" id="artists">
+<div class="hs__stage">
+<section class="scr scr--dark hs__page hs__page--cover" id="legends" style="--rows:694">
+  <div class="ph" aria-hidden="true"><img src="assets/ja/fuji.webp" alt="" style="--t:-320" width="1806" height="3210" loading="lazy"></div>
+  <div class="ring ring--leg" aria-hidden="true"><div class="ring__in"><i class="e1"></i><i class="e3"></i><i class="e2"></i><i class="e4"></i></div></div>
+  <p class="g t9" style="--c:591;--r:45;--w:26" data-a="fade">[P.05]</p>
+  <h2 class="g t46 on c nowrap" style="--c:505;--r:251;--w:198" data-a="legt">Legends</h2>
+  <p class="g t14u on c" style="--c:543;--r:311;--w:122" data-a="legs">Names &amp; albums</p>
+</section>
+  <article class="hs__page" id="p-ojima" data-page="ojima">
+    <div class="hs__body"><div class="hs__grid" style="--rows:586">
+      <figure class="g pic pp" style="--c:469;--r:1;--w:264;--h:276" data-art="ojima" data-r="photo"><img src="assets/ja/p-ojima.webp" alt="Yoshio Ojima" loading="lazy"></figure>
+      <div class="g tab" style="--c:601;--r:1;--w:273;--h:47" data-art="ojima" data-r="tab"></div>
+      <h3 class="g t32 nm" style="--c:612;--r:1;--w:187" data-art="ojima" data-r="name">Yoshio Ojima</h3>
+      <p class="g t14" style="--c:602;--r:299;--w:361" data-art="ojima" data-r="text">Ojima is recognized for his ability to create immersive soundscapes that reflect the architecture they accompany, offering listeners a unique auditory experience</p>
+      <p class="g t14" style="--c:469;--r:551;--w:251" data-art="ojima" data-r="text">Composed <b>"Music for Spirals"</b> in 1988 for the Spiral building in Tokyo</p>
+      <figure class="g pic" style="--c:313;--r:446;--w:141;--h:141" data-art="ojima" data-r="album"><img src="assets/ja/a-spiral.webp" alt="Yoshio Ojima – Music for Spiral" loading="lazy"></figure>
+    </div></div>
+    <div class="hs__spine" aria-hidden="false"><p class="hs__k" lang="ja" data-art="ojima" data-r="label">尾島 由郎</p></div>
+  </article>
+  <article class="hs__page" id="p-yoshimura" data-page="yoshimura">
+    <div class="hs__body"><div class="hs__grid" style="--rows:489">
+      <figure class="g pic pp" style="--c:21;--r:1;--w:264;--h:276" data-art="yoshimura" data-r="photo"><img src="assets/ja/p-yoshimura.webp" alt="Hiroshi Yoshimura recording by a river" loading="lazy" style="object-position:38% 50%"></figure>
+      <div class="g tab" style="--c:153;--r:1;--w:273;--h:47" data-art="yoshimura" data-r="tab"></div>
+      <h3 class="g t32 nm" style="--c:165;--r:1;--w:262" data-art="yoshimura" data-r="name">Hiroshi Yoshimura</h3>
+      <p class="g t14" style="--c:469;--r:277;--w:327" data-art="yoshimura" data-r="text">His music, characterized by its meditative quality<br>and simplicity, became a symbol of tranquility<br>in urban life</p>
+      <p class="g t14" style="--c:469;--r:349;--w:441" data-art="yoshimura" data-r="text">Released <b>"Soundscape 1: Surround"</b> in 1986,<br>funded by Misawa Home Corporation, and <b>"Green,"</b> made entirely<br>on a Yamaha DX7</p>
+      <figure class="g pic" style="--c:313;--r:349;--w:141;--h:141" data-art="yoshimura" data-r="album"><img src="assets/ja/a-surround.webp" alt="Hiroshi Yoshimura – Soundscape 1: Surround" loading="lazy"></figure>
+    </div></div>
+    <div class="hs__spine" aria-hidden="false"><p class="hs__k" lang="ja" data-art="yoshimura" data-r="label">吉村弘</p></div>
+  </article>
+  <article class="hs__page" id="p-hisaishi" data-page="hisaishi">
+    <div class="hs__body"><div class="hs__grid" style="--rows:508">
+      <figure class="g pic pp" style="--c:766;--r:69;--w:264;--h:272" data-art="hisaishi" data-r="photo"><img src="assets/ja/p-hisaishi.webp" alt="Joe Hisaishi at the piano" loading="lazy" style="object-position:28% 50%"></figure>
+      <div class="g tab" style="--c:898;--r:69;--w:273;--h:47" data-art="hisaishi" data-r="tab"></div>
+      <h3 class="g t32 nm" style="--c:910;--r:70;--w:174" data-art="hisaishi" data-r="name">Joe Hisaishi</h3>
+      <p class="g t14" style="--c:469;--r:1;--w:269" data-art="hisaishi" data-r="text">His works are notable for their emotional depth, merging traditional Japanese music with ambient and orchestral sounds</p>
+      <p class="g t14" style="--c:469;--r:455;--w:264" data-art="hisaishi" data-r="text">Known for Ghibli soundtracks, experimented with ambient music, featured in <b>"Kankyo Ongaku"</b></p>
+      <figure class="g pic" style="--c:313;--r:301;--w:141;--h:141" data-art="hisaishi" data-r="album"><img src="assets/ja/a-kankyo.webp" alt="Kankyo Ongaku compilation" loading="lazy"></figure>
+    </div></div>
+    <div class="hs__spine" aria-hidden="false"><p class="hs__k" lang="ja" data-art="hisaishi" data-r="label">久石 譲</p></div>
+  </article>
+  <article class="hs__page" id="p-shimizu" data-page="shimizu">
+    <div class="hs__body"><div class="hs__grid" style="--rows:584">
+      <figure class="g pic pp" style="--c:21;--r:55;--w:264;--h:272" data-art="shimizu" data-r="photo"><img src="assets/ja/p-shimizu.webp" alt="Yasuaki Shimizu" loading="lazy"></figure>
+      <div class="g tab" style="--c:153;--r:55;--w:273;--h:47" data-art="shimizu" data-r="tab"></div>
+      <h3 class="g t32 nm" style="--c:168;--r:57;--w:234" data-art="shimizu" data-r="name">Yasuaki Shimizu</h3>
+      <p class="g t14" style="--c:469;--r:1;--w:319" data-art="shimizu" data-r="text">Known for his experimental approach, Shimizu fused ambient sounds with jazz influences, creating truly avant-garde compositions</p>
+      <p class="g t14" style="--c:469;--r:379;--w:240" data-art="shimizu" data-r="text">Created <b>"Music for Commercials,"</b> funded by Honda, Seiko, and Sharp</p>
+      <figure class="g pic" style="--c:313;--r:444;--w:141;--h:141" data-art="shimizu" data-r="album"><img src="assets/ja/a-measure.webp" alt="Yasuaki Shimizu – Music for Commercials" loading="lazy"></figure>
+    </div></div>
+    <div class="hs__spine" aria-hidden="false"><p class="hs__k" lang="ja" data-art="shimizu" data-r="label">清水靖晃</p></div>
+  </article>
+  <article class="hs__page" id="p-kokubo" data-page="kokubo">
+    <div class="hs__body"><div class="hs__grid" style="--rows:525">
+      <figure class="g pic pp" style="--c:26;--r:1;--w:264;--h:276" data-art="kokubo" data-r="photo"><img src="assets/ja/p-kokubo.webp" alt="Takashi Kokubo with a binaural dummy head in a forest" loading="lazy" style="object-position:40% 50%"></figure>
+      <div class="g tab" style="--c:158;--r:1;--w:273;--h:47" data-art="kokubo" data-r="tab"></div>
+      <h3 class="g t32 nm" style="--c:170;--r:1;--w:228" data-art="kokubo" data-r="name">Takashi Kokubo</h3>
+      <p class="g t14" style="--c:469;--r:267;--w:407" data-art="kokubo" data-r="text">Kokubo became known for his ability to blend natural sounds with synthesized elements, crafting soundscapes that immerse listeners in a world of nature and tranquility.</p>
+      <p class="g t14" style="--c:469;--r:339;--w:441" data-art="kokubo" data-r="text">Released <b>"Wind Oasis"</b><br>in 1993, an album created for Sanyo air conditioners</p>
+      <figure class="g pic" style="--c:313;--r:385;--w:141;--h:141" data-art="kokubo" data-r="album"><img src="assets/ja/a-oasis.webp" alt="Takashi Kokubo – Wind Oasis" loading="lazy"></figure>
+    </div></div>
+    <div class="hs__spine" aria-hidden="false"><p class="hs__k" lang="ja" data-art="kokubo" data-r="label">小久保隆</p></div>
+  </article>
+  <article class="hs__page" id="p-hosono" data-page="hosono">
+    <div class="hs__body"><div class="hs__grid" style="--rows:586">
+      <figure class="g pic pp" style="--c:469;--r:1;--w:264;--h:276" data-art="hosono" data-r="photo"><img src="assets/ja/p-hosono.webp" alt="Haruomi Hosono" loading="lazy"></figure>
+      <div class="g tab" style="--c:601;--r:1;--w:273;--h:47" data-art="hosono" data-r="tab"></div>
+      <h3 class="g t32 nm" style="--c:620;--r:4;--w:245" data-art="hosono" data-r="name">Haruomi Hosono</h3>
+      <p class="g t14" style="--c:601;--r:299;--w:361" data-art="hosono" data-r="text">One of the pioneers of Japanese ambient, Hosono's work is known for its delicate textures and calmness, providing a perfect backdrop for Muji's minimalist aesthetic</p>
+      <p class="g t14" style="--c:459;--r:551;--w:253" data-art="hosono" data-r="text">Released <b>"Watering a Flower"</b> in 1984, funded by Muji</p>
+      <figure class="g pic" style="--c:305;--r:446;--w:141;--h:141" data-art="hosono" data-r="album"><img src="assets/ja/a-flower.webp" alt="Haruomi Hosono – Watering a Flower" loading="lazy"></figure>
+    </div></div>
+    <div class="hs__spine" aria-hidden="false"><p class="hs__k" lang="ja" data-art="hosono" data-r="label">細野 晴臣</p></div>
+  </article>
+</div>
+</section>
+
+<!-- ФИНАЛ: светлый лист, одна фотография в рамке, мелкие надписи по краям (слова – из макета). Фото – ВРЕМЕННОЕ (кадр с пагодой),
+     пока Антон не пришлёт отдельный снимок для финала. -->
+<section class="fin" id="finale">
+  <div class="fin__row t13" data-a="fint"><span>Japanese Ambient</span><span>Music inside the silence</span><span>1980s</span></div>
+  <figure class="fin__ph">
+    <img src="assets/ja/photo2.webp" alt="" loading="lazy" style="object-position:70% 72%">
+    <p class="fin__k t14" lang="ja" data-a="fink">静</p>
+    <div class="fin__cur fin__cur--l" aria-hidden="true"></div><div class="fin__cur fin__cur--r" aria-hidden="true"></div>
+  </figure>
+  <div class="fin__row t13" data-a="finb"><span>Commercial music</span><span>Artists</span><span>New wave</span><span>Heritage</span><a href="#wa">Back to top ↑</a></div>
+  <p class="fin__note t9" data-a="finn">Personal concept made for my portfolio. Not affiliated with the artists or their labels. Photos, names and album art belong to their owners.</p>
+</section>
+<div class="grain" aria-hidden="true"></div>
+<svg class="fxsvg" aria-hidden="true"><filter id="warp" filterUnits="userSpaceOnUse" primitiveUnits="userSpaceOnUse" color-interpolation-filters="sRGB" x="0" y="0" width="0" height="0">
+  <feFlood flood-color="rgb(128,128,128)" result="flat"/>
+  <feImage id="warpMap" x="0" y="0" width="0" height="0" preserveAspectRatio="none" result="m"/>
+  <feComposite in="m" in2="flat" operator="over" result="map"/>
+  <feDisplacementMap in="SourceGraphic" in2="map" scale="0" xChannelSelector="R" yChannelSelector="G" id="warpDisp"/>
+</filter></svg>
+</main>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/SplitText.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.3.26/dist/lenis.min.js"></script>
+<script>
+/* Режимы: ?static – без анимаций, всё видно; &to=<id> – показать экран (сдвиг отрицательным margin, headless не рисует прокрутку);
+   prefers-reduced-motion – как static; ?reel – после заставки страница сама едет вниз с ровной скоростью (&speed=<px/с>, по умолчанию 90). */
+const params = new URLSearchParams(location.search);
+const isStatic = params.has('static');
+const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const motionOn = !isStatic && !reduce && typeof gsap !== 'undefined' && typeof ScrollTrigger !== 'undefined' && typeof Lenis !== 'undefined';
+const mobile = () => matchMedia('(max-width:768px)').matches;
+const finePointer = matchMedia('(pointer:fine)').matches;
+
+function showSection(){
+  const el = params.get('to') && document.getElementById(params.get('to'));
+  if (el) document.body.style.marginTop = `-${el.getBoundingClientRect().top + scrollY}px`;   /* от верха документа – страницы альбома вложены */
+}
+
+function start(){
+  if (!motionOn) { document.documentElement.classList.remove('mo'); if (isStatic) showSection(); return; }
+  gsap.registerPlugin(ScrollTrigger, SplitText);
+  history.scrollRestoration = 'manual'; scrollTo(0, 0);   /* демо всегда начинается с открытия, а не с места, где остановились */
+
+  /* плавный скролл: Lenis на тикере GSAP */
+  const lenis = new Lenis({ lerp: .085 });
+  lenis.on('scroll', ScrollTrigger.update);
+  gsap.ticker.add(t => lenis.raf(t * 1000));
+  gsap.ticker.lagSmoothing(0);
+  document.querySelectorAll('a[href^="#"]').forEach(a => a.addEventListener('click', e => {
+    const t = document.querySelector(a.getAttribute('href')); if (!t) return;
+    e.preventDefault(); lenis.scrollTo(t, { duration: 2.2 });
+  }));
+  const show = el => gsap.set(el, { visibility: 'visible' });
+
+  /* ---------- 1. открытие: кольцо загорается, заголовок проявляется из размытия ---------- */
+  const ring = document.querySelector('.ring'), ringIn = ring.querySelector('.ring__in');
+  const [e1, e3, e2, e4] = ['.e1', '.e3', '.e2', '.e4'].map(s => ring.querySelector(s));
+  const intro = gsap.timeline({ delay: .25 });
+  gsap.set(ring, { opacity: 1 });
+  intro.from('#wa .ph img', { scale: 1.06, filter: 'blur(6px)', duration: 3.2, ease: 'power2.out' }, 0)
+    .from(ring, { opacity: 0, duration: 2.6, ease: 'power1.inOut' }, .3)
+    .from(e2, { scale: 1.45, duration: 3.6, ease: 'expo.out' }, .3)          /* тёмный круг сжимается – кольцо загорается снаружи внутрь */
+    .from(e1, { scale: .82, duration: 3.6, ease: 'expo.out' }, .3);
+  const hero = document.querySelector('[data-a="hero"]'); show(hero);
+  const heroSplit = new SplitText(hero, { type: 'words,chars' })   /* сначала слова – иначе на узком экране буквы переносятся посреди слова */;
+  intro.from(heroSplit.chars, { opacity: 0, y: 18, filter: 'blur(14px)', duration: 2, ease: 'power3.out', stagger: { each: .05, from: 'center' } }, 1.1);
+  ['sub', 'kanji'].forEach((k, i) => { const el = document.querySelector(`[data-a="${k}"]`); show(el);
+    intro.from(el, { opacity: 0, y: 10, filter: 'blur(6px)', duration: 1.8, ease: 'power2.out' }, 2 + i * .5); });
+  const nav = document.querySelector('[data-a="nav"]'); show(nav);
+  intro.from(nav.children, { opacity: 0, y: -8, duration: 1.4, ease: 'power2.out', stagger: .1 }, 2.2);
+
+  /* ---------- 2. кольцо живёт: дышит, переливается, тянется за курсором, при прокрутке отстаёт ---------- */
+  gsap.to(e2, { scale: 1.045, duration: 6.5, ease: 'sine.inOut', yoyo: true, repeat: -1, delay: 3.9 });
+  gsap.to(e1, { y: () => 18 * innerWidth / 1200, duration: 8, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+  gsap.fromTo(ringIn, { filter: 'hue-rotate(-10deg)' }, { filter: 'hue-rotate(14deg)', duration: 9, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+  if (finePointer) {
+    const qx = gsap.quickTo(ringIn, 'x', { duration: 2.4, ease: 'power3.out' }), qy = gsap.quickTo(ringIn, 'y', { duration: 2.4, ease: 'power3.out' });
+    addEventListener('pointermove', e => { const k = innerWidth / 1200; qx((e.clientX / innerWidth - .5) * 40 * k); qy((e.clientY / innerHeight - .5) * 26 * k); });
+  }
+  /* при прокрутке обложки кольцо раскрывается шире и проходит часть радуги – свет «отвечает» на движение страницы */
+  gsap.fromTo(ring, { yPercent: 0, scale: 1, filter: 'hue-rotate(0deg)' }, { yPercent: 18, scale: 1.3, filter: 'hue-rotate(110deg)', ease: 'none', immediateRender: false,
+    scrollTrigger: { trigger: '#wa', start: 'top top', end: 'bottom top', scrub: .6 } });
+
+  /* ---------- 3. лепестки сакуры: редкие, медленные, с разной глубиной ---------- */
+  const petals = document.createElement('div'); petals.className = 'petals'; petals.setAttribute('aria-hidden', 'true');
+  ring.after(petals);
+  const N = mobile() ? 8 : 14;
+  for (let i = 0; i < N; i++) {
+    const p = document.createElement('i'); p.className = 'petal'; petals.append(p);
+    const depth = gsap.utils.random(.55, 1.25), H = () => petals.offsetHeight, W = () => petals.offsetWidth;
+    gsap.set(p, { scale: depth, opacity: .45 + depth * .35, filter: depth < .75 ? 'blur(1.5px)' : 'none' });
+    const fall = () => {
+      const x0 = gsap.utils.random(-.1, .95) * W(), drift = gsap.utils.random(.12, .3) * W();
+      gsap.fromTo(p, { x: x0, y: -30, rotation: gsap.utils.random(0, 360) },
+        { x: x0 + drift, y: H() + 30, rotation: `+=${gsap.utils.random(160, 420)}`, duration: gsap.utils.random(13, 22) / depth * .8, ease: 'none', onComplete: fall });
+    };
+    gsap.delayedCall(2.4 + i * gsap.utils.random(.6, 1.4), fall);
+    gsap.to(p, { xPercent: gsap.utils.random(-260, 260), duration: gsap.utils.random(2.5, 4), ease: 'sine.inOut', yoyo: true, repeat: -1 });
+  }
+
+  /* ---------- 4. фото под плашками: медленнее страницы, в пределах запаса по высоте (на телефоне фото прилипает – там без сдвига) ---------- */
+  ScrollTrigger.matchMedia({
+    '(min-width:769px)': () => {
+      gsap.fromTo('#wa .ph img', { y: 0 }, { y: () => 300 * innerWidth / 1200, ease: 'none', immediateRender: false, scrollTrigger: { trigger: '#wa', start: 'top top', end: 'bottom top', scrub: true } });
+      gsap.fromTo('#boom .ph img', { y: () => -300 * innerWidth / 1200 }, { y: () => 300 * innerWidth / 1200, ease: 'none', scrollTrigger: { trigger: '#boom', start: 'top bottom', end: 'bottom top', scrub: true, invalidateOnRefresh: true } });
+    },
+    '(max-width:768px)': () => {
+      gsap.fromTo('#boom .ph img', { scale: 1.12 }, { scale: 1, ease: 'none', scrollTrigger: { trigger: '#boom', start: 'top bottom', end: 'bottom bottom', scrub: true } });
+    }
+  });
+
+  /* ---------- 5. сборка коллажа: светлое пространство раскрывается от центра страницы в стороны (как раздвигающиеся створки, сразу на всю высоту),
+     надписи появляются, когда пространство под ними раскрыто и они в кадре. Всё привязано к прокрутке и при прокрутке вверх сходится обратно. ---------- */
+  const SCRUB = .9, SCRUB_T = 1;   /* текст догоняет прокрутку медленнее плашек – при резкой прокрутке не обгоняет свою плашку */
+  const textFrom = { opacity: 0, y: 26, filter: 'blur(6px)' };
+  const words = el => {   /* цитата Eno проявляется словами по ходу чтения */
+    show(el);
+    const s = new SplitText(el, { type: 'words' });
+    gsap.fromTo(s.words, { opacity: .14 }, { opacity: 1, ease: 'none', stagger: .1, scrollTrigger: { trigger: el, start: 'top 88%', end: 'top 56%', scrub: true } });   /* успевает дочитаться до того, как наезжает следующий блок (раньше – 'bottom 55%', уже под наездом) */
+  };
+  /* сборка коллажа – одна функция для десктопа и телефона (mob): на телефоне своя сетка 390 и свои плашки .pm */
+  const collage = mob => {
+      /* Окно раскрытия: вертикальная полоса шириной 2·w с центром на середине страницы (x = 600 в координатах макета).
+         Каждая плашка видна только внутри окна (clip-path); w растёт от 0 до 600 по ходу прокрутки экрана.
+         Скорость раскрытия – ниже, в EASE и range. */
+      const vh = () => innerHeight, docTop = el => el.getBoundingClientRect().top + scrollY;
+      const C = mob ? 195 : 600, PSEL = mob ? '.pan.pm' : '.pan:not(.pm)';   /* центр сетки (390 / 1200 колонок) и свои плашки */
+      const U = sec => sec.offsetWidth / (2 * C);
+      /* раскрытие с разгоном и торможением (power3.inOut): створки трогаются медленно, разгоняются в середине и мягко доходят до края */
+      const EASE = 'power3.inOut', ez = gsap.parseEase(EASE);
+      const inv = v => { let lo = 0, hi = 1; for (let k = 0; k < 24; k++) { const m = (lo + hi) / 2; ez(m) < v ? lo = m : hi = m; } return (lo + hi) / 2; };
+      const panTop = sec => docTop(sec) + Math.min(...[...sec.querySelectorAll(PSEL)].map(p => p.offsetTop));
+      /* диапазон прокрутки экрана: первый – с начала прокрутки до 40 % высоты окна; остальные – пока верх первой плашки идёт от 95 % до 60 % окна
+         (15.11: раньше было до 10 % – надписи появлялись, когда экран уже уходил вверх) */
+      const range = sec => sec.id === 'wa' && !mob ? [1, .4 * vh()] : [panTop(sec) - .95 * vh(), panTop(sec) - .6 * vh()];
+      const screens = [...document.querySelectorAll('.scr')].filter(sec => sec.querySelector(PSEL));
+      screens.forEach(sec => {
+        const pans = [...sec.querySelectorAll(PSEL)];
+        const open = { w: 0 };
+        const apply = () => {
+          const u = U(sec), L = (C - open.w) * u, R = (C + open.w) * u;
+          pans.forEach(el => {
+            const x = el.offsetLeft, pw = el.offsetWidth;
+            const l = Math.max(0, L - x), r = Math.max(0, x + pw - R);
+            el.style.clipPath = l + r >= pw ? 'inset(0 50% 0 50%)' : `inset(0 ${r.toFixed(1)}px 0 ${l.toFixed(1)}px)`;
+          });
+        };
+        pans.forEach(show); apply();
+        gsap.to(open, { w: C, ease: EASE, onUpdate: apply,
+          scrollTrigger: { start: () => range(sec)[0], end: () => range(sec)[1], scrub: SCRUB, invalidateOnRefresh: true, onRefresh: apply } });
+      });
+      /* когда надпись можно показывать: окно уже накрыло её целиком (с запасом), и она в кадре */
+      const ready = el => {
+        const sec = el.closest('.scr');
+        if (!screens.includes(sec)) return null;
+        /* надпись не на плашке (метки [P.0x], подписи к альбомам на фоне страницы) – ничего не ждёт, появляется, как только входит в кадр */
+        const onPan = [...sec.querySelectorAll(PSEL)].some(p => p.offsetLeft < el.offsetLeft + el.offsetWidth && p.offsetLeft + p.offsetWidth > el.offsetLeft
+          && p.offsetTop < el.offsetTop + el.offsetHeight && p.offsetTop + p.offsetHeight > el.offsetTop);
+        if (!onPan) return null;
+        const u = U(sec), x = el.offsetLeft / u, w = el.offsetWidth / u;
+        const need = Math.min(1, (Math.max(C - x, x + w - C) + C / 15) / C);   /* доля раскрытия, при которой надпись под окном */
+        const [a, b] = range(sec);
+        const t = inv(need);   /* момент прокрутки, когда окно раскрылось до нужной ширины */
+        return Math.max(a + t * (b - a), docTop(el) - .92 * vh());
+      };
+      const at = el => ready(el) === null
+        ? { trigger: el, start: 'top 90%', end: 'top 68%', scrub: SCRUB_T }
+        : { start: () => ready(el), end: () => ready(el) + .1 * vh(), scrub: SCRUB_T, invalidateOnRefresh: true };
+      document.querySelectorAll('[data-a="lines"]').forEach(el => {
+        show(el);
+        const s = new SplitText(el, { type: 'lines', mask: 'lines' });
+        gsap.set(s.lines, { yPercent: 110 });   /* все строки спрятаны сразу; выезжают по очереди */
+        const tl = gsap.timeline({ scrollTrigger: at(el) });
+        s.lines.forEach((l, i) => tl.to(l, { yPercent: 0, ease: 'power2.out', duration: 1 }, i * .12));
+      });
+      document.querySelectorAll('[data-a="fade"]').forEach(el => { show(el); gsap.fromTo(el, { opacity: 0, y: 20 }, { opacity: 1, y: 0, ease: 'power2.out', immediateRender: true, scrollTrigger: at(el) }); });
+      document.querySelectorAll('[data-a="wipe"]').forEach(el => {   /* портрет открывается шторкой, как сдвигается сёдзи */
+        show(el);
+        const tl = gsap.timeline({ scrollTrigger: { trigger: el, start: 'top 92%', end: 'top 60%', scrub: SCRUB } });
+        tl.from(el, { clipPath: 'inset(0% 100% 0% 0%)', ease: 'power2.inOut', duration: 1 })
+          .from(el.querySelector('img'), { scale: 1.25, ease: 'power2.out', duration: 1 }, 0);
+      });
+      document.querySelectorAll('[data-a="words"]').forEach(words);
+  };
+  ScrollTrigger.matchMedia({ '(min-width:769px)': () => collage(false), '(max-width:768px)': () => collage(true) });
+
+  /* ---------- 5б. улица Токио: фото медленнее страницы под плашками (десктоп) ---------- */
+  ScrollTrigger.matchMedia({ '(min-width:769px)': () => {
+    gsap.fromTo('#arts .phw img', { yPercent: -5 }, { yPercent: 5, ease: 'none', scrollTrigger: { trigger: '#arts .phw', start: 'top bottom', end: 'bottom top', scrub: true } });
+  } });
+
+  /* ---------- 5в. «альбом»: Legends – обложка, артисты – страницы ----------
+     Десктоп: сцена закрепляется (единственный пин на странице) на 7.5 высоты окна. На обложке кольцо распускается из светящейся точки,
+     проходя радугу; потом каждая страница артиста въезжает справа поверх предыдущей (та уходит влево и тускнеет – слой под слоем).
+     У новой страницы корешок с именем иероглифами: сначала широкая отбивка с крупными вертикальными иероглифами, потом корешок
+     сжимается в узкое поле слева и открывает страницу; карточка собирается своей «фразой» по времени.
+     Телефон: страницы стоят друг под другом, кольцо распускается по прокрутке, карточки собираются при входе в кадр. */
+  {
+    const leg = document.getElementById('legends'), r2 = leg.querySelector('.ring'), r2in = r2.querySelector('.ring__in');
+    const t = leg.querySelector('[data-a="legt"]'), sub = leg.querySelector('[data-a="legs"]'); show(t); show(sub);
+    const ch = new SplitText(t, { type: 'words,chars' }).chars;
+    const pages = [...document.querySelectorAll('.hs__page:not(.hs__page--cover)')];
+    const card = page => {   /* «фраза» карточки: портрет снизу вверх → ярлык слева → имя из-под маски → тексты → обложка сверху */
+      const q = r => [...page.querySelectorAll(`[data-r="${r}"]`)];
+      const [photo] = q('photo'), [tab] = q('tab'), [name] = q('name'), texts = q('text'), [album] = q('album'), [label] = q('label');
+      [photo, tab, name, album, label, ...texts].forEach(show);
+      const lines = new SplitText(name, { type: 'lines', mask: 'lines' }).lines;
+      const tl = gsap.timeline({ paused: true, defaults: { ease: 'expo.out' } });
+      tl.fromTo(photo, { clipPath: 'inset(100% 0% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.6, ease: 'expo.inOut' }, 0)
+        .fromTo(photo.querySelector('img'), { scale: 1.3 }, { scale: 1, duration: 2.3 }, 0)
+        .fromTo(tab, { clipPath: 'inset(0% 100% 0% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.05, ease: 'power3.inOut' }, .8)
+        .fromTo(lines, { yPercent: 110 }, { yPercent: 0, duration: 1.3 }, 1.15)
+        .fromTo(texts, { opacity: 0, y: 18 }, { opacity: 1, y: 0, duration: 1.4, ease: 'power3.out', stagger: .18 }, 1.3)
+        .fromTo(album, { clipPath: 'inset(0% 0% 100% 0%)' }, { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.3, ease: 'expo.inOut' }, 1.5)
+        .fromTo(album.querySelector('img'), { scale: 1.25 }, { scale: 1, duration: 2 }, 1.5);
+      return { tl, on: false };
+    };
+    const cards = pages.map(card);
+    gsap.set(r2, { opacity: 0, scale: .08, transformOrigin: '50% 40.86%', filter: 'hue-rotate(-200deg) brightness(1.4)' });   /* распускается из центра экрана */
+    gsap.set([...ch, sub], { opacity: 0 });
+    /* заголовок обложки проступает раньше – пока сцена въезжает снизу, ещё до закрепления */
+    gsap.timeline({ scrollTrigger: { trigger: '#artists', start: 'top 75%', end: 'top 20%', scrub: SCRUB_T } })
+      .fromTo(ch, { opacity: 0, y: 14, filter: 'blur(12px)' }, { opacity: 1, y: 0, filter: 'blur(0px)', duration: 1, ease: 'power2.out', stagger: { each: .1, from: 'center' } }, 0)
+      .fromTo(sub, { opacity: 0, y: 8 }, { opacity: 1, y: 0, duration: .8, ease: 'power2.out' }, .5);
+    gsap.to(r2in, { scale: 1.04, duration: 6.5, ease: 'sine.inOut', yoyo: true, repeat: -1 });
+    if (finePointer) {
+      const qx = gsap.quickTo(r2in, 'x', { duration: 2.4, ease: 'power3.out' }), qy = gsap.quickTo(r2in, 'y', { duration: 2.4, ease: 'power3.out' });
+      addEventListener('pointermove', e => { const k = innerWidth / 1200; qx((e.clientX / innerWidth - .5) * 50 * k); qy((e.clientY / innerHeight - .5) * 34 * k); });
+    }
+    const bloom = (tl, at) => tl
+      .fromTo(leg.querySelector('.ph img'), { scale: 1.2 }, { scale: 1.02, ease: 'none', duration: 1.1 }, at)
+      .to(r2, { opacity: 1, duration: .1, ease: 'none' }, at)
+      .to(r2, { scale: 1, filter: 'hue-rotate(0deg) brightness(1)', duration: .45, ease: 'power3.out' }, at)
+      .fromTo(r2.querySelector('.e2'), { scale: 1.6 }, { scale: 1, duration: .45, ease: 'expo.out' }, at + .03);
+
+    ScrollTrigger.matchMedia({
+      '(min-width:769px)': () => {
+        const main = document.querySelector('main');
+        const spW = () => 56 * main.offsetWidth / 1200;
+        gsap.set(pages, { xPercent: 110 });   /* 110 – чтобы тень страницы не торчала у правого края, пока она ждёт за кадром */
+        const STEP = 1.9, FIRST = .55, showAt = [];   /* FIRST – сколько длится обложка Legends (было 1.1 – экран казался затянутым) */
+        const all = [leg, ...pages];
+        /* карточки запускаются по времени самой сцены (onUpdate таймлайна – он догоняет прокрутку с задержкой scrub, а не по событию прокрутки) */
+        const tl = gsap.timeline({ scrollTrigger: { trigger: '#artists', start: 'top top', end: () => '+=' + innerHeight * 6.8, pin: true, scrub: 1, anticipatePin: 1, invalidateOnRefresh: true },
+          onUpdate: () => {
+            /* страница, полностью закрытая следующей, скрывается – в стопке не остаётся лишних полупрозрачных слоёв (из-за них браузер «моргал») */
+            all.forEach((pg, i) => { const nx = all[i + 1]; const hide = nx && gsap.getProperty(nx, 'xPercent') <= .5; if (pg.style.visibility !== (hide ? 'hidden' : '')) pg.style.visibility = hide ? 'hidden' : ''; });
+            const now = tl.time(); cards.forEach((c, i) => {
+            if (now >= showAt[i] && !c.on) { c.on = true; c.tl.timeScale(1.7).play(); }
+            else if (now < showAt[i] - .3 && c.on) { c.on = false; c.tl.timeScale(1.8).reverse(); } }); } });
+        bloom(tl, 0);
+        /* выход с обложки: кольцо раздувается за края, как портал, слово уходит */
+        tl.to(r2, { scale: 3.2, opacity: 0, filter: 'hue-rotate(160deg) brightness(1.2)', duration: .7, ease: 'power2.in' }, FIRST - .1)
+          .to([t, sub], { opacity: 0, y: -20, filter: 'blur(8px)', duration: .4, ease: 'power2.in' }, FIRST);
+        pages.forEach((pg, i) => {
+          const t0 = FIRST + i * STEP, sp = pg.querySelector('.hs__spine'), k = pg.querySelector('.hs__k');
+          tl.to(pg, { xPercent: 0, duration: 1, ease: 'power3.inOut' }, t0)
+            .to(all[i], { xPercent: -24, opacity: .35, duration: 1, ease: 'power3.inOut' }, t0)
+            .fromTo(sp, { width: () => innerWidth * .42 }, { width: spW, duration: .85, ease: 'power3.inOut' }, t0 + .7)
+            .fromTo(k, { scale: 4.6 }, { scale: 1, duration: .85, ease: 'power3.inOut' }, t0 + .7);
+          showAt.push(t0 + .7);   /* карточка начинает собираться, когда страница почти встала и корешок начал сжиматься (было 1.3 – отставала от прокрутки) */
+        });
+        tl.to({}, { duration: .6 });   /* пауза на последней странице перед отпусканием */
+      },
+      '(max-width:768px)': () => {
+        bloom(gsap.timeline({ scrollTrigger: { trigger: leg, start: 'top 80%', end: 'top 10%', scrub: 1 } }), 0);
+        pages.forEach((pg, i) => ScrollTrigger.create({ trigger: pg, start: 'top 70%', onEnter: () => cards[i].tl.play(), onLeaveBack: () => cards[i].tl.reverse() }));
+      }
+    });
+  }
+
+  /* ---------- 5г. финал: створки расходятся от центра и открывают фото (фото при этом отъезжает), надписи по краям проявляются,
+     дальше фото живёт само (WebGL: бесконечная рябь + искажение под курсором) ---------- */
+  {
+    const fin = document.getElementById('finale');
+    const top = fin.querySelector('[data-a="fint"]'), bar = fin.querySelector('[data-a="finb"]'), k = fin.querySelector('[data-a="fink"]'), note = fin.querySelector('[data-a="finn"]');
+    [top, bar, k, note].forEach(show);
+    const ft = gsap.timeline({ scrollTrigger: { trigger: fin, start: 'top 85%', end: 'top top', scrub: .8 } });
+    ft.fromTo('.fin__cur--l', { xPercent: 0 }, { xPercent: -100, ease: 'power3.inOut', duration: .6 }, .35)   /* створки – когда финал уже на полэкрана */
+      .fromTo('.fin__cur--r', { xPercent: 0 }, { xPercent: 100, ease: 'power3.inOut', duration: .6 }, .35)
+      .fromTo(fin.querySelector('.fin__ph'), { scale: .94 }, { scale: 1, ease: 'power2.out', duration: .9 }, 0)
+      .fromTo([...top.children, ...bar.children], { opacity: 0, y: 10 }, { opacity: 1, y: 0, ease: 'power2.out', duration: .3, stagger: .04 }, .5)
+      .fromTo(k, { opacity: 0, filter: 'blur(10px)' }, { opacity: 1, filter: 'blur(0px)', ease: 'power2.out', duration: .3 }, .75)
+      .fromTo(note, { opacity: 0 }, { opacity: 1, ease: 'none', duration: .25 }, .8);
+    lens(fin.querySelector('.fin__ph'), { loop: true });   /* у финала искажение под курсором делает сам WebGL: SVG-фильтр поверх WebGL-холста моргает */
+  }
+
+  /* ---------- 5е′. искажение под курсором всего экрана (десктоп): SVG-фильтр смещения ставится на экран под курсором, работает только
+     в круге вокруг курсора (смещает карта-«линза» 2R, область фильтра – видимая часть экрана), сила – от скорости курсора, в покое фильтр снимается совсем (ничего не грузит).
+     Карта смещения – «линза»: точки внутри круга тянутся к центру, края круга мягкие. Искажаются фото, светлые плашки, их границы и буквы. ---------- */
+  if (finePointer) {
+    const N = 128, mc = document.createElement('canvas'); mc.width = mc.height = N;
+    const cx = mc.getContext('2d'), id = cx.createImageData(N, N);
+    for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+      const dx = (x + .5) / N * 2 - 1, dy = (y + .5) / N * 2 - 1, r = Math.hypot(dx, dy), w = r < 1 ? Math.pow(1 - r, 1.6) * Math.sin(Math.PI * Math.min(1, r * 1.4)) : 0;
+      const k = (y * N + x) * 4; id.data[k] = 128 - dx * w * 127; id.data[k + 1] = 128 - dy * w * 127; id.data[k + 2] = 128; id.data[k + 3] = 255;
+    }
+    cx.putImageData(id, 0, 0);
+    const F = document.getElementById('warp'), M = document.getElementById('warpMap'), D = document.getElementById('warpDisp');
+    M.setAttribute('href', mc.toDataURL()); M.setAttributeNS('http://www.w3.org/1999/xlink', 'href', mc.toDataURL());
+    const w = { x: 0, y: 0, v: 0, tv: 0, el: null, cx: 0, cy: 0 };
+    const R0 = () => 150 * innerWidth / 1200;
+    const setEl = el => { if (w.el === el) return; if (w.el) w.el.style.filter = ''; w.el = el; };
+    addEventListener('pointermove', e => {
+      const v = Math.hypot(e.clientX - w.cx, e.clientY - w.cy); w.cx = e.clientX; w.cy = e.clientY;
+      w.tv = Math.min(1, w.tv + v / 120);
+      setEl(e.target.closest && !e.target.closest('#artists') ? e.target.closest('.scr') : null);   /* не финал (там WebGL) и не альбом (стопка полупрозрачных страниц) – фильтр поверх них моргает */
+    });
+    gsap.ticker.add(() => {
+      w.v += (w.tv - w.v) * .15; w.tv *= .9;
+      if (!w.el) return;
+      if (w.v < .01) { if (w.el.style.filter) w.el.style.filter = ''; return; }
+      /* область фильтра – видимая часть экрана целиком (всё, что за её пределами, браузер не рисует – поэтому не квадрат вокруг курсора);
+         вне круга карта смещения нейтральная (серый 128 = сдвиг 0) */
+      const r = w.el.getBoundingClientRect(), R = R0(), lx = w.cx - r.left, ly = w.cy - r.top;
+      const vx = Math.max(0, -r.left), vy = Math.max(0, -r.top), vw = Math.min(r.width, innerWidth - r.left) - vx, vh = Math.min(r.height, innerHeight - r.top) - vy;
+      if (vw <= 0 || vh <= 0) { w.el.style.filter = ''; w.el = null; return; }   /* экран под курсором уже уехал из кадра */
+      F.setAttribute('x', vx - 2); F.setAttribute('y', vy - 2); F.setAttribute('width', vw + 4); F.setAttribute('height', vh + 4);
+      M.setAttribute('x', lx - R); M.setAttribute('y', ly - R); M.setAttribute('width', R * 2); M.setAttribute('height', R * 2);
+      D.setAttribute('scale', (w.v * 70 * innerWidth / 1200).toFixed(1));
+      if (!w.el.style.filter) w.el.style.filter = 'url(#warp)';
+    });
+
+  }
+
+  /* ---------- 5д. слоистость между крупными блоками: следующий блок наезжает на предыдущий, предыдущий притормаживает и чуть уходит вглубь
+     (смещается вниз – значит, движется медленнее страницы – и тускнеет); у наезжающего блока мягкая тень по верхнему краю. Только десктоп. ---------- */
+  ScrollTrigger.matchMedia({ '(min-width:769px)': () => {
+    [['#boom', '#arts'], ['#arts', '#artists'], ['#artists .hs__stage', '#finale']].forEach(([prev, next]) => {
+      gsap.fromTo(prev, { y: 0, opacity: 1 }, { y: () => innerHeight * .45, opacity: .55, ease: 'none', immediateRender: false,
+        scrollTrigger: { trigger: next, start: 'top bottom', end: 'top top', scrub: true, invalidateOnRefresh: true } });
+    });
+  } });
+
+  /* ---------- 6. режим записи для рилс ---------- */
+  if (params.has('reel')) {
+    const speed = +params.get('speed') || 90;
+    gsap.delayedCall(4.6, () => {
+      const end = document.documentElement.scrollHeight - innerHeight;
+      lenis.scrollTo(end, { duration: (end - scrollY) / speed, easing: t => t, lock: true, force: true });
+    });
+  }
+}
+
+/* «линза» на больших фото (WebGL): поверх фото – холст, который рисует ту же картинку с тем же положением и масштабом (берёт их у <img>
+   каждый кадр, поэтому параллакс и приближения GSAP сохраняются), а под курсором прогибает её линзой с лёгким расслоением цвета;
+   сила – от скорости курсора, затихает плавно. loop – для финала: ещё бесконечная мягкая рябь воздуха и дыхание масштаба.
+   Холст рисует только в кадре; без WebGL или без мыши – обычная <img>. */
+function lens(box, opt = {}){
+  const img = box.querySelector('img'); if (!img) return;
+  const cv = document.createElement('canvas'); cv.className = 'lens'; cv.setAttribute('aria-hidden', 'true'); img.closest('picture') ? img.closest('picture').after(cv) : img.after(cv);
+  const gl = cv.getContext('webgl', { premultipliedAlpha: false, antialias: false, preserveDrawingBuffer: true });   /* кадр не стирается, пока холст стоит */
+  if (!gl) { cv.remove(); return; }
+  const vs = 'attribute vec2 p;varying vec2 v;void main(){v=p*.5+.5;gl_Position=vec4(p,0.,1.);}';
+  const fs = `precision mediump float;varying vec2 v;uniform sampler2D t;uniform vec2 res,m;uniform vec4 c;uniform float time,str,loop;
+    vec2 map(vec2 q){return (q*res-c.xy)/c.zw;}
+    void main(){vec2 uv=vec2(v.x,1.-v.y);
+      if(loop>.5){float z=1.03+.02*sin(time*.18);uv=(uv-.5)/z+.5;uv+=vec2(sin(uv.y*9.+time*.55),cos(uv.x*7.+time*.42))*.0022;}
+      vec2 a=vec2(res.x/res.y,1.);vec2 d=(uv-m)*a;float f=exp(-dot(d,d)/.03);
+      vec2 off=-d/a*f*str*.11;
+      gl_FragColor=vec4(texture2D(t,map(uv+off*1.18)).r,texture2D(t,map(uv+off)).g,texture2D(t,map(uv+off*.82)).b,1.);}`;
+  const sh = (type, src) => { const x = gl.createShader(type); gl.shaderSource(x, src); gl.compileShader(x); return x; };
+  const pr = gl.createProgram(); gl.attachShader(pr, sh(gl.VERTEX_SHADER, vs)); gl.attachShader(pr, sh(gl.FRAGMENT_SHADER, fs)); gl.linkProgram(pr);
+  if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) { cv.remove(); return; }
+  gl.useProgram(pr);
+  const b = gl.createBuffer(); gl.bindBuffer(gl.ARRAY_BUFFER, b); gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const loc = gl.getAttribLocation(pr, 'p'); gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+  const U = n => gl.getUniformLocation(pr, n), uRes = U('res'), uC = U('c'), uM = U('m'), uT = U('time'), uS = U('str');
+  gl.uniform1f(U('loop'), opt.loop ? 1 : 0);
+  const tex = gl.createTexture(), m = { x: .5, y: .5, tx: .5, ty: .5, s: 0, ts: 0 };
+  let run = false, raf = 0, ready = false, d = 1;
+  const size = () => { d = Math.min(2, devicePixelRatio || 1); cv.width = Math.max(1, cv.clientWidth * d); cv.height = Math.max(1, cv.clientHeight * d); gl.viewport(0, 0, cv.width, cv.height); };
+  /* где на холсте лежит содержимое картинки: учитывает transform (getBoundingClientRect) и object-fit: cover с object-position */
+  const content = () => {
+    const B = cv.getBoundingClientRect(), R = img.getBoundingClientRect(), cs = getComputedStyle(img);
+    let x = R.left - B.left, y = R.top - B.top, w = R.width, h = R.height;
+    if (cs.objectFit === 'cover') {
+      const k = Math.max(w / img.naturalWidth, h / img.naturalHeight), cw = img.naturalWidth * k, ch = img.naturalHeight * k;
+      const [px, py] = cs.objectPosition.split(' ').map(v => parseFloat(v) / 100);
+      x += (w - cw) * px; y += (h - ch) * py; w = cw; h = ch;
+    }
+    return [x * d, y * d, w * d, h * d];
+  };
+  const load = () => {
+    gl.bindTexture(gl.TEXTURE_2D, tex);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, img);
+    size(); ready = true;
+    /* холст показывается (а картинка прячется) только после того, как он нарисовал первый кадр – иначе на миг пусто, «моргает» */
+    gsap.delayedCall(opt.delay || 0, () => requestAnimationFrame(t => { draw(t); box.classList.add('lens-on'); }));
+  };
+  img.loading = 'eager';
+  const src = img.currentSrc || img.src;
+  if (img.complete && img.naturalWidth) load(); else img.addEventListener('load', load, { once: true });
+  const draw = t => {
+    m.x += (m.tx - m.x) * .1; m.y += (m.ty - m.y) * .1; m.s += (m.ts - m.s) * .08; m.ts *= .93;
+    const [x, y, w, h] = content();
+    gl.uniform2f(uRes, cv.width, cv.height); gl.uniform4f(uC, x, y, w, h); gl.uniform2f(uM, m.x, m.y); gl.uniform1f(uT, t / 1000); gl.uniform1f(uS, m.s);
+    gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  };
+  const frame = t => { if (ready) draw(t); if (run) raf = requestAnimationFrame(frame); };
+  if (opt.cursor !== false) addEventListener('pointermove', e => {
+    const r = cv.getBoundingClientRect(); if (!r.width) return;
+    const x = (e.clientX - r.left) / r.width, y = (e.clientY - r.top) / r.height;
+    if (x < -.2 || x > 1.2 || y < -.2 || y > 1.2) return;
+    m.ts = Math.min(1, m.ts + Math.hypot(x - m.tx, y - m.ty) * 6); m.tx = x; m.ty = y;
+  });
+  addEventListener('resize', () => { if (ready) { size(); draw(performance.now()); } });
+  new IntersectionObserver(es => { const on = es[0].isIntersecting; if (on && !run) { run = true; raf = requestAnimationFrame(frame); } else if (!on) { run = false; cancelAnimationFrame(raf); } }).observe(box);
+}
+
+/* старт: ждём шрифт, но не дольше 2.5 с */
+Promise.race([document.fonts.ready, new Promise(r => setTimeout(r, 2500))]).then(start);
+</script>
+</body>
+</html>
